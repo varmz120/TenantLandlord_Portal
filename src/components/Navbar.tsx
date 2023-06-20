@@ -15,9 +15,13 @@ const Navbar = () => {
 
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-navbar">
-      <div className="flex flex-wrap items-center justify-between ml-5">
-        <a href="https://flowbite.com/" className="flex items-center">
-          <img src={homeImage} className="h-6 mr-3" alt="Flowbite Logo" />
+      <div className="flex flex-wrap items-center justify-between ">
+        <a
+          href="#"
+          className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
+									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
+        >
+          <img src={homeImage} className="h-6" alt="Flowbite Logo" />
         </a>
         <button
           data-collapse-toggle="navbar-default"
