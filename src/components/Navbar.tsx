@@ -1,12 +1,13 @@
 import React from 'react';
 import homeImage from '../images/home.svg';
+import userIcon from '../images/user_icon.svg';
 
 const Navbar = () => {
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between mx-10 ml-5 p-4">
         <a href="https://flowbite.com/" className="flex items-center">
-          <img src={homeImage} className="h-8 mr-3" alt="Flowbite Logo" />
+          <img src={homeImage} className="h-6 mr-3" alt="Flowbite Logo" />
         </a>
         <button
           data-collapse-toggle="navbar-default"
@@ -52,9 +53,10 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 "
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 flex"
               >
-                Username
+                <img src={userIcon} className="h-6 mr-2" alt="?"></img>
+                <div>Username</div>
               </a>
             </li>
           </ul>
