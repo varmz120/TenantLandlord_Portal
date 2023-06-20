@@ -67,6 +67,7 @@ const Navbar = () => {
 									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
                 onMouseDown={handleUsernameActive}
                 onMouseUp={handleUsernameInactive}
+                onMouseLeave={handleUsernameInactive}
               >
                 <img
                   src={usernameIsActive ? userIconDark : userIcon}
