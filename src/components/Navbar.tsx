@@ -33,30 +33,31 @@ const Navbar = () => {
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0">
-            <li>
+            <li className="flex items-center">
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 "
+                className="block text-white rounded md:bg-transparent md:p-0"
                 aria-current="page"
               >
                 Home
               </a>
             </li>
-            <li>
+            <li className="flex items-center">
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 "
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0"
               >
                 Notifications
               </a>
             </li>
-            <li>
+            <li className="flex items-center">
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 flex"
+                className="block text-white rounded flex border-solid border-1 px-2 py-1 flex items-center"
+                style={{ color: '#3180BA', backgroundColor: '#EDFDFF' }}
               >
-                <img src={userIcon} className="h-6 mr-2" alt="?"></img>
-                <div>Username</div>
+                <img src={userIcon} className="h-5 mx-3 ml-4" alt="?"></img>
+                <div className="mr-4">Username</div>
               </a>
             </li>
           </ul>
