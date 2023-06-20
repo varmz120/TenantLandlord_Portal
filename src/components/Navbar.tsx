@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import homeImage from '../images/home.svg';
 import userIcon from '../images/user_icon.svg';
 import userIconDark from '../images/user_icon_dark.svg';
 
-const Navbar = () => {
+function Navbar() {
   const [usernameIsActive, setUsernameIsActive] = useState(false);
   const handleUsernameActive = () => {
     setUsernameIsActive(true);
@@ -90,6 +90,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;
