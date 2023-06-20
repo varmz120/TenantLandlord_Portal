@@ -8,6 +8,12 @@ module.exports = {
       },
       backgroundColor: {
         navbar: '#31556F',
+        userNameButton: '#EDFDFF',
+        userNameButtonActive: '#193446',
+      },
+      textColor: {
+        userNameText: '#3180BA',
+        userNameTextActive: '#CBE6EC',
       },
     },
   },

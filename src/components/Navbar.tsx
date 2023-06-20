@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import homeImage from '../images/home.svg';
 import userIcon from '../images/user_icon.svg';
+import userIconDark from '../images/user_icon_dark.svg';
 
 const Navbar = () => {
+  const [usernameIsActive, setUsernameIsActive] = useState(false);
+  const handleUsernameActive = () => {
+    setUsernameIsActive(true);
+  };
+
+  const handleUsernameInactive = () => {
+    setUsernameIsActive(false);
+  };
+
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between mx-10 ml-5 p-4">
@@ -53,10 +63,16 @@ const Navbar = () => {
             <li className="flex items-center">
               <a
                 href="#"
-                className="block text-white rounded flex border-solid border-1 px-2 py-1 flex items-center"
-                style={{ color: '#3180BA', backgroundColor: '#EDFDFF' }}
+                className="block text-white rounded flex border-solid border-1 px-2 py-1 
+									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
+                onMouseDown={handleUsernameActive}
+                onMouseUp={handleUsernameInactive}
               >
-                <img src={userIcon} className="h-5 mx-3 ml-4" alt="?"></img>
+                <img
+                  src={usernameIsActive ? userIconDark : userIcon}
+                  className="h-5 mx-3 ml-4"
+                  alt="?"
+                ></img>
                 <div className="mr-4">Username</div>
               </a>
             </li>
