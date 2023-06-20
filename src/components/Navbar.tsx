@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-navbar">
-      <div className="flex flex-wrap items-center justify-between mx-10 ml-5 p-4">
+      <div className="flex flex-wrap items-center justify-between ml-5">
         <a href="https://flowbite.com/" className="flex items-center">
           <img src={homeImage} className="h-6 mr-3" alt="Flowbite Logo" />
         </a>
@@ -41,29 +41,33 @@ const Navbar = () => {
             ></path>
           </svg>
         </button>
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0">
+        <div className="h-full hidden w-full md:block md:w-auto" id="navbar-default">
+          <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
               <a
                 href="#"
-                className="block text-white rounded md:bg-transparent md:p-0"
+                className="h-full items-center flex text-white rounded md:bg-transparent p-4
+									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 aria-current="page"
               >
                 Home
               </a>
             </li>
-            <li className="flex items-center">
+            <li
+            // className="flex items-center content-center justify-center ml-0"
+            >
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0"
+                className="h-full items-center flex text-white rounded md:bg-transparent p-4
+									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
               >
                 Notifications
               </a>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-center mx-3 mr-5">
               <a
                 href="#"
-                className="block text-white rounded flex border-solid border-1 px-2 py-1 
+                className="block rounded flex border-solid border-1 px-2 py-1 
 									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
                 onMouseDown={handleUsernameActive}
                 onMouseUp={handleUsernameInactive}
