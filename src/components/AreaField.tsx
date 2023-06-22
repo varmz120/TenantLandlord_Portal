@@ -9,7 +9,7 @@ interface InputProps {
   disabled?: boolean
 }
 
-const OutputField: FC<InputProps> = ({
+const AreaField: FC<InputProps> = ({
   label,
   padding_right,
   value,
@@ -27,4 +27,4 @@ const OutputField: FC<InputProps> = ({
   )
 }
 
-export default OutputField;
+export default AreaField;

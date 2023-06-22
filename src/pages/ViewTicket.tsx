@@ -1,6 +1,9 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react'
-import OutputField from '../components/OutputField';
-import FormGallery from '../components/FormGallery';
+import FormGallery from '../components/Gallery';
+import AreaField from '../components/AreaField';
+import LineField from '../components/LineField';
+import AttachmentGallery from '../components/Gallery';
+import Gallery from '../components/Gallery';
+import Status from '../components/Status';
 
 function ViewTicket() {
     var ticket_id = "007";
@@ -10,7 +13,7 @@ function ViewTicket() {
     var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
 
     return (
-      <div className="bg-content w-screen h-screen font-3xl " id="content">
+      <div className="bg-content font-3xl" id="content">
         <div id="viewTicket">
             <div>
                 <p className='text-headerText pt-12 pb-12 text-2xl font-medium'>Service Ticket #{ticket_id} : {location} Unit {unit}</p>
@@ -19,28 +22,41 @@ function ViewTicket() {
                 <form className="space-y-6">
                     <p className="text-lg text-left font-medium">Title</p>
                     <hr className="h-px my-8 bg-gray-300 border-0 drop-shadow-md"></hr>
-                    <OutputField
+                    <LineField
+                      type={"text"}
+                      label="Name"
+                      padding_right="75"
+                      value={category}
+                      name="name"
+                      placeholder={""}
+                      error={false}
+                      disabled={true}
+                      onChange={()=> null}/>
+                    {/* <OutputField
                       label={"Category"}
                       value={category}
                       name="description"
                       disabled={true}
                       placeholder='' 
-                      padding_right={'48'}/>
-                    <OutputField
+                      padding_right={'48'}/> */}
+                    <AreaField
                         label={"Description"}
                         padding_right={"32"}
                         value={description}
                         name="description"
                         disabled={true}
                         placeholder=''/>
-                    <FormGallery
+                    <Gallery
                         label={"Attachments"}
                         value=''
                         padding_right={"0"}/>
                     <hr className="h-px my-8 bg-gray-300 border-0 drop-shadow-md"></hr>
+                    <Status
+                        label={"Status"}
+                        value={"Opened"}
+                        padding_right={"0"}/>
                 </form>
             </div>
-
         </div>
       </div>
     );
