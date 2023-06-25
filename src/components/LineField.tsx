@@ -26,7 +26,7 @@ const LineField: FC<InputProps> = ({
   return (
     <div className="w-3/5 flex align-center text-left input-wrapper">
       <label style={{ paddingRight: padding_right + 'px' }} className="pr-4 font-medium text-headerText" htmlFor={label}>{label}</label>
-      <input className="w-2/5 disabled:bg-disabledField disabled:text-fieldText text-light rounded pl-1 text-base"
+      <input className="text-headerText w-2/5 disabled:bg-disabledField disabled:text-disabledText text-thin rounded pl-1"
         type={type}
         id={label}
         value={value}
