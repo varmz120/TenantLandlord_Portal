@@ -5,7 +5,6 @@ import Navbar from './components/Navbar.tsx';
 import RequestTicket from './pages/RequestTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
 import '@fontsource-variable/lexend';
-import "@fontsource-variable/lexend/wght.css"; 
 
 /* Where I put in my pages I guess? */
 function App() {

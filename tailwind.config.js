@@ -2,10 +2,6 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    fontWeight: {
-      thin: '200',
-      medium: '500',
-    },
     extend: {
       screens: {
         '3xl': '1920px',
@@ -16,15 +12,23 @@ module.exports = {
         disabledField: '#E6E5E5',
         navbar: '#31556F',
         userNameButton: '#EDFDFF',
-        userNameButtonActive: '#193446',
+        buttonActive: '#193446',
       },
       textColor: {
         headerText: '#2E424D',
         fieldText: '#344054',
         arrow: '#63696E',
+        disabledText: '#777D86',
         userNameText: '#3180BA',
-        userNameTextActive: '#CBE6EC',
+        textActive: '#CBE6EC',
       },
+      borderRadius: {
+        'md': '5px',
+      },
+      colors: {
+        'button' : '#2E424D',
+        'buttonActive' : '#193446',
+      }
     },
   },
   plugins: [],

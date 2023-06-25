@@ -4,6 +4,7 @@ import LineField from '../components/LineField';
 import AttachmentGallery from '../components/Gallery';
 import Gallery from '../components/Gallery';
 import Status from '../components/Status';
+import ActionRequired from '../components/ActionRequired';
 
 function ViewTicket() {
     var ticket_id = "007";
@@ -32,13 +33,6 @@ function ViewTicket() {
                       error={false}
                       disabled={true}
                       onChange={()=> null}/>
-                    {/* <OutputField
-                      label={"Category"}
-                      value={category}
-                      name="description"
-                      disabled={true}
-                      placeholder='' 
-                      padding_right={'48'}/> */}
                     <AreaField
                         label={"Description"}
                         padding_right={"32"}
@@ -51,10 +45,17 @@ function ViewTicket() {
                         value=''
                         padding_right={"0"}/>
                     <hr className="h-px my-8 bg-gray-300 border-0 drop-shadow-md"></hr>
-                    <Status
+                    <div className="grid grid-cols-2">
+                      <Status
                         label={"Status"}
                         value={"Opened"}
                         padding_right={"0"}/>
+                      <ActionRequired
+                        label={"Action Required"}
+                        value={"View Quote"}
+                        padding_right={"32"}
+                        alert={false}/>
+                    </div>
                 </form>
             </div>
         </div>
