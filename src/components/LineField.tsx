@@ -11,7 +11,7 @@ interface InputProps {
   disabled?: boolean
   layout: string
   classnames : string
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange: (event : ChangeEvent<HTMLInputElement>) => void
 }
 
 const LineField: FC<InputProps> = ({

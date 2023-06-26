@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.tsx';
 import RequestTicket from './pages/RequestTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
 import '@fontsource-variable/lexend';
+import TestFlow from './pages/TestFlow.tsx';
 
 function App() {
   return (
@@ -32,4 +33,13 @@ function ViewTicketPage(){
   );
 }
 
-export default RequestTicketPage;
+function Test(){
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <TestFlow />
+    </div>
+  );
+}
+
+export default Test;
