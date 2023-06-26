@@ -9,10 +9,15 @@ module.exports = {
       backgroundColor: {
         content: '#ECEDED',
         form: '#FCFBFB',
-        disabledField: '#E6E5E5',
+        disabledField: '#ECEAEA',
+        inputField: '#D9D9D9',
+        activeField: '#3180BA',
         navbar: '#31556F',
         userNameButton: '#EDFDFF',
         buttonActive: '#193446',
+      },
+      backgroundImage: {
+        'imageUploadIcons': "#ECEAEA url('./images/upload_icon.svg')"
       },
       textColor: {
         headerText: '#2E424D',

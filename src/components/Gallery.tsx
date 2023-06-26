@@ -52,7 +52,7 @@ const Gallery: FC<InputProps> = ({
   return (
     <div className="flex align-center text-left input-wrapper">
       <label style={{ paddingRight: padding_right + 'px' }} className="font-medium text-headerText" htmlFor={label}>{label}</label>
-      <div className='max-w-[500px] h-[250px] w-2/3 w-min-[100] h-min-[100] mx-5 relative group'>
+      <div className='max-w-[500px] h-[250px] w-3/5 w-min-[100] h-min-[100] mx-5 relative group'>
         <div
           style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
           className='w-full h-full rounded-2xl bg-center bg-cover duration-500'

@@ -6,10 +6,18 @@ import RequestTicket from './pages/RequestTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
 import '@fontsource-variable/lexend';
 
-/* Where I put in my pages I guess? */
 function App() {
   return (
-    <div className="App h-screen">
+    <div className="App h-screen bg-content">
+      <Navbar />
+    </div>
+  );
+}
+
+function RequestTicketPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
       <RequestTicket />
     </div>
   );
@@ -17,11 +25,11 @@ function App() {
 
 function ViewTicketPage(){
   return (
-    <div className="App h-screen">
+    <div className="App h-screen bg-content">
       <Navbar />
       <ViewTicket />
     </div>
   );
 }
 
-export default ViewTicketPage; /* This was originally App */
+export default RequestTicketPage;
