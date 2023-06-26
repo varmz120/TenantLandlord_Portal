@@ -10,7 +10,7 @@ interface InputProps {
   placeholder: string
   error: boolean
   disabled?: boolean
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const UploadField: FC<InputProps> = ({
@@ -25,20 +25,6 @@ const UploadField: FC<InputProps> = ({
   onChange,
 }) => {
   return (
-    // <div className="flex flex-col gap-2 w-3/5 align-center text-left input-wrapper">
-    //   <label style={{ paddingRight: padding_right + 'px' }} className="flex pr-4 font-medium text-headerText" htmlFor={label}>{label}</label>
-    //   <input className="font-light text-sm rounded cursor-pointer focus:outline-none file:border-0 file:px-4 file:pr-8 file:py-2 file:text-headerText file:font-medium file:cursor-pointer file:bg-inputField"
-    //     type={type}
-    //     id={label}
-    //     value={value}
-    //     name={name}
-    //     placeholder={placeholder}
-    //     onChange={onChange}
-    //     disabled={disabled}
-    //   />
-    //   {error && <p className="error">Input field can't be empty!</p>}
-    //   <p className="mt-1 text-sm text-gray-400" id="file_input_help">SVG, PNG, JPG or GIF (MAX. SMTH MB).</p>
-    // </div>
     <div className="flex flex-col justify-left w-full">
     <label style={{ paddingRight: padding_right + 'px' }} className="flex pr-4 font-medium text-headerText" htmlFor={label}>{label}</label>
     <label htmlFor="dropzone-file" className="mt-2 w-1/3 py-2 rounded cursor-pointer bg-disabledField">

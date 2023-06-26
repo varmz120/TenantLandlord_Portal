@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, FC, FormEventHandler } from 'react'
 interface InputProps {
   type: React.ButtonHTMLAttributes<HTMLButtonElement>["type"]
   label: string 
-  handleClick : FormEventHandler
+  handleClick : any
 }
 
 const SubmitButton: FC<InputProps> = ({

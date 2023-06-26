@@ -7,8 +7,67 @@ import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
+import React, {ChangeEvent, FormEvent, useState} from 'react'
 
-function RequestTicket() {
+// GO TO https://css-tricks.com/demonstrating-reusable-react-components-in-a-form/
+
+class TestFlow extends React.Component {
+  state : {[key: string]: any} = {
+    form: {
+      form_title: ""
+      // form_category: "",
+      // form_description: "",
+      // acknowledgement: false
+    },
+    errors: {},
+    submitted: false
+  };
+
+  handleChange = (event : ChangeEvent<HTMLInputElement>): void => {
+    console.log("Handling...");
+    console.log(this.state);
+    const { form } = this.state;
+    form[event.target.name] = event.target.value;
+    this.setState({ form });
+    console.log("At end of handling");
+    console.log(this.state);
+  };
+
+  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    console.log("Submitting...");
+    console.log(this.state);
+    const {
+      form: { form_title }
+    } = this.state;
+    let err : {[key: string]: any} = {};
+
+    if (!form_title) {
+      err.form_title = "Enter a title!";
+      console.log("SHDNT PRINT");
+    }
+
+    // if (!form_category) {
+    //   err.form_category = "Enter a title!";
+    // }
+
+    // if (!acknowledgement) {
+    //   err.acknowledgement = "Enter a title!";
+    // }
+
+    this.setState({ errors : err }, () => {
+      console.log("hmm i think its here")
+      if (Object.getOwnPropertyNames(this.state.errors).length === 0) {
+        this.setState({ submitted: true });
+        console.log("Success");
+      } else {
+        console.log("Hmm");
+      }
+    });
+  };
+
+  render(){
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
@@ -18,8 +77,17 @@ function RequestTicket() {
   var category = "Defects";
   var email = "dianmaisara@gmail.com"
   var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
-
+  
+  const {
+    submitted,
+    errors,
+    form: {form_title}
+  } = this.state;
   return (
+    <React.Fragment>
+    {submitted ? (
+      <p>Yay! {form_title} ticket has been sent!</p>
+    ) : (
     <div className="flex flex-col w-full items-center" id="requestTicket">
       <div className="flex bg-white/70 px-10 my-3">
         <p className='text-sm flex flex-col text-black font-base py-1'>
@@ -29,7 +97,7 @@ function RequestTicket() {
         </p>
       </div>
       <div className="flex bg-form border-gray-200 rounded-lg shadow sm:p-5">
-        <form className="space-y-5">
+        <form onSubmit={this.handleSubmit} className="space-y-5">
           <p className="text-lg text-center font-medium h-5">New Request Form</p>
           <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
           <div className="grid grid-cols-2 gap-x-10">
@@ -63,13 +131,13 @@ function RequestTicket() {
             label="Title"
             classnames="w-3/4"
             padding_right="0"
-            value=""
-            name="title"
-            placeholder={""}
+            value={form_title}
+            name="form_title"
+            placeholder={"Please type in a title"}
             error={false}
             disabled={false}
             layout={"vertical"}
-            onChange={()=> null}/>
+            onChange={this.handleChange}/>
           <DropdownField
             type={"text"}
             label="Category"
@@ -81,7 +149,7 @@ function RequestTicket() {
             error={false}
             disabled={false}
             layout={"vertical"}
-            onChange={()=> null}/>
+            onChange={this.handleChange}/>
           <AreaField
             label={"Description"}
             classnames=""
@@ -109,16 +177,19 @@ function RequestTicket() {
             name="tc"
             error={false}
             disabled={false}
-            onChange={()=> null}/>
+            onChange={this.handleChange}/>
           <SubmitButton
             type="submit"
             label="Submit"
-            handleClick={()=> null}
+            handleClick={this.handleSubmit}
             />
         </form>
       </div>
     </div>
+  )}
+  </React.Fragment>
   );
 }
+}
 
-export default RequestTicket;
+export default TestFlow;
