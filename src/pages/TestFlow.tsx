@@ -14,8 +14,8 @@ import React, {ChangeEvent, FormEvent, useState} from 'react'
 class TestFlow extends React.Component {
   state : {[key: string]: any} = {
     form: {
-      form_title: ""
-      // form_category: "",
+      form_title: "",
+      form_category: ""
       // form_description: "",
       // acknowledgement: false
     },
@@ -23,14 +23,12 @@ class TestFlow extends React.Component {
     submitted: false
   };
 
-  handleChange = (event : ChangeEvent<HTMLInputElement>): void => {
+  handleChange = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement>) : void => { // : void
     console.log("Handling...");
-    console.log(this.state);
     const { form } = this.state;
     form[event.target.name] = event.target.value;
     this.setState({ form });
     console.log("At end of handling");
-    console.log(this.state);
   };
 
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -39,30 +37,30 @@ class TestFlow extends React.Component {
     console.log("Submitting...");
     console.log(this.state);
     const {
-      form: { form_title }
+      form: { form_title, form_category }
     } = this.state;
     let err : {[key: string]: any} = {};
 
     if (!form_title) {
       err.form_title = "Enter a title!";
-      console.log("SHDNT PRINT");
     }
 
-    // if (!form_category) {
-    //   err.form_category = "Enter a title!";
-    // }
+    if (!form_category) {
+      err.form_category = "Please pick a category.";
+    }
 
     // if (!acknowledgement) {
     //   err.acknowledgement = "Enter a title!";
     // }
 
     this.setState({ errors : err }, () => {
-      console.log("hmm i think its here")
+      console.log(this.state);
       if (Object.getOwnPropertyNames(this.state.errors).length === 0) {
         this.setState({ submitted: true });
         console.log("Success");
       } else {
-        console.log("Hmm");
+        console.log("Failed");
+        console.log(this.state);
       }
     });
   };
@@ -77,16 +75,17 @@ class TestFlow extends React.Component {
   var category = "Defects";
   var email = "dianmaisara@gmail.com"
   var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
-  
+  var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
+
   const {
     submitted,
     errors,
-    form: {form_title}
+    form: {form_title, form_category}
   } = this.state;
   return (
     <React.Fragment>
     {submitted ? (
-      <p>Yay! {form_title} ticket has been sent!</p>
+      <p>Yay! {form_title} ticket with category: {form_category} has been sent!</p>
     ) : (
     <div className="flex flex-col w-full items-center" id="requestTicket">
       <div className="flex bg-white/70 px-10 my-3">
@@ -143,12 +142,13 @@ class TestFlow extends React.Component {
             label="Category"
             classnames="w-1/4"
             padding_right="0"
-            value=""
-            name="title"
+            value={form_category}
+            name="form_category"
             placeholder={""}
             error={false}
             disabled={false}
             layout={"vertical"}
+            options={categories}
             onChange={this.handleChange}/>
           <AreaField
             label={"Description"}

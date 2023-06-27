@@ -26,6 +26,7 @@ module.exports = {
         disabledText: '#777D86',
         userNameText: '#3180BA',
         textActive: '#CBE6EC',
+        placeholderText: '#9DA3AE'
       },
       borderRadius: {
         'md': '5px',
