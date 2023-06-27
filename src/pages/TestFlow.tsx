@@ -7,7 +7,7 @@ import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
-import React, {ChangeEvent, FormEvent, useState} from 'react'
+import React, {ChangeEvent, FormEvent} from 'react'
 
 // GO TO https://css-tricks.com/demonstrating-reusable-react-components-in-a-form/
 
@@ -15,18 +15,28 @@ class TestFlow extends React.Component {
   state : {[key: string]: any} = {
     form: {
       form_title: "",
-      form_category: ""
-      // form_description: "",
-      // acknowledgement: false
+      form_category: "",
+      form_description: "",
+      acknowledgement: false
     },
     errors: {},
     submitted: false
   };
 
-  handleChange = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement>) : void => { // : void
+  handleChange = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => { // : void
     console.log("Handling...");
     const { form } = this.state;
-    form[event.target.name] = event.target.value;
+
+    if ('checked' in event.target) {
+      form[event.target.name] = event.target.checked;
+    }
+    if ('value' in event.target) {
+      form[event.target.name] = event.target.value;
+    }
+    if ('textContent' in event.target) {
+      form[event.target.id] = event.target.textContent;
+    }
+    console.log(this.state);
     this.setState({ form });
     console.log("At end of handling");
   };
@@ -37,7 +47,7 @@ class TestFlow extends React.Component {
     console.log("Submitting...");
     console.log(this.state);
     const {
-      form: { form_title, form_category }
+      form: { form_title, form_category, form_description, acknowledgement }
     } = this.state;
     let err : {[key: string]: any} = {};
 
@@ -49,9 +59,9 @@ class TestFlow extends React.Component {
       err.form_category = "Please pick a category.";
     }
 
-    // if (!acknowledgement) {
-    //   err.acknowledgement = "Enter a title!";
-    // }
+    if (!acknowledgement) {
+      err.acknowledgement = "Please accept the T&C!";
+    }
 
     this.setState({ errors : err }, () => {
       console.log(this.state);
@@ -80,12 +90,17 @@ class TestFlow extends React.Component {
   const {
     submitted,
     errors,
-    form: {form_title, form_category}
+    form: {form_title, form_category, form_description, acknowledgement}
   } = this.state;
   return (
     <React.Fragment>
     {submitted ? (
-      <p>Yay! {form_title} ticket with category: {form_category} has been sent!</p>
+      <React.Fragment>
+        <p>Yay! {form_title} has been sent!</p>
+        <p>Category: {form_category}</p>
+        <p>User acceptance: {acknowledgement}</p>
+        <p>Comments: {form_description ? form_description : null}</p>
+      </React.Fragment>
     ) : (
     <div className="flex flex-col w-full items-center" id="requestTicket">
       <div className="flex bg-white/70 px-10 my-3">
@@ -144,7 +159,6 @@ class TestFlow extends React.Component {
             padding_right="0"
             value={form_category}
             name="form_category"
-            placeholder={""}
             error={false}
             disabled={false}
             layout={"vertical"}
@@ -155,10 +169,11 @@ class TestFlow extends React.Component {
             classnames=""
             padding_right={"0"}
             value=""
-            name="description"
+            id="form_description"
             disabled={false}
             layout={"vertical"}
-            placeholder=''/>
+            placeholder="Please inclue any additional remarks here."
+            onInput={this.handleChange}/>
           <UploadField
             type={"file"}
             label="Add Attachments"
@@ -173,8 +188,8 @@ class TestFlow extends React.Component {
             link={"#"}
             label="Acnowledgement of T&C"
             padding_right="0"
-            value=""
-            name="tc"
+            value={acknowledgement}
+            name="acknowledgement"
             error={false}
             disabled={false}
             onChange={this.handleChange}/>
