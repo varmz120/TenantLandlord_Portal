@@ -9,7 +9,7 @@ interface InputProps {
   layout : string
   classnames : string
   disabled?: boolean
-  onInput: (event : ChangeEvent<HTMLDivElement>) => void
+  onChange: (event : ChangeEvent<HTMLDivElement>) => void
 }
 
 const AreaField: FC<InputProps> = ({
@@ -21,7 +21,7 @@ const AreaField: FC<InputProps> = ({
   layout,
   classnames,
   disabled,
-  onInput
+  onChange
 }) => {
   let editStatus = (disabled == true ? false : true);
   let pointerEventStatus = (disabled == true ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"])
@@ -34,7 +34,7 @@ const AreaField: FC<InputProps> = ({
       autoCorrect="off" 
       autoCapitalize='off'
       placeholder={placeholder}
-      onInput={onInput}
+      onBlur={onChange}
       id={id}>
       {value}
       </div>

@@ -7,7 +7,7 @@ interface InputProps {
   value: string | number
   name: string
   placeholder: string
-  error: boolean
+  error: string
   disabled?: boolean
   layout: string
   classnames : string
@@ -39,7 +39,7 @@ const LineField: FC<InputProps> = ({
         onChange={onChange}
         disabled={disabled}
       />
-      {error && <p className="error">Input field can't be empty!</p>}
+      {error && <p className="error text-red-500">{error}</p>}
     </div>
   )
 }
