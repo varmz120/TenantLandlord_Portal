@@ -1,8 +1,5 @@
 import AreaField from '../components/AreaField';
 import LineField from '../components/LineField';
-import Gallery from '../components/Gallery';
-import Status from '../components/Status';
-import ActionRequired from '../components/ActionRequired';
 import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
@@ -12,12 +9,8 @@ function RequestTicket() {
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
-  var ticket_id = "007";
-  var location = "Sunplaza";
-  var unit = "01-35";
-  var category = "Defects";
-  var email = "dianmaisara@gmail.com"
-  var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
+  var email = "dianmaisara@gmail.com";
+  var userCtc = '+65 9874 2311';
   var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
 
   return (
@@ -42,7 +35,7 @@ function RequestTicket() {
               value={email}
               name="name"
               placeholder={""}
-              error={false}
+              error=""
               disabled={true}
               layout={"vertical"}
               onChange={()=> null}/>
@@ -51,10 +44,10 @@ function RequestTicket() {
               label="Contact"
               classnames="w-4/5"
               padding_right="0"
-              value={contactNo}
-              name="contactNo"
+              value={userCtc}
+              name="userCtc"
               placeholder={""}
-              error={false}
+              error=""
               disabled={true}
               layout={"vertical"}
               onChange={()=> null}/>
@@ -65,9 +58,9 @@ function RequestTicket() {
             classnames="w-3/4"
             padding_right="0"
             value={""}
-            name="form_title"
+            name="formTitle"
             placeholder={"Please type in a title"}
-            error={false}
+            error={""}
             disabled={false}
             layout={"vertical"}
             onChange={()=>null}/>
@@ -77,8 +70,8 @@ function RequestTicket() {
             classnames="w-1/4"
             padding_right="0"
             value={""}
-            name="form_category"
-            error={false}
+            name="formCategory"
+            error={""}
             disabled={false}
             layout={"vertical"}
             options={categories}
@@ -87,29 +80,28 @@ function RequestTicket() {
             label={"Description"}
             classnames=""
             padding_right={"0"}
-            value=""
-            id="form_description"
+            value={""}
+            id="formDescription"
             disabled={false}
             layout={"vertical"}
             placeholder="Please inclue any additional remarks here."
-            onInput={()=>null}/>
+            onChange={()=>null}/>
           <UploadField
-            type={"file"}
             label="Add Attachments"
+            name="formAttachments"
             padding_right="0"
-            value=""
-            name="title"
-            placeholder={""}
-            error={false}
+            filenames={[]}
+            value={""}
+            error={""}
             disabled={false}
-            onChange={()=> null}/>
+            onChange={()=>null}/>
           <TermsConditionsCheckbox
             link={"#"}
             label="Acnowledgement of T&C"
             padding_right="0"
             value={false}
-            name="acknowledgement"
-            error={false}
+            name=""
+            error={""}
             disabled={false}
             onChange={()=>null}/>
           <SubmitButton

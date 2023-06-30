@@ -1,107 +1,141 @@
 import AreaField from '../components/AreaField';
 import LineField from '../components/LineField';
-import Gallery from '../components/Gallery';
-import Status from '../components/Status';
-import ActionRequired from '../components/ActionRequired';
 import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
-import React, {ChangeEvent, FormEvent} from 'react'
+import React, {ChangeEvent, FormEvent, useState} from 'react'
 
-// GO TO https://css-tricks.com/demonstrating-reusable-react-components-in-a-form/
+function TestFlow() {
 
-class TestFlow extends React.Component {
-  state : {[key: string]: any} = {
-    form: {
-      form_title: "",
-      form_category: "",
-      form_description: "",
-      acknowledgement: false
-    },
-    errors: {},
-    submitted: false
-  };
+  const [formState, setFormState] = useState<string | any>({
+    formTitle: "",
+    formCategory: "",
+    formDescription: "",
+    formAttachments: [],
+    formAcknowledgement: false,
+    isSubmitted: false
+  });
+   
+  const [filenames, setFilenames] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string | any>({});
 
-  handleChange = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => { // : void
-    console.log("Handling...");
-    const { form } = this.state;
-
-    if ('checked' in event.target) {
-      form[event.target.name] = event.target.checked;
-    }
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
     if ('value' in event.target) {
-      form[event.target.name] = event.target.value;
+      setFormState({
+        ...formState,
+        [event.target.name]: event.target.value
+      });
     }
-    if ('textContent' in event.target) {
-      form[event.target.id] = event.target.textContent;
-    }
-    console.log(this.state);
-    this.setState({ form });
-    console.log("At end of handling");
   };
 
-  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleTextChange = (event: ChangeEvent<HTMLDivElement>) : void => {
+    if ('textContent' in event.target) {
+      setFormState({
+        ...formState,
+        [event.target.id]: event.target.textContent
+      });
+    } 
+  };
+
+  const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>) : void => {
+    if ('checked' in event.target) {
+      setFormState({
+        ...formState,
+        [event.target.name]: event.target.checked
+      });
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) : void => {
+    if ('files' in event.target) {
+      const data : string[] = [];
+      const names : string[] = [];
+      if (!event.target.files || event.target.files.length === 0) {
+        console.log("Select a file");
+      } else {
+        for (let i=0; i < event.target.files.length; i++) {
+          data.push(URL.createObjectURL(event.target.files[i]));
+          names.push(event.target.files[i].name);
+        }
+      const updatedAttachments = formState["formAttachments"].concat(data);
+      setFormState({
+        ...formState,
+        [event.target.name]: updatedAttachments
+      });
+      setFilenames(names);
+      }
+    }
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log("Submitting...");
-    console.log(this.state);
-    const {
-      form: { form_title, form_category, form_description, acknowledgement }
-    } = this.state;
-    let err : {[key: string]: any} = {};
-
-    if (!form_title) {
-      err.form_title = "Enter a title!";
+    if (!formState.formTitle) {
+      errors.formTitle = "Enter a title!";
+    } else {
+      delete errors.formTitle;
     }
-
-    if (!form_category) {
-      err.form_category = "Please pick a category.";
+    if (!formState.formAcknowledgement) {
+      errors.formAcknowledgement = "Please accept the T&C!"
+    } else {
+      delete errors.formAcknowledgement;
     }
-
-    if (!acknowledgement) {
-      err.acknowledgement = "Please accept the T&C!";
+    if (!formState.formCategory) {
+      errors.formCategory = "Enter a category!";
+    } else {
+      delete errors.formCategory;
     }
+    setErrors({...errors});
 
-    this.setState({ errors : err }, () => {
-      console.log(this.state);
-      if (Object.getOwnPropertyNames(this.state.errors).length === 0) {
-        this.setState({ submitted: true });
-        console.log("Success");
-      } else {
-        console.log("Failed");
-        console.log(this.state);
-      }
-    });
+    if (Object.keys(errors).length > 0) {
+      console.log("Failed");
+      console.log(errors);
+      console.log(formState);
+    } else {
+      setFormState({
+        ...formState,
+        isSubmitted: true
+      });
+      console.log("Success");
+      console.log(formState);
+    }
   };
 
-  render(){
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
-  var ticket_id = "007";
-  var location = "Sunplaza";
-  var unit = "01-35";
-  var category = "Defects";
-  var email = "dianmaisara@gmail.com"
-  var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
+  var email = "dianmaisara@gmail.com";
+  var userCtc = '+65 9874 2311';
   var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
 
   const {
-    submitted,
-    errors,
-    form: {form_title, form_category, form_description, acknowledgement}
-  } = this.state;
+    formTitle,
+    formCategory,
+    formDescription,
+    formAttachments, 
+    formAcknowledgement,
+    isSubmitted
+  } = formState;
+
   return (
+    // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-    {submitted ? (
+    {isSubmitted ? (
       <React.Fragment>
-        <p>Yay! {form_title} has been sent!</p>
-        <p>Category: {form_category}</p>
-        <p>User acceptance: {acknowledgement}</p>
-        <p>Comments: {form_description ? form_description : null}</p>
-      </React.Fragment>
+        <p>Yay! {formTitle} has been sent!</p>
+        <p>Category: {formCategory}</p>
+        <p>User acceptance: {formAcknowledgement? "yes" : ""}</p>
+        <p>Comments: {formDescription ? formDescription : null}</p>
+        <p>Attachments below:</p>
+        {formAttachments?.map((file: string) => {
+        return (
+          <iframe src={file} className='flex align-center items-center mx-auto wx-full text-center'/>
+        );
+        })}
+    </React.Fragment>
     ) : (
+    // ACTUAL PAGE
     <div className="flex flex-col w-full items-center" id="requestTicket">
       <div className="flex bg-white/70 px-10 my-3">
         <p className='text-sm flex flex-col text-black font-base py-1'>
@@ -111,7 +145,7 @@ class TestFlow extends React.Component {
         </p>
       </div>
       <div className="flex bg-form border-gray-200 rounded-lg shadow sm:p-5">
-        <form onSubmit={this.handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <p className="text-lg text-center font-medium h-5">New Request Form</p>
           <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
           <div className="grid grid-cols-2 gap-x-10">
@@ -123,7 +157,7 @@ class TestFlow extends React.Component {
               value={email}
               name="name"
               placeholder={""}
-              error={false}
+              error=""
               disabled={true}
               layout={"vertical"}
               onChange={()=> null}/>
@@ -132,10 +166,10 @@ class TestFlow extends React.Component {
               label="Contact"
               classnames="w-4/5"
               padding_right="0"
-              value={contactNo}
-              name="contactNo"
+              value={userCtc}
+              name="userCtc"
               placeholder={""}
-              error={false}
+              error=""
               disabled={true}
               layout={"vertical"}
               onChange={()=> null}/>
@@ -145,58 +179,57 @@ class TestFlow extends React.Component {
             label="Title"
             classnames="w-3/4"
             padding_right="0"
-            value={form_title}
-            name="form_title"
+            value={formTitle}
+            name="formTitle"
             placeholder={"Please type in a title"}
-            error={false}
+            error={errors.formTitle}
             disabled={false}
             layout={"vertical"}
-            onChange={this.handleChange}/>
+            onChange={handleValueChange}/>
           <DropdownField
             type={"text"}
             label="Category"
             classnames="w-1/4"
             padding_right="0"
-            value={form_category}
-            name="form_category"
-            error={false}
+            value={formCategory}
+            name="formCategory"
+            error={errors.formCategory}
             disabled={false}
             layout={"vertical"}
             options={categories}
-            onChange={this.handleChange}/>
+            onChange={handleValueChange}/>
           <AreaField
             label={"Description"}
             classnames=""
             padding_right={"0"}
-            value=""
-            id="form_description"
+            value={formDescription}
+            id="formDescription"
             disabled={false}
             layout={"vertical"}
             placeholder="Please inclue any additional remarks here."
-            onInput={this.handleChange}/>
+            onChange={handleTextChange}/>
           <UploadField
-            type={"file"}
             label="Add Attachments"
+            name="formAttachments"
             padding_right="0"
-            value=""
-            name="title"
-            placeholder={""}
-            error={false}
+            filenames={filenames}
+            value={formAttachments}
+            error={errors.formAttachments}
             disabled={false}
-            onChange={()=> null}/>
+            onChange={handleFileChange}/>
           <TermsConditionsCheckbox
             link={"#"}
             label="Acnowledgement of T&C"
             padding_right="0"
-            value={acknowledgement}
-            name="acknowledgement"
-            error={false}
+            value={formAcknowledgement}
+            name="formAcknowledgement"
+            error={errors.formAcknowledgement}
             disabled={false}
-            onChange={this.handleChange}/>
+            onChange={handleCheckedChange}/>
           <SubmitButton
             type="submit"
             label="Submit"
-            handleClick={this.handleSubmit}
+            handleClick={handleSubmit}
             />
         </form>
       </div>
@@ -205,6 +238,4 @@ class TestFlow extends React.Component {
   </React.Fragment>
   );
 }
-}
-
 export default TestFlow;

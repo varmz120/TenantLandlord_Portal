@@ -1,39 +1,45 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import uploadIcons from '../images/upload_icon.svg'
+import { createRef } from 'react'
 
 interface InputProps {
-  type: 'text' | 'number' | 'email' | 'password' | 'file'
   label: string
   padding_right: string
-  value: string | number
+  value: any
   name: string
-  placeholder: string
-  error: boolean
+  error: string
   disabled?: boolean
+  filenames : string[]
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const UploadField: FC<InputProps> = ({
-  type,
   label,
-  padding_right,
-  value,
   name,
-  placeholder,
+  padding_right,
   error,
   disabled,
+  filenames,
   onChange,
 }) => {
   return (
-    <div className="flex flex-col justify-left w-full">
-    <label style={{ paddingRight: padding_right + 'px' }} className="flex pr-4 font-medium text-headerText" htmlFor={label}>{label}</label>
-    <label htmlFor="dropzone-file" className="mt-2 w-1/3 py-2 rounded cursor-pointer bg-disabledField">
-        <div className="flex flex-col items-center">
-          <img src={uploadIcons} className='ml-24'/>
-        </div>
-        <input id="dropzone-file" type="file" className="hidden" />
-    </label>
-    <p className="mt-2 text-left text-xs text-gray-500 font-light"><span className="font-semibold">! Click to upload</span> PDF, PNG, or JPG (MAX. 10 MB).</p>
+      <div className="flex flex-col justify-left w-full">
+      <label style={{ paddingRight: padding_right + 'px' }} className="flex pr-4 font-medium text-headerText" htmlFor={label}>{label}</label>
+      <span className="flex  items-center">
+      <label htmlFor="dropzone-file" className="mt-2 py-2 w-1/3 rounded cursor-pointer bg-disabledField">
+          <div className="flex flex-col items-center">
+            <img src={uploadIcons} className='ml-24'/>
+          </div>
+          <input disabled={disabled} id="dropzone-file" name={name} type="file" className="hidden overflow-hidden z-1 " multiple onChange={onChange}/>
+      </label><p className="pt-2 pl-2 font-light text-sm ">
+      {filenames.map((name: string) => {
+        return (
+          <li className='inline-block overflow-hidden px-2'> {name} </li>
+        );
+      })}
+      </p></span>
+      <p className="mt-2 text-left text-xs text-gray-500 font-light"><span className="font-semibold">! Click to upload</span> PDF, PNG, or JPG (MAX. 10 MB).</p>
+      {error && <p className="error text-red-500">{error}</p>}
   </div>
   )
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar.tsx';
 import RequestTicket from './pages/RequestTicket.tsx';

@@ -42,7 +42,7 @@ function ViewTicket() {
                         disabled={true}
                         layout=''
                         placeholder="Please inclue any additional remarks here."
-                        onInput={()=>null} />
+                        onChange={()=>null} />
                     <Gallery
                         label={"Attachments"}
                         value=''
