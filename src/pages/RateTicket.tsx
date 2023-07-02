@@ -7,7 +7,7 @@ import SubmitButton from '../components/SubmitButton';
 import UploadField from '../components/UploadField';
 import React, {MouseEvent, ChangeEvent, FormEvent, useState, useEffect} from 'react'
 
-function RateTicket() {
+function TestFlow() {
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
   const [formState, setFormState] = useState<string | any>({
@@ -46,6 +46,34 @@ function RateTicket() {
     }
   };
 
+  const handleRatingChange = (event: MouseEvent<HTMLButtonElement>) : void => {
+    event.stopPropagation();
+    if ('id' in event.target) {
+      setFormState({
+        ...formState,
+        ["formRating"]: +(event.target.id as string)
+      });
+    }
+  };
+
+  useEffect(()=> {
+    console.log('Form:', formState);
+  }, [formState]);
+
+  useEffect(()=> {
+    console.log('Submitted?:', isSubmitted);
+  }, [formState['isSubmitted']]);
+
+
+  const handleTextChange = (event: ChangeEvent<HTMLDivElement>) : void => {
+    if ('textContent' in event.target) {
+      setFormState({
+        ...formState,
+        [event.target.id]: event.target.textContent
+      });
+    } 
+  };
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) : void => {
     if ('files' in event.target) {
       const data : string[] = [];
@@ -68,7 +96,11 @@ function RateTicket() {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    //event.stopPropagation();
     event.preventDefault();
+
+    console.log(event);
+    console.log("AM HERE");
 
     if (isClosed) {
       if (!formState.formRating) {
@@ -76,19 +108,20 @@ function RateTicket() {
       } else {
         delete errors.formRating;
       }
-      if (!formState.formAcknowledgement) {
-        errors.formAcknowledgement = "Please accept the T&C!"
-      } else {
-        delete errors.formAcknowledgement;
-      }
     } else {
       if (!formState.formRemarks) {
-        errors.formRemarks = "Please list your concerns below.";
+        errors.formRemarks = "Please list your concerns above.";
       } else {
         delete errors.formRemarks;
       }
     }
+    if (!formState.formAcknowledgement) {
+      errors.formAcknowledgement = "Please accept the T&C!"
+    } else {
+      delete errors.formAcknowledgement;
+    }
     setErrors({...errors});
+    console.log(errors);
 
     if (Object.keys(errors).length > 0) {
       console.log("Failed");
@@ -113,11 +146,30 @@ function RateTicket() {
     formRating,
     formRemarks, 
     formAcknowledgement,
-    formAttachments
+    formAttachments,
+    isSubmitted
   } = formState;
 
   return (
-    <div className="flex flex-col font-3xl" id="viewTicket">
+    // ONLY FOR TESTING PURPOSES
+    <React.Fragment>
+    {isSubmitted ?
+     (
+      <React.Fragment>
+        <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
+        <p>Remarks: {formRemarks}</p>
+        <p>Ratings: {formRating && isClosed ? formRating : null}</p>
+        <p>Acknowledgement: {formAcknowledgement ? "yes" : "no"}</p>
+        <p>Attachments below:</p>
+         {formAttachments?.map((file: string) => {
+         return (
+           <iframe src={file} className='flex align-center items-center mx-auto wx-full text-center'/>
+         );
+         })}
+      </React.Fragment>
+      ) : (
+      // ACTUAL PAGE
+      <div className="flex flex-col font-3xl" id="viewTicket">
             <BackButton
               type="button"
               label={"all tickets"}
@@ -127,7 +179,7 @@ function RateTicket() {
                 <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {location} Unit {unit}</p>
             </div>
             <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     <p className="text-lg text-left font-medium">Title</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className='flex align-center text-left'>
@@ -149,14 +201,17 @@ function RateTicket() {
                         firstViewState={firstView}
                         onClick={handleButtonClick}/>
                     </div>
-                    { firstView ? 
-                      (null) :
-                    isClosed ? (
+                    {
+                    firstView ? 
+                      null : 
+                    isClosed ?                    
                     <React.Fragment>
                     <StarRating 
                       label={"Rating"}
                       padding_right='24'
-                      handleClick={()=>null}/>
+                      rating={formRating}
+                      error={errors.formRating}
+                      handleClick={handleRatingChange}/>
                     <AreaField
                       label={"Additional Remarks"}
                       classnames="w-4/5"
@@ -165,15 +220,16 @@ function RateTicket() {
                       id="formRemarks"
                       disabled={false}
                       layout={"vertical"}
+                      error={""}
                       placeholder="Please inclue any additional remarks here."
-                      onChange={()=>null}/>
+                      onChange={handleTextChange}/>
                     <TermsConditionsCheckbox
                       link={"#"}
                       label="Acnowledgement of T&C"
                       padding_right="0"
                       value={formAcknowledgement}
                       name="formAcknowledgement"
-                      error={""}
+                      error={errors.formAcknowledgement}
                       disabled={false}
                       onChange={handleCheckedChange}/>
                     <SubmitButton
@@ -181,7 +237,7 @@ function RateTicket() {
                       label="Submit"
                       handleClick={handleSubmit}/>
                     </React.Fragment>
-                    ) : (
+                    :
                     <React.Fragment>
                     <AreaField
                       label={"Reasons for reopening of service ticket"}
@@ -191,27 +247,37 @@ function RateTicket() {
                       id="formRemarks"
                       disabled={false}
                       layout={"vertical"}
+                      error={errors.formRemarks}
                       placeholder="Please inclue any additional remarks here."
-                      onChange={()=>null}/>
+                      onChange={handleTextChange}/>
                     <UploadField
                       label="Add Attachments"
                       name="formAttachments"
                       padding_right="0"
                       filenames={filenames}
                       value={formAttachments}
-                      error={errors.formAttachments}
+                      error={""}
                       disabled={false}
                       onChange={handleFileChange}/>
+                    <TermsConditionsCheckbox
+                      link={"#"}
+                      label="Acnowledgement of T&C"
+                      padding_right="0"
+                      value={formAcknowledgement}
+                      name="formAcknowledgement"
+                      error={errors.formAcknowledgement}
+                      disabled={false}
+                      onChange={handleCheckedChange}/>
                     <SubmitButton
                       type="submit"
                       label="Submit"
                       handleClick={handleSubmit}/>
-                    </React.Fragment>
-                    )}
+                    </React.Fragment> }
                 </form>
             </div>
       </div>
-    );
-  }
-  
-  export default RateTicket;
+    )}
+  </React.Fragment>
+  );
+}
+export default TestFlow;

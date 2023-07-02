@@ -18,7 +18,7 @@ interface InputProps {
     return (
       <div className="flex flex-col align-center text-left input-wrapper">
         <label style={{ paddingRight: padding_right + 'px' }} className="text-lg font-medium text-headerText" htmlFor={label}>{label}</label>
-        <img className="my-6" src={statuses[value]}/>
+        <img className="my-6 max-w-[250px]" src={statuses[value]}/>
       </div>
     )
   }

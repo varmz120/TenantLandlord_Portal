@@ -3,6 +3,8 @@ import { MouseEvent, FC, useState } from 'react'
 interface InputProps {
   label: string 
   padding_right: string
+  rating : number
+  error : string
   handleClick : (event : MouseEvent<HTMLButtonElement>) => void
 }
 
@@ -10,9 +12,10 @@ interface InputProps {
 const StarRating: FC<InputProps> = ({
    label,
    padding_right,
+   rating,
+   error,
    handleClick,
   }) => {
-    const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     return (
       <div className="flex align-left text-left input-wrapper" >
@@ -24,13 +27,14 @@ const StarRating: FC<InputProps> = ({
             type="button"
             key={index}
             className={index <= (hover || rating) ? "text-starActive" : "text-placeholderText"}
-            onClick={() => setRating(index)}
+            onClick={handleClick}
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(rating)}>
-            <span className="star">&#9733;</span>
+            <span className="star" id={index.toString()}>&#9733;</span>
           </button>
         );
       })}
+    {error && <p className="pl-2 error text-red-500">{error}</p>}
     </div>
     )
   }

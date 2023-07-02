@@ -13,7 +13,7 @@ const SubmitButton: FC<InputProps> = ({
   }) => {
     return (
       <div className="flex align-left text-left input-wrapper" >
-        <button type={type} onSubmit={handleClick} className='flex py-1 px-4 bg-navbar font-medium text-white rounded'>
+        <button type={type} onClick={handleClick} onSubmit={handleClick} className='flex py-1 px-4 bg-navbar font-medium text-white rounded'>
         {label}
         </button>
     </div>

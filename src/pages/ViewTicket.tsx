@@ -42,12 +42,13 @@ function ViewTicket() {
                       onChange={()=> null}/>
                     <AreaField
                         label={"Description"}
-                        classnames="w-3/5"
+                        classnames="w-4/5"
                         padding_right={"32"}
                         value={description}
                         id="description"
                         disabled={true}
                         layout=''
+                        error={""}
                         placeholder="Please inclue any additional remarks here."
                         onChange={()=>null} />
                     <Gallery
@@ -69,7 +70,10 @@ function ViewTicket() {
                       <ActionButton
                         value={"View Quote"}
                         padding_right={"30"}
-                        type=""/>
+                        type=""
+                        firstViewState={false}
+                        toggle={false}
+                        onClick={()=>null}/>
                     </div>
                     </div>
                     </div>
