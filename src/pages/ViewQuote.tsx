@@ -60,6 +60,7 @@ function ViewQuote() {
                         id="description"
                         disabled={true}
                         layout=''
+                        error={""}
                         placeholder="Please inclue any additional remarks here."
                         onChange={()=>null} />
                         <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
@@ -71,20 +72,29 @@ function ViewQuote() {
                         <ActionButton
                         value={"Accept"}
                         padding_right={"0"}
-                        type="accept"/>
+                        type="accept"
+                        firstViewState={false}
+                        toggle={false}
+                        onClick={()=>null}/>
                         <ActionButton
                         value={"Reject"}
                         padding_right={"0"}
-                        type="reject"/>
+                        type="reject"
+                        firstViewState={false}
+                        toggle={false}
+                        onClick={()=>null}/>
                         </div>
                 </form>
                 <div className='border-l-2 border-gray-300 drop-shadow-md items-center'>
                     <p className='text-lg text-left font-medium text-headerText text-center'>Document View</p>
                     <iframe src={invoiceURI} className='flex mx-auto my-5 h-2/3 w-2/3'/>
                     <ActionButton
-                    value={"Download Icon"}
+                    value={"Download Quote"}
                     padding_right={"0"}
-                    type="download"/>
+                    type="download"
+                    firstViewState={false}
+                    toggle={false}
+                    onClick={()=>null}/>
                 </div>
                 </div>
             </div>

@@ -30,12 +30,12 @@ const ActionButton: FC<InputProps> = ({
         break;
       }
       case "download": {
-        className="w-40 text-headerText hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 mx-auto my-5";
+        className="w-40 text-headerText border-button hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 mx-auto my-5";
         icon="bg-50 bg-left bg-no-repeat bg-[url('./images/download_icon.svg')] group-hover:bg-[url('./images/download_icon_dark.svg')]"
         break;
       }
       default: {
-        className="w-32 text-headerText hover:text-textActive border-button hover:border-buttonActive hover:bg-buttonActive";
+        className="w-32 text-headerText border-button hover:text-textActive border-button hover:border-buttonActive hover:bg-buttonActive";
         break;
       }
     }
