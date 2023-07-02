@@ -79,11 +79,6 @@ function Navbar() {
                 onMouseLeave={handleUsernameInactive}
               >
               <div className={"w-8 h-5 mx-3 ml-3 bg-contain bg-center bg-no-repeat bg-[url('./images/user_icon.svg')] group-hover:bg-[url('./images/user_icon_dark.svg')]"}></div>
-                {/* <img
-                  src={usernameIsActive ? userIconDark : userIcon}
-                  className="w-8 h-5 mx-3 ml-3"
-                  alt="?"
-                ></img> */}
                 <div className="mr-4">Log In</div>
               </a>
             </li>

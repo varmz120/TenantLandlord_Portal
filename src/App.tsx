@@ -4,6 +4,8 @@ import RequestTicket from './pages/RequestTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
 import '@fontsource-variable/lexend';
 import TestFlow from './pages/TestFlow.tsx';
+import ViewQuote from './pages/ViewQuote.tsx';
+import RateTicket from './pages/RateTicket.tsx';
 
 function App() {
   return (
@@ -31,6 +33,24 @@ function ViewTicketPage(){
   );
 }
 
+function ViewQuotePage(){
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <ViewQuote />
+    </div>
+  );
+}
+
+function RateTicketPage(){
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <RateTicket />
+    </div>
+  );
+}
+
 function Test(){
   return (
     <div className="App h-screen bg-content">
@@ -40,4 +60,4 @@ function Test(){
   );
 }
 
-export default Test;
+export default RateTicketPage;

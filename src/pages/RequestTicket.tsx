@@ -4,6 +4,7 @@ import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
+import BackButton from '../components/BackButton';
 
 function RequestTicket() {
   // Mock static values
@@ -14,19 +15,26 @@ function RequestTicket() {
   var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
 
   return (
-    <div className="flex flex-col w-full items-center" id="requestTicket">
-      <div className="flex bg-white/70 px-10 my-3">
-        <p className='text-sm flex flex-col text-black font-base py-1'>
-          <span>For {area}, please refer to the Frequently Asked Questions FAQ Page <a href="#" className="underline">
-           here </a></span>
-          <span>In case of emergencies, please contact us at {contactNo}</span>
-        </p>
+    <div className="flex-col flex j w-full items-center" id="requestTicket">
+      <div className='grid grid-cols-banner gap-x-0'>
+        <BackButton
+          type="button"
+          label={"all tickets"}
+          handleClick={()=>null}
+          layout=''/>
+        <div className="flex bg-white/70 px-2 my-3">
+          <p className='text-sm flex flex-col text-black font-base py-1'>
+            <span>For {area}, please refer to the Frequently Asked Questions FAQ Page <a href="#" className="underline">
+            here </a></span>
+            <span>In case of emergencies, please contact us at {contactNo}</span>
+          </p>
+        </div>
       </div>
       <div className="flex bg-form border-gray-200 rounded-lg shadow sm:p-5">
-        <form onSubmit={()=>null} className="space-y-5">
+        <form onSubmit={()=>null} className="space-y-5 px-2">
           <p className="text-lg text-center font-medium h-5">New Request Form</p>
           <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-          <div className="grid grid-cols-2 gap-x-10">
+          <div className="grid grid-cols-2 gap-x-20">
             <LineField
               type={"text"}
               label="Email"
@@ -110,6 +118,9 @@ function RequestTicket() {
             handleClick={()=>null}
             />
         </form>
+      </div>
+      <div className='flex'>
+
       </div>
     </div>
   );
