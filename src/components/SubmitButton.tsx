@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC, FormEventHandler } from 'react'
+import { FC } from 'react'
 
 interface InputProps {
   type: React.ButtonHTMLAttributes<HTMLButtonElement>["type"]

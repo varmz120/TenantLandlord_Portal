@@ -52,7 +52,7 @@ const Gallery: FC<InputProps> = ({
   return (
     <div className="flex align-center text-left input-wrapper">
       <label style={{ paddingRight: padding_right + 'px' }} className="font-medium text-headerText" htmlFor={label}>{label}</label>
-      <div className='max-w-[500px] h-[200px] w-3/5 w-min-[100] h-min-[100] mx-5 relative group'>
+      <div className='max-w-[320px] h-[210px] w-3/5 w-min-[100] h-min-[100] ml-5 relative group'>
         <div
           style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
           className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
@@ -69,7 +69,7 @@ const Gallery: FC<InputProps> = ({
               <span className="sr-only">Next</span>
           </span>
         </button>
-        <div className='flex top-4 justify-center py-2'>
+        <div className='flex top-4 justify-center'>
           {slides.map((slide, slideIndex) => (
             <div
               key={slideIndex}
