@@ -1,6 +1,9 @@
 import ActionButton from "../components/ActionButton";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+    const navigate = useNavigate();
+
     // Mock static values
     var ticket_id = "007";
     var ticket_title = "Mock Ticket Title";
@@ -28,8 +31,8 @@ function Dashboard() {
                         type=""
                         firstViewState={false}
                         toggle={false}
-                        onClick={()=>null}/>
-                        </div>
+                        onClick={()=>navigate('/newRequest')} />
+                </div>
             </div>
       </div>
     );
