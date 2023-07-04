@@ -7,11 +7,22 @@ import Dashboard from './pages/Dashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
-    <div className="App h-screen bg-content">
-      <Navbar />
-    </div>
+    // <div className="App h-screen bg-content">
+    //   <Navbar />
+    // </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/newRequest" element={<RequestTicketPage/>} />
+        <Route path="/viewDetails" element={<ViewTicketPage/>} />
+        <Route path="/viewQuote" element={<ViewQuotePage />} />
+        <Route path="/feedbackSurvey" element={<RateTicketPage />} />
+      </Routes>
+    </Router>
   );
 }
 
@@ -60,4 +71,4 @@ function RateTicketPage(){
   );
 }
 
-export default DashboardPage; // Change to what you wanna see
+export default App; // Change to what you wanna see
