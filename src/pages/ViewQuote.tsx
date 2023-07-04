@@ -3,14 +3,24 @@ import LineField from '../components/LineField';
 import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
+import { useNavigate, useLocation } from "react-router-dom";
 
 function ViewQuote() {
+    const navigate = useNavigate();
+    const locate = useLocation();
+
+    console.log(locate.state);
+
     // Mock static values
     var ticket_id = "007";
-    var location = "Sunplaza";
-    var unit = "01-35";
-    var category = "Defects";
+    var location = "SunPlaza";
+    var landlord = "Mr Soy";
+    var unit = "01-42";
+    var amount = "250.00";
     var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla";
+    var formState = locate.state? locate.state.formState :  null;
+    var isSubmit = locate.state? locate.state.isSubmit : false;
+    var title = locate.state? formState.formTitle : "";
 
     return (
       <div className="flex flex-col font-3xl" id="viewTicket">
@@ -25,13 +35,13 @@ function ViewQuote() {
             <div className="flex mx-auto my-auto max-w-content bg-form border-gray-200 rounded-lg shadow sm:p-7">
                 <div className='grid grid-cols-2'>
                 <form className="space-y-5">
-                        <p className="text-lg text-left font-medium">Title</p>
+                        <p className="text-lg text-left font-medium">{title}</p>
                         <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                         <LineField
                         type={"text"}
                         label="Uploaded by"
                         padding_right="106"
-                        value={"Lorem ipsum"}
+                        value={landlord}
                         name="landlord"
                         placeholder={""}
                         error={""}
@@ -43,8 +53,8 @@ function ViewQuote() {
                         type={"text"}
                         label="Total Amount (SGD)"
                         padding_right="50"
-                        value={category}
-                        name="category"
+                        value={amount}
+                        name="amount"
                         placeholder={""}
                         error={""}
                         disabled={true}
@@ -74,14 +84,14 @@ function ViewQuote() {
                         type="accept"
                         firstViewState={false}
                         toggle={false}
-                        onClick={()=>null}/>
+                        onClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: true}})}/>
                         <ActionButton
                         value={"Reject"}
                         padding_right={"0"}
                         type="reject"
                         firstViewState={false}
                         toggle={false}
-                        onClick={()=>null}/>
+                        onClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: false}})}/>
                         </div>
                 </form>
                 <div className='border-l-2 border-gray-300 drop-shadow-md items-center'>
