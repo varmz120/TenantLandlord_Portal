@@ -6,17 +6,28 @@ import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
 import UploadField from '../components/UploadField';
 import React, {MouseEvent, ChangeEvent, FormEvent, useState, useEffect} from 'react'
+import { useNavigate, useLocation } from "react-router-dom";
 
 function TestFlow() {
+  const navigate = useNavigate();
+  const locate = useLocation();
+
+  console.log(locate.state);
+  var form = locate.state? locate.state.formState :  null;
+  var title = locate.state? form.formTitle : "";
+  var category = locate.state? form.formCategory : "";
+  
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
   const [formState, setFormState] = useState<string | any>({
+    formTitle: title,
+    formCategory: category,
     formRating: 0,
-    formRemarks: "",
+    formDescription: "",
     formAcknowledgement: false,
-    formAttachments: [],
-    isSubmitted: false
+    formAttachments: []
   });
+  const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
@@ -31,11 +42,6 @@ function TestFlow() {
       setClosed(closed);
     }
   };
-
-  // // For testing purpose
-  // useEffect(()=> {
-  //   console.log('Current button press', isClosed);
-  // }, [isClosed]);
 
   const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>) : void => {
     if ('checked' in event.target) {
@@ -55,15 +61,6 @@ function TestFlow() {
       });
     }
   };
-
-  useEffect(()=> {
-    console.log('Form:', formState);
-  }, [formState]);
-
-  useEffect(()=> {
-    console.log('Submitted?:', isSubmitted);
-  }, [formState['isSubmitted']]);
-
 
   const handleTextChange = (event: ChangeEvent<HTMLDivElement>) : void => {
     if ('textContent' in event.target) {
@@ -99,7 +96,6 @@ function TestFlow() {
     //event.stopPropagation();
     event.preventDefault();
 
-    console.log(event);
     console.log("AM HERE");
 
     if (isClosed) {
@@ -109,7 +105,7 @@ function TestFlow() {
         delete errors.formRating;
       }
     } else {
-      if (!formState.formRemarks) {
+      if (!formState.formDescription) {
         errors.formRemarks = "Please list your concerns above.";
       } else {
         delete errors.formRemarks;
@@ -128,14 +124,17 @@ function TestFlow() {
       console.log(errors);
       console.log(formState);
     } else {
-      setFormState({
-        ...formState,
-        isSubmitted: true
-      });
+      setSubmit(true);
       console.log("Success");
-      console.log(formState);
     }
   };
+
+  useEffect(()=>{
+    if (isSubmit) {
+      setTimeout(()=> {
+        navigate('/', {state: {formState, isSubmit, isClosed}});
+      }, 5000);}
+  }, [isSubmit]);
 
   // Mock static values
   var ticket_id = "007";
@@ -144,20 +143,19 @@ function TestFlow() {
 
   const {
     formRating,
-    formRemarks, 
+    formDescription, 
     formAcknowledgement,
-    formAttachments,
-    isSubmitted
+    formAttachments
   } = formState;
 
   return (
     // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-    {isSubmitted ?
+    {isSubmit ?
      (
       <React.Fragment>
         <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
-        <p>Remarks: {formRemarks}</p>
+        <p>Remarks: {formDescription}</p>
         <p>Ratings: {formRating && isClosed ? formRating : null}</p>
         <p>Acknowledgement: {formAcknowledgement ? "yes" : "no"}</p>
         <p>Attachments below:</p>
@@ -180,7 +178,7 @@ function TestFlow() {
             </div>
             <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                    <p className="text-lg text-left font-medium">Title</p>
+                    <p className="text-lg text-left font-medium">{title}</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className='flex align-center text-left'>
                       <p className='text-userNameText'>Do you wish to close the ticket and confirm completion of service?</p>
@@ -216,8 +214,8 @@ function TestFlow() {
                       label={"Additional Remarks"}
                       classnames="w-4/5"
                       padding_right={"0"}
-                      value={formRemarks}
-                      id="formRemarks"
+                      value={formDescription}
+                      id="formDescription"
                       disabled={false}
                       layout={"vertical"}
                       error={""}
@@ -243,11 +241,11 @@ function TestFlow() {
                       label={"Reasons for reopening of service ticket"}
                       classnames=""
                       padding_right={"0"}
-                      value={formRemarks}
-                      id="formRemarks"
+                      value={formDescription}
+                      id="formDescription"
                       disabled={false}
                       layout={"vertical"}
-                      error={errors.formRemarks}
+                      error={errors.formDescription}
                       placeholder="Please inclue any additional remarks here."
                       onChange={handleTextChange}/>
                     <UploadField

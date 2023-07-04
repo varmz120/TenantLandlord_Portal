@@ -4,19 +4,21 @@ import DropdownField from '../components/DropdownField';
 import UploadField from '../components/UploadField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
-import React, {ChangeEvent, FormEvent, useState} from 'react'
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
+import { useNavigate } from "react-router-dom";
 
 function RequestTicket() {
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState<string | any>({
     formTitle: "",
     formCategory: "",
     formDescription: "",
     formAttachments: [],
-    formAcknowledgement: false,
-    isSubmitted: false
+    formAcknowledgement: false
+    //isSubmitted: false
   });
-   
+  const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
@@ -93,14 +95,22 @@ function RequestTicket() {
       console.log(errors);
       console.log(formState);
     } else {
-      setFormState({
-        ...formState,
-        isSubmitted: true
-      });
+      setSubmit(true);
       console.log("Success");
-      console.log(formState);
+
+      // Will redirect to home/dashboard after 5 seconds
+      // setTimeout(()=> {
+      //     navigate('/', {state: {formState, isSubmit }});
+      //     }, 5000);
     }
   };
+
+  useEffect(()=>{
+    if (isSubmit) {
+      setTimeout(()=> {
+        navigate('/', {state: {formState, isSubmit }});
+      }, 5000);}
+  }, [isSubmit]);
 
   // Mock static values
   var area = 'General Queries';
@@ -115,13 +125,13 @@ function RequestTicket() {
     formDescription,
     formAttachments, 
     formAcknowledgement,
-    isSubmitted
+    //isSubmitted
   } = formState;
 
   return (
     // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-    {isSubmitted ? (
+    {isSubmit ? (
       <React.Fragment>
         <p>"{formTitle}" Ticket has been sent:</p>
         <p>Category: {formCategory}</p>
