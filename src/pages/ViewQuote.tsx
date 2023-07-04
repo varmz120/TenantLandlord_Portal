@@ -10,8 +10,7 @@ function ViewQuote() {
     var location = "Sunplaza";
     var unit = "01-35";
     var category = "Defects";
-    var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla"
-    var invoiceURI = '../images/alertImg.png'
+    var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla";
 
     return (
       <div className="flex flex-col font-3xl" id="viewTicket">
@@ -87,7 +86,8 @@ function ViewQuote() {
                 </form>
                 <div className='border-l-2 border-gray-300 drop-shadow-md items-center'>
                     <p className='text-lg text-left font-medium text-headerText text-center'>Document View</p>
-                    <iframe src={invoiceURI} className='flex mx-auto my-5 h-2/3 w-2/3'/>
+                     <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/>
+                     <iframe srcDoc={'<html><body><p>Quote will be displayed here in iframe.</p></body></html>'} className='flex mx-auto h-1/4 w-2/3 mb-1'/>
                     <ActionButton
                     value={"Download Quote"}
                     padding_right={"0"}
