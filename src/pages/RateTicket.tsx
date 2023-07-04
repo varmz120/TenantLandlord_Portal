@@ -171,7 +171,7 @@ function TestFlow() {
             <BackButton
               type="button"
               label={"all tickets"}
-              handleClick={()=>null}
+              handleClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: true}})}
               layout=''/>
             <div className='flex justify-center'>
                 <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {location} Unit {unit}</p>
