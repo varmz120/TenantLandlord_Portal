@@ -29,7 +29,7 @@ function ViewTicket() {
             <BackButton
               type="button"
               label={"all tickets"}
-              handleClick={()=>null}
+              handleClick={()=>navigate('/', {state: {formState, isSubmit, isClosed}})}
               layout=''/>
             <div className='flex justify-center'>
                 <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {building} Unit {unit}</p>
