@@ -12,6 +12,7 @@ interface InputProps {
     value, // where all my uris gonna be?
     padding_right,
   }) => {
+    // TODO: ADD ALL STATUS IMAGES HERE
     const statuses : {[key: string]: string} = {
         "Opened" : openTicket
     }

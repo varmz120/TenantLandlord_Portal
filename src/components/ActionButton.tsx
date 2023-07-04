@@ -20,6 +20,7 @@ const ActionButton: FC<InputProps> = ({
     let className = "";
     let icon = "";
 
+    // TODO: Add View Quote button option here
     switch(type) {
       case "accept": {
         className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText hover:border-[#BEDCB5] hover:bg-[#BEDCB5]");
