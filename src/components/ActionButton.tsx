@@ -22,11 +22,11 @@ const ActionButton: FC<InputProps> = ({
 
     switch(type) {
       case "accept": {
-        className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText hover:border-[#BEDCB5] hover:bg-[#BEDCB5]");
+        className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText");
         break;
       } 
       case "reject": {
-        className="w-24 " + (toggle && !firstViewState ? "text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]" : "text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E] hover:border-[#EBB3B0] hover:bg-[#EBB3B0]") ;
+        className="w-24 " + (toggle && !firstViewState ? "text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]" : "text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E]") ;
         break;
       }
       case "download": {
@@ -47,8 +47,8 @@ const ActionButton: FC<InputProps> = ({
     }
 
     return (
-      <div style={{ paddingLeft: padding_right + 'px' }} className="flex">
-        <button type="button" name={type} onClick={onClick} className={"h-8 rounded-md border-[1px] text-sm group " + className}>
+      <div style={{ paddingLeft: padding_right }} className="flex">
+        <button type="button" name={type} onClick={onClick} className={className}>
           {icon ? (
           <div className={"inline-block w-6 h-3 ml-2 " + icon}>
           </div>
