@@ -1,0 +1,194 @@
+import AreaField from '../components/AreaField';
+import LineField from '../components/LineField';
+import ActionRequired from '../components/ActionRequired';
+import DropdownField from '../components/DropdownField';
+import UploadField from '../components/UploadField';
+import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
+import UploadQuotationButton from '../components/UploadQuotationButton';
+import AttachQuotation from '../components/AttachQuotation';
+import Navbar from '../components/Navbar';
+import BackButton from '../components/BackButton';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
+
+function UploadQuote() {
+  //const navigate = useNavigate();
+
+  const [formState, setFormState] = useState<string | any>({
+    totalAmount: "",
+    formAttachments: [],
+    //isSubmitted: false
+  });
+  const [isSubmit, setSubmit] = useState(false);
+  const [filenames, setFilenames] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string | any>({});
+
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
+    if ('value' in event.target) {
+      setFormState({
+        ...formState,
+        [event.target.name]: event.target.value
+      });
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) : void => {
+    if ('files' in event.target) {
+      const data : string[] = [];
+      const names : string[] = [];
+      if (!event.target.files || event.target.files.length === 0) {
+        console.log("Select a file");
+      } else {
+        for (let i=0; i < event.target.files.length; i++) {
+          data.push(URL.createObjectURL(event.target.files[i]));
+          names.push(event.target.files[i].name);
+        }
+      const updatedAttachments = formState["formAttachments"].concat(data);
+      setFormState({
+        ...formState,
+        [event.target.name]: updatedAttachments
+      });
+      setFilenames(names);
+      }
+    }
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!formState.totalAmount) {
+      errors.formTitle = "Enter a Amount!";
+    } else {
+      delete errors.totalAmount;
+    }
+    if (!formState.formCategory) {
+      errors.formCategory = "Enter a category!";
+    } else {
+      delete errors.formCategory;
+    }
+    setErrors({...errors});
+
+    if (Object.keys(errors).length > 0) {
+      console.log("Failed");
+      console.log(errors);
+      console.log(formState);
+    } else {
+      setSubmit(true);
+      console.log("Success");
+
+      // Will redirect to home/dashboard after 5 seconds
+      // setTimeout(()=> {
+      //     navigate('/', {state: {formState, isSubmit }});
+      //     }, 5000);
+    }
+  };
+
+  // Mock static values
+  var quotationby = "Tom";
+  var date = '06/06/2023'; 
+
+  const {
+    totalAmount,
+    formAttachments, 
+  } = formState;
+
+
+    return (
+      <div className="flex flex-col h-screen bg-[#ECEDED]">
+        <Navbar />
+        <div className="flex flex-col font-3xl" id="viewTicket">
+            <BackButton
+              type="button"
+              label={"view ticket"}
+              handleClick={()=>null}
+              layout=''/>
+          <div className='flex-grow flex flex-col justify-center items-center bg-[#ECEDED]'>
+              <p className='text-headerText pb-5 text-2xl font-medium'>New Quotation</p>
+          </div>
+          <div className="flex mx-auto my-auto max-w-content bg-white border-gray-200 rounded-lg shadow sm:p-7">
+          <div className='grid grid-cols-2'>
+          <form onSubmit={handleSubmit} className="space-y-5">
+          <p className="text-lg text-center font-medium h-5">New Request Form</p>
+          <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+          <div className="grid grid-cols-2 gap-x-10">
+            <LineField
+              type={"text"}
+              label="Quotation By"
+              classnames=""
+              padding_right="0"
+              value={quotationby}
+              name="name"
+              placeholder={""}
+              error=""
+              disabled={true}
+              layout={"vertical"}
+              onChange={()=> null}/>
+            <LineField
+              type={"text"}
+              label="Date"
+              classnames="w-4/5"
+              padding_right="0"
+              value={date}
+              name="date"
+              placeholder={""}
+              error=""
+              disabled={true}
+              layout={"vertical"}
+              onChange={()=> null}/>
+            <LineField
+              type={"text"}
+              label="Date"
+              classnames="w-4/5"
+              padding_right="0"
+              value={date}
+              name="date"
+              placeholder={""}
+              error=""
+              disabled={true}
+              layout={"vertical"}
+              onChange={()=> null}/>
+          </div>
+          <LineField
+            type={"text"}
+            label="Total Amount (SGD)"
+            classnames="w-3/4"
+            padding_right="0"
+            value={totalAmount}
+            name="totalAmount"
+            placeholder={"Please key in amount"}
+            error={errors.formTitle}
+            disabled={false}
+            layout={"vertical"}
+            onChange={handleValueChange}/>
+        </form>
+                  <div className='border-l-2 border-gray-300 items-center bg-[white]'>
+                  <div className='border-l-2 border-gray-300 flex flex-col items-center bg-[white]'>
+                      <p className='text-lg text-left font-medium text-headerText text-center'>Document View</p>
+                        <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/>
+ 
+                        <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
+                        <AttachQuotation
+                        label="Add Attachments"
+                        name="formAttachments" 
+                        padding_left="0"
+                        filenames={filenames}
+                        value={formAttachments}
+                        error={errors.formAttachments}
+                        disabled={false}
+                        onChange={handleFileChange}/>
+                        </div>
+                        </div>
+
+                      <UploadQuotationButton
+                      label={"Upload Quote"}
+                      type="submit"
+                      handleClick={handleSubmit}
+                      />
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+    );
+  }
+  
+  export default UploadQuote;
