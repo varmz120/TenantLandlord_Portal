@@ -105,6 +105,8 @@ const ViewAllAccounts = () => {
 
   useEffect(() => {
     if (initialRender) {
+      handleToggle('tenants');
+      handleClick('tenants');
       setUserType('Tenants');
     }
     setInitialRender(false);
