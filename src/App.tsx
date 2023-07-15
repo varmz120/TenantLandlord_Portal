@@ -18,6 +18,7 @@ import ErrorPageRunTime from './pages/RuntimeError.tsx';
 import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import AdminHome from './pages/AdminHome';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/viewQuote" element={<ViewQuotePage />} />
         <Route path="/feedbackSurvey" element={<RateTicketPage />} />
         <Route path="/notification" element={<NotificationPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
         <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
@@ -112,6 +114,15 @@ function NotificationPage() {
         <Navbar />
         <Notification />
       </ErrorBoundary>
+    </div>
+  );
+}
+
+function AdminPage() {
+  return (
+    <div className="App h-screen flex flex-col">
+      <Navbar />
+      <AdminHome />
     </div>
   );
 }
