@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
+import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from "react-router-dom";
+
+// TODO: 1) Reroute for demo with correct navigate, locate and usestates. 2) Update filter dropdown.
 
 // old Dashboard for demo
 // function Dashboard() {
@@ -65,6 +68,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 // export default Dashboard;
 
 const Dashboard = () => {
+
   // useStates
   const [userIsActive, setUserIsActive] = useState(false);
   const handleUserActive = () => {
@@ -72,27 +76,26 @@ const Dashboard = () => {
   };
 
   const [tableData, setTableData] = useState([
-    { ID: 1, Item: 'Fix Floor', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 2, Item: 'Fix Floor', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 3, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 4, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 5, Item: 'Fix Floor', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 6, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 7, Item: 'Leaking Pipe', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 8, Item: 'Fix Floor', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 9, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 10, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 11, Item: 'Fix Floor', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 12, Item: 'Pest Control', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 13, Item: 'Leaking Pipe', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 14, Item: 'John', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 15, Item: 'John', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 16, Item: 'John', Category: 'Doe', Date: ' ', Status: ' ' },
-    { ID: 17, Item: 'John', Category: 'Doe', Date: ' ', Status: ' ' },
+    { ID: 1, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ' },
+    { ID: 2, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ' },
+    { ID: 3, Item: 'Pest Control', Category: 'Cleanliness', Date: ' ', Status: ' ' },
+    { ID: 4, Item: 'Pest Control', Category: 'Cleanliness', Date: ' ', Status: ' ' },
+    { ID: 5, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ' }
   ]);
 
   const navigate = useNavigate();
   const locate = useLocation();
+  const [firstView, setFirstView] = useState(true);
+
+  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) : void => {
+    //event.stopPropagation();
+    event.preventDefault();
+
+    console.log("AM HERE");
+
+    navigate('/newRequest');
+  };
+
 
   //
   const [filterValue, setFilterValue] = useState('');
@@ -150,15 +153,14 @@ const Dashboard = () => {
 
   return (
     // Card component that will be used to display the data
-    <div className="flex justify-center items-center h-screen">
-      <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
+    <div className="flex justify-center items-center">
+      <div className="container mx-auto mt-10" style={{ maxWidth: '1329px', height: '656px' }}>
         <div
           className="bg-navbar flex items-center justify-between rounded-t-lg drop-shadow-2xl"
-          style={{ height: '87px', paddingLeft: '20px', paddingRight: '20px' }}
+          style={{ height: '80px', paddingLeft: '20px', paddingRight: '20px' }}
         >
           <div className="flex items-center">
-            <a /* New Request Button */
-              href="#"
+            {/* <a /* New Request Button
               className="block rounded flex border-solid border-1 px-2 py-1 mr-4
                                         flex justify-center items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
               onMouseDown={handleUserActive}
@@ -168,7 +170,14 @@ const Dashboard = () => {
               onClick={()=>navigate('/newRequest')}
             >
               <div className="mx-auto">New Request</div>
-            </a>
+            </a> */}
+             <ActionButton
+                        value={"New Request"}
+                        padding_right={"0"}
+                        type="request"
+                        toggle={false}
+                        firstViewState={firstView}
+                        onClick={handleButtonClick}/>
           </div>
           <div className="flex items-center">
             
@@ -179,7 +188,7 @@ const Dashboard = () => {
               onMouseDown={handleUserActive}
               onMouseUp={handleUserInactive}
               onMouseLeave={handleUserInactive}
-              style={{ width: '57px', height: '57px' }}
+              style={{ width: '55px', height: '55px' }}
             >
               <img
                 src={userIsActive ? filterIcon : filterIcon}
@@ -187,7 +196,8 @@ const Dashboard = () => {
                 alt="?"
               ></img>
             </a>
-            <span /* Select All Button */
+            {/* 
+            <span /* Select All Button
               className="block rounded flex border-solid border-1 px-2 py-1
                                         flex justify-center items-center text-[#3180ba] bg-[#edfdff]"
               style={{ width: '200px', height: '60px' }}
@@ -206,7 +216,7 @@ const Dashboard = () => {
                 />
                 Select All
               </div>
-            </span>
+            </span> */}
           </div>
         </div>
         <div className="bg-white h-full overflow-y-auto rounded-b-lg drop-shadow-2xl">
@@ -228,9 +238,9 @@ const Dashboard = () => {
           <table className="table-auto w-full">
             <thead>
               <tr>
-                <th className="border px-4 py-2 bg-tableHeader text-white"></th>
-                <th className="border px-4 py-2 bg-tableHeader text-white">S/N</th>
-                <th className="border px-4 py-2 bg-tableHeader text-white">
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText"></th>
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText">S/N</th>
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText">
                   Item/Task Description
                   {filterValue && (
                     <span className="ml-2 text-sm text-gray-500">
@@ -238,9 +248,9 @@ const Dashboard = () => {
                     </span>
                   )}
                 </th>
-                <th className="border px-4 py-2 bg-tableHeader text-white">Category</th>
-                <th className="border px-4 py-2 bg-tableHeader text-white">Date</th>
-                <th className="border px-4 py-2 bg-tableHeader text-white">Status</th>
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText">Category</th>
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText">Date</th>
+                <th className="border px-4 py-2 bg-tableHeader text-userNameText">Status</th>
               </tr>
             </thead>
             <tbody className="">
@@ -261,20 +271,7 @@ const Dashboard = () => {
                   <td className="px-4 py-2">{row.Item}</td>
                   <td className="px-4 py-2">{row.Category}</td>
                   <td className="px-4 py-2">{row.Date}</td>
-                  <td className="px-4 py-2">
-                    <select
-                      value={row.Status}
-                      onChange={(e) => handleStatusUpdate(row.ID, e)}
-                      className="block appearance-none w-full bg-white border border-gray-300 
-                                                  hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      {statusOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
+                  <td className="px-4 py-2">{row.Status}</td>
                 </tr>
               ))}
             </tbody>

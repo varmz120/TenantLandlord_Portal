@@ -29,6 +29,10 @@ const ActionButton: FC<InputProps> = ({
         className="w-24 " + (toggle && !firstViewState ? "text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]" : "text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E]") ;
         break;
       }
+      case "request": {
+        className="w-40 text-userNameText border-button bg-userNameButton hover:text-textActive hover:border-activeField hover:bg-buttonActive mx-auto py-3 rounded";
+        break;
+      }
       case "download": {
         className="w-40 text-headerText border-button hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 mx-auto my-5";
         icon="bg-50 bg-left bg-no-repeat bg-[url('./images/download_icon.svg')] group-hover:bg-[url('./images/download_icon_dark.svg')]"
