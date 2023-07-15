@@ -52,7 +52,7 @@ const ActionButton: FC<InputProps> = ({
 
     return (
       <div style={{ paddingLeft: padding_right }} className="flex">
-        <button type="button" name={type} onClick={onClick} className={className}>
+        <button type="button" name={type} id="action" onClick={onClick} className={className}>
           {icon ? (
           <div className={"inline-block w-6 h-3 ml-2 " + icon}>
           </div>
