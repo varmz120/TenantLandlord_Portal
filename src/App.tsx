@@ -3,7 +3,7 @@ import '@fontsource-variable/lexend';
 import Navbar from './components/Navbar.tsx';
 import RequestTicket from './pages/RequestTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
-import Dashboard from './pages/Dashboard.tsx';
+import TenantDashboard from './pages/TenantDashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
 
@@ -27,7 +27,7 @@ function DashboardPage(){
   return (
     <div className="App h-screen bg-content">
       <Navbar />
-      <Dashboard />
+      <TenantDashboard />
     </div>
   );
 }
