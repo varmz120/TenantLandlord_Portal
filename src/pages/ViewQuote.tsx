@@ -4,51 +4,60 @@ import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from "react-router-dom";
+import React, {MouseEvent} from 'react';
 
 function ViewQuote() {
-    const navigate = useNavigate();
-    const locate = useLocation();
 
-    console.log(locate.state);
+  // Navigation & routing
+  const navigate = useNavigate();
+  const locate = useLocation();
+  var formState = locate.state? locate.state.formState :  null; // Temporary -> for demo purposes w/o backend
+  var isSubmit = locate.state? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
+  var title = locate.state? formState.formTitle : ""; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = locate.state? formState.formID : ""; // Temporary -> for demo purposes w/o backend
 
-    // Mock static values
-    var ticket_id = "007";
-    var location = "SunPlaza";
-    var landlord = "Mr Soy";
-    var unit = "01-42";
-    var amount = "250.00";
-    var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla";
-    var formState = locate.state? locate.state.formState :  null;
-    var isSubmit = locate.state? locate.state.isSubmit : false;
-    var title = locate.state? formState.formTitle : "";
+  // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
+  // Mock static Values
+  var location = "SunPlaza";
+  var landlord = "Mr Soy";
+  var unit = "01-42";
+  var amount = "250.00";
+  var description= "Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla";
 
-    return (
-      <div className="flex flex-col font-3xl" id="viewTicket">
-            <BackButton
-              type="button"
-              label={"all tickets"}
-              handleClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: false}})}
-              />
-            <div className='flex justify-center'>
-                <p className='text-headerText pb-5 text-2xl font-medium'>Quotation for #{ticket_id} : {location} Unit {unit}</p>
-            </div>
-            <div className="flex mx-auto my-auto max-w-content bg-form border-gray-200 rounded-lg shadow sm:p-7">
-                <div className='grid grid-cols-2'>
-                <form className="space-y-5">
-                        <p className="text-lg text-left font-medium">{title}</p>
-                        <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                        <LineField
-                        type={"text"}
-                        label="Uploaded by"
-                        padding_right="106"
-                        value={landlord}
-                        name="landlord"
-                        placeholder={""}
-                        error={""}
-                        disabled={true}
-                        layout=''
-                        classnames='w-2/5'
-                        onChange={()=> null}/>
+  // Handlers - None
+  // TODO: Download quote handler here
+  const handleAcceptClick = (event: MouseEvent<HTMLButtonElement>) : void => {
+    formState.formStatus = "Pending Approval";
+    navigate('/viewDetails', {state: {formState, isSubmit: true}});
+  };
+
+  return (
+    <div className="flex flex-col font-3xl" id="viewTicket">
+        <BackButton
+          type="button"
+          label={"ticket details"}
+          handleClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: !isSubmit}})}
+        />
+        <div className='flex justify-center'>
+          <p className='text-headerText pb-5 text-2xl font-medium'>Quotation for #00{ticket_ID} : {location} Unit {unit}</p>
+        </div>
+        <div className="flex mx-auto my-auto max-w-content bg-form border-gray-200 rounded-lg shadow sm:p-7">
+          <div className='grid grid-cols-2'>
+              <form className="space-y-5">
+                  <p className="text-lg text-left font-medium">{title}</p>
+                  <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+                  <LineField
+                    type={"text"}
+                    label="Uploaded by"
+                    padding_right="106"
+                    value={landlord}
+                    name="landlord"
+                    placeholder={""}
+                    error={""}
+                    disabled={true}
+                    layout=''
+                    classnames='w-2/5'
+                    onChange={()=> null}/>
                         <LineField
                         type={"text"}
                         label="Total Amount (SGD)"
@@ -73,6 +82,8 @@ function ViewQuote() {
                         placeholder="Please inclue any additional remarks here."
                         onChange={()=>null} />
                         <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
+                        {isSubmit ?
+                        <React.Fragment>
                         <ActionRequired
                         label={"Action Required"}
                         padding_right={"0"}
@@ -84,7 +95,7 @@ function ViewQuote() {
                         type="accept"
                         firstViewState={false}
                         toggle={false}
-                        onClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: true}})}/>
+                        onClick={handleAcceptClick}/>
                         <ActionButton
                         value={"Reject"}
                         padding_right={"0"}
@@ -93,6 +104,12 @@ function ViewQuote() {
                         toggle={false}
                         onClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: false}})}/>
                         </div>
+                        </React.Fragment>:
+                        <ActionRequired
+                        label={"Action Required"}
+                        padding_right={"0"}
+                        alert={false}/>
+                        }
                 </form>
                 <div className='border-l-2 border-gray-300 drop-shadow-md items-center'>
                     <p className='text-lg text-left font-medium text-headerText text-center'>Document View</p>
@@ -104,7 +121,7 @@ function ViewQuote() {
                     type="download"
                     firstViewState={false}
                     toggle={false}
-                    onClick={()=>null}/>
+                    onClick={()=>null}/> // Refer to TODO above
                 </div>
                 </div>
             </div>

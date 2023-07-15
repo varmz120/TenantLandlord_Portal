@@ -8,20 +8,31 @@ import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
 import { useNavigate } from "react-router-dom";
 
 function RequestTicket() {
+
+  // Navigation & routing
   const navigate = useNavigate();
 
+  // UseStates & Backend Data
+  const [isSubmit, setSubmit] = useState(false);
+  const [filenames, setFilenames] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string | any>({});
   const [formState, setFormState] = useState<string | any>({
     formTitle: "",
+    formID: 6,
+    formStatus: "Opened",
     formCategory: "",
     formDescription: "",
     formAttachments: [],
     formAcknowledgement: false
-    //isSubmitted: false
   });
-  const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string | any>({});
+  // Mock static values
+  var area = 'General Queries';
+  var contactNo = '+65 9123 4567';
+  var email = "dianmaisara@gmail.com";
+  var userCtc = '+65 9874 2311';
+  var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
 
+  // Handlers
   const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
     if ('value' in event.target) {
       setFormState({
@@ -70,6 +81,7 @@ function RequestTicket() {
     }
   };
 
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -108,20 +120,12 @@ function RequestTicket() {
       }, 5000);}
   }, [isSubmit]);
 
-  // Mock static values
-  var area = 'General Queries';
-  var contactNo = '+65 9123 4567';
-  var email = "dianmaisara@gmail.com";
-  var userCtc = '+65 9874 2311';
-  var categories = ["Cleanliness", "Aircon Extension", "Repair", "Pest Control"] 
-
   const {
     formTitle,
     formCategory,
     formDescription,
     formAttachments, 
-    formAcknowledgement,
-    //isSubmitted
+    formAcknowledgement
   } = formState;
 
   return (
