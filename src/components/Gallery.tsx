@@ -8,10 +8,9 @@ interface InputProps {
 
 const Gallery: FC<InputProps> = ({
   label,
-  value, // where all my uris gonna be?
+  value, // TODO: Pass in from MongoDB dictionary of URIs
   padding_right,
 }) => {
-  // TODO: Connect to input props to receive URI from DB
   const slides = [
     {
       url: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',

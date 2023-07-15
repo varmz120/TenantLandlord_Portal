@@ -5,7 +5,8 @@ function Dashboard() {
     const navigate = useNavigate();
     const locate = useLocation();
 
-    // Mock static values
+    // // TODO: Opt-in option for users (tenant, landlords)
+    // //  Mock static values
     // var ticket_id = "007";
     // var ticket_title = "Mock Ticket Title";
     // var location = "Sunplaza";

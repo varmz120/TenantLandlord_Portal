@@ -1,5 +1,11 @@
-import { FC, useState } from 'react'
-import openTicket from '../images/OpenTicketStatus.svg'
+import { FC } from 'react'
+import openTicket from '../images/ticket_opened_icon.svg'
+import pendingQuote from '../images/ticket_pendingQuote_icon.svg'
+import pendingApprove from '../images/ticket_pendingApprove_icon.svg'
+import closeTicket from '../images/ticket_closed_icon.svg'
+import rejectTicket from '../images/ticket_rejected_icon.svg'
+import inProgressTicket from '../images/ticket_progress_icon.svg'
+import inQueueTicket from '../images/ticket_queue_icon.svg'
 
 interface InputProps {
     label: string
@@ -9,12 +15,17 @@ interface InputProps {
   
   const Status: FC<InputProps> = ({
     label,
-    value, // where all my uris gonna be?
+    value, // TODO: Pass in from MongoDB ticket status string
     padding_right,
   }) => {
-    // TODO: ADD ALL STATUS IMAGES HERE
     const statuses : {[key: string]: string} = {
-        "Opened" : openTicket
+        "Opened" : openTicket,
+        "In Queue" : inQueueTicket,
+        "In Progress" : inProgressTicket,
+        "Pending Quote": pendingQuote,
+        "Pending Approval": pendingApprove,
+        "Closed" : closeTicket,
+        "Rejected" : rejectTicket
     }
     return (
       <div className="flex flex-col align-center text-left input-wrapper">

@@ -23,7 +23,7 @@ const DropdownField: FC<InputProps> = ({
   error,
   layout,
   classnames,
-  options,
+  options, // TODO: Pass in from MongoDB list of categories
   disabled,
   onChange,
 }) => {

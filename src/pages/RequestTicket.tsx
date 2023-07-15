@@ -98,10 +98,6 @@ function RequestTicket() {
       setSubmit(true);
       console.log("Success");
 
-      // Will redirect to home/dashboard after 5 seconds
-      // setTimeout(()=> {
-      //     navigate('/', {state: {formState, isSubmit }});
-      //     }, 5000);
     }
   };
 

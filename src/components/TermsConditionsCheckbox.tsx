@@ -11,6 +11,7 @@ interface InputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
+// TODO: Props for timestamp
 const TermsConditionsCheckbox: FC<InputProps> = ({
   link,
   label,

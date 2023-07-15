@@ -16,7 +16,7 @@ interface InputProps {
 const AreaField: FC<InputProps> = ({
   label,
   padding_right,
-  value,
+  value, // TODO: Pass in from MongoDB value if displaying pre-filled information
   id,
   placeholder,
   layout,
