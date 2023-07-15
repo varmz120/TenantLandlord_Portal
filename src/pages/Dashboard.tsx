@@ -8,8 +8,13 @@ import Navbar from '../components/Navbar';
 const Dashboard = () => {
   // useStates
   const [userIsActive, setUserIsActive] = useState(false);
+
   const handleUserActive = () => {
     setUserIsActive(true);
+  };
+
+  const handleUserInactive = () => {
+    setUserIsActive(false);
   };
 
   const [tableData, setTableData] = useState([
@@ -32,14 +37,55 @@ const Dashboard = () => {
     { ID: '17', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
   ]);
 
-  
-  const handleUserInactive = () => {
-    setUserIsActive(false);
-  };
-//*********************************************************** */
-//Const for filter attempt
+  // Define a type for the column names
+  type TableColumn = 'ID' | 'Item' | 'Category' | 'Date' | 'Status';
 
-  //********************************************************* */
+  // Update the state and event handler with the TableColumn type
+  const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
+    ID: '',
+    Item: '',
+    Category: '',
+    Date: '',
+    Status: '',
+  });
+
+  // Implement Filter function for table 
+  const [filteredTableData, setFilteredTableData] = useState(tableData);
+
+  const handleSearchInputChange = (column: TableColumn, value: string) => {
+    setSearchInputs((prevState) => ({
+      ...prevState,
+      [column]: value
+    }));
+
+    const filteredData = tableData.filter((row) => {
+      const rowValue = row[column].toString().toLowerCase();
+      const searchValue = value.toLowerCase();
+      return rowValue.includes(searchValue);
+    });
+
+    setFilteredTableData(filteredData);
+  };
+
+  //Implement Clear Filter function for table
+  const handleClearFilters = () => {
+    setSearchInputs({
+      ID: '',
+      Item: '',
+      Category: '',
+      Date: '',
+      Status: '',
+    });
+
+    setFilteredTableData(tableData);
+  };
+
+  //Implement Hidden Filter Row function for table
+  const [isRowVisible, setIsRowVisible] = useState(false);
+
+  const toggleRowVisibility = () => {
+    setIsRowVisible(!isRowVisible);
+  };
 
   // Check all checkbox function using indeterminate checkbox
   const [checked, setChecked] = useState<string[]>([]);
@@ -79,6 +125,13 @@ const Dashboard = () => {
       return row;
     });
     setTableData(updateTableData);
+    const updateFilteredTableData = filteredTableData.map((row) => {
+      if (row.ID === itemId) {
+        return { ...row, Status: e.target.value };
+      }
+      return row;
+    })
+    setFilteredTableData(updateFilteredTableData);
   };
 
   // Function for delete row
@@ -96,21 +149,15 @@ const Dashboard = () => {
         <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px'}}>
           <div
             className="flex items-center justify-between bg-[#31556F] rounded-t-lg drop-shadow-2xl"
-            style={{ height: '87px', paddingLeft: '20px', paddingRight: '20px' }}
-          >
+            style={{ height: '87px', paddingLeft: '20px', paddingRight: '20px' }}>
           
             <div className="flex items-center">
-              <a /* Give Quotation Button */
-                href="#"
+              <button /* Clear Filter Button */
+                onClick={handleClearFilters}
                 className="block rounded flex border-solid border-1 px-2 py-1 mr-4
-                                          flex justify-center items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
-                onMouseDown={handleUserActive}
-                onMouseUp={handleUserInactive}
-                onMouseLeave={handleUserInactive}
-                style={{ width: '150px', height: '60px' }}
-              >
-                <div className="mx-auto">Give Quotation</div>
-              </a>
+                                            flex justify-center items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]">
+                Clear Filters
+              </button>
             </div>
             <div className="flex items-center">
               <a /* Filter Icon Button */
@@ -120,6 +167,7 @@ const Dashboard = () => {
                   onMouseDown={handleUserActive}
                   onMouseUp={handleUserInactive}
                   onMouseLeave={handleUserInactive}
+                  onClick={toggleRowVisibility}
                   style={{ width: '57px', height: '57px' }}
                 >
                   <img
@@ -183,11 +231,68 @@ const Dashboard = () => {
                   </div>
                 </span>
             </div>
-        </div>
+          </div>
         <div className="bg-white h-full overflow-y-auto rounded-b-lg drop-shadow-2xl">
-          
           <table className="table-auto w-full">
             <thead>
+            <tr style={{display: isRowVisible ? 'table-row' : 'none'}}>
+                <th className="border px-4 py-2 bg-[gray] text-white"></th>
+
+                <th className="border px-4 py-2 bg-[gray] text-white">
+                  ID
+                  <input
+                  type="text"
+                  value={searchInputs.ID}
+                  onChange={(e) => handleSearchInputChange('ID', e.target.value)}
+                  placeholder="Search ID"
+                  style={{ color: 'gray' }}
+                />
+                </th>
+
+                <th className="border px-4 py-2 bg-[gray] text-white">
+                  Task/Description
+                  <input
+                  type="text"
+                  value={searchInputs.Item}
+                  onChange={(e) => handleSearchInputChange('Item', e.target.value)}
+                  placeholder="Search Item"
+                  style={{ color: 'gray' }}
+                />
+                </th>
+
+                <th className="border px-4 py-2 bg-[gray] text-white">
+                  Category
+                  <input
+                  type="text"
+                  value={searchInputs.Category}
+                  onChange={(e) => handleSearchInputChange('Category', e.target.value)}
+                  placeholder="Search Category"
+                  style={{ color: 'gray' }}
+                />
+                </th>
+
+                <th className="border px-4 py-2 bg-[gray] text-white">
+                  Date
+                  <input
+                  type="text"
+                  value={searchInputs.Date}
+                  onChange={(e) => handleSearchInputChange('Date', e.target.value)}
+                  placeholder="Search Date"
+                  style={{ color: 'gray' }}
+                />
+                </th>
+
+                <th className="border px-4 py-2 bg-[gray] text-white">
+                  Status
+                  <input
+                  type="text"
+                  value={searchInputs.Status}
+                  onChange={(e) => handleSearchInputChange('Status', e.target.value)}
+                  placeholder="Search Status"
+                  style={{ color: 'gray' }}
+                />
+                </th>
+              </tr>
               <tr>
                 <th className="border px-4 py-2 bg-[#3180BA] text-white"></th>
                 <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
@@ -198,36 +303,36 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="">
-            {tableData
-                .map((row) => (
-                <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID}>
-                  <td className="px-4 py-2">
-                    <input
-                      type="checkbox"
-                      checked={checked.includes(row.ID)}
-                      onChange={() => handleCheck(row.ID)}
-                    />
-                  </td>
-                  <td className="px-4 py-2">{row.ID}</td>
-                  <td className="px-4 py-2">{row.Item}</td>
-                  <td className="px-4 py-2">{row.Category}</td>
-                  <td className="px-4 py-2">{row.Date}</td>
-                  <td className="px-4 py-2">
-                    <select
-                      value={row.Status}
-                      onChange={(e) => handleStatusUpdate(row.ID, e)}
-                      className="block appearance-none w-full bg-white border border-gray-300 
-                                                  hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      {statusOptions.map((option) => (
+              {filteredTableData
+                  .map((row) => (
+                  <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID}>
+                    <td className="px-4 py-2">
+                      <input
+                        type="checkbox"
+                        checked={checked.includes(row.ID)}
+                        onChange={() => handleCheck(row.ID)}
+                      />
+                    </td>
+                    <td className="px-4 py-2">{row.ID}</td>
+                    <td className="px-4 py-2">{row.Item}</td>
+                    <td className="px-4 py-2">{row.Category}</td>
+                    <td className="px-4 py-2">{row.Date}</td>
+                    <td className="px-4 py-2">
+                      <select
+                        value={row.Status}
+                        onChange={(e) => handleStatusUpdate(row.ID, e)}
+                        className="block appearance-none w-full bg-white border border-gray-300 
+                                                    hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                      >
+                        {statusOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
-                    </select>
-                  </td>
-                </tr>
-              ))}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
