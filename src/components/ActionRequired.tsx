@@ -13,8 +13,13 @@ const ActionRequired: FC<InputProps> = ({
     alert,
   }) => {
     return (
-      <div style={{ paddingLeft: padding_right + 'px' }} className="flex align-center text-left mb-2">
+      <div style={{ paddingLeft: padding_right + 'px' }} className="flex-row align-center text-left mb-2">
         <span className='w-full flex justify-start items-baseline'><label className="text-lg font-medium text-headerText" htmlFor={label}>{label}</label><img src={alertImg} className={"pl-3 h-4 " + (alert == true ? 'visible' : 'invisible')}></img></span>
+      {!alert ?
+      <p className='text-userNameText text-sm text-left pt-2'>
+        None at this time.
+      </p>
+      : ""}
       </div>
     )
   }
