@@ -7,22 +7,27 @@ import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from "react-router-dom";
 
+// TODO: Add history of messages
 function ViewTicket() {
+
+  // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
+  var formState = locate.state? locate.state.formState :  null; // Temporary -> for demo purposes w/o backend
+  var isSubmit = locate.state? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
+  var title = locate.state? formState.formTitle : ""; // Temporary -> for demo purposes w/o backend
+  var category = locate.state? formState.formCategory : ""; // Temporary -> for demo purposes w/o backend
+  var description= locate.state? formState.formDescription : ""; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = locate.state? formState.formID :  ""; // Temporary -> for demo purposes w/o backend
+  var status = locate.state? formState.formStatus : ""; // // Temporary -> for demo purposes w/o backend
+  var isClosed = locate.state? locate.state.isClosed : false; // Temporary -> for demo purposes w/o backend
 
-  console.log(locate.state);
-
-  // Mock static values
-  var ticket_id = "007";
+  // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
+  // Mock static Values
   var building = "SunPlaza";
   var unit = "01-42";
-  var formState = locate.state? locate.state.formState :  null;
-  var isSubmit = locate.state? locate.state.isSubmit : false;
-  var title = locate.state? formState.formTitle : "";
-  var category = locate.state? formState.formCategory : "";
-  var description= locate.state? formState.formDescription : "";
-  var isClosed = locate.state? locate.state.isClosed : false;
+
+  // Handlers - None
 
   return (
       <div className="flex flex-col font-3xl" id="viewTicket">
@@ -32,7 +37,7 @@ function ViewTicket() {
               handleClick={()=>navigate('/', {state: {formState, isSubmit, isClosed}})}
               />
             <div className='flex justify-center'>
-                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {building} Unit {unit}</p>
+                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #00{ticket_ID} : {building} Unit {unit}</p>
             </div>
             <div className='flex flex-row justify-center'>
             <div className="flex w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
@@ -82,7 +87,7 @@ function ViewTicket() {
                     <div className="grid grid-cols-2 pt-1">
                       <Status
                         label={"Status"}
-                        value={"Opened"}
+                        value={status}
                         padding_right={"0"}/>
                       <div className="flex flex-col pt-1">
                       {isClosed?

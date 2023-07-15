@@ -1,19 +1,25 @@
-import React, { useState, MouseEvent } from 'react';
-import trashBinIcon from '../images/trash_bin_icon.svg';
-import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
+import { useState, MouseEvent, useEffect } from 'react';
 import filterIcon from '../images/filter_icon.svg';
 import filterDarkIcon from '../images/filter_icon_dark.svg';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from "react-router-dom";
 
-// TODO: 1) Reroute for demo with correct navigate, locate and usestates. 2) Update filter dropdown.
 const Dashboard = () => {
 
+  // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
-
+  var formState = locate.state? locate.state.formState :  null; // Temporary -> for demo purposes w/o backend
+  var title = locate.state? formState.formTitle : ""; // Temporary -> for demo purposes w/o backend
+  var category = locate.state? formState.formCategory : ""; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = locate.state? formState.formID :  ""; // Temporary -> for demo purposes w/o backend
+  var ticket_status = locate.state? formState.formStatus : ""; //Temporary -> for demo purposes w/o backend
+  var isClosed = locate.state? locate.state.isClosed : null; // Temporary -> for demo purposes w/o backend
+  
+  // UseStates & Backend Data
   const [filterActive, setFilter] = useState(false);
   const [filterValue, setFilterValue] = useState('');
+  // Mock static values
   const [tableData, setTableData] = useState([
     { ID: 1, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending ' },
     { ID: 2, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending '  },
@@ -22,6 +28,7 @@ const Dashboard = () => {
     { ID: 5, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending '  }
   ]);
 
+  // Handlers
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) : void => {
     event.preventDefault();
 
@@ -33,6 +40,30 @@ const Dashboard = () => {
       }
     }
     console.log(filterActive);
+  };
+
+  useEffect(()=>{
+    if (formState) {
+      var newData = {
+        ID: ticket_ID,
+        Item: title,
+        Category: category,
+        Date: ' ',
+        Status:  ticket_status,
+        Landlord: ' Pending '
+      };
+      setTableData(tableData => [...tableData, newData]);
+    }
+  }, [formState]);
+
+  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>) : void => {
+    event.preventDefault();
+
+    if (ticket_status === "Pending Approval") {
+      navigate('viewDetails', {state: {formState, isSubmit: true, isClosed }});
+    } else {
+      navigate('viewDetails', {state: {formState, isSubmit: false, isClosed }});
+    }
   };
 
   return (
@@ -110,7 +141,7 @@ const Dashboard = () => {
                   row.Item.toLowerCase().includes(filterValue.toLowerCase()) || row.Category.toLowerCase().includes(filterValue.toLowerCase()) || row.Landlord.toLowerCase().includes(filterValue.toLowerCase()) || row.Status.toLowerCase().includes(filterValue.toLowerCase())
                   )
                 .map((row) => (
-                <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID}>
+                <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID} onClick={handleRowClick}>
                   <td className="px-4 py-2">{row.ID}</td>
                   <td className="px-4 py-2">{row.Item}</td>
                   <td className="px-4 py-2">{row.Category}</td>

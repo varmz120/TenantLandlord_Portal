@@ -22,15 +22,15 @@ const ActionButton: FC<InputProps> = ({
 
     switch(type) {
       case "accept": {
-        className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText");
+        className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText hover:border-[#BEDCB5] hover:bg-[#BEDCB5]");
         break;
       } 
       case "reject": {
-        className="w-24 " + (toggle && !firstViewState ? "text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]" : "text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E]") ;
+        className="w-24 " + (toggle && !firstViewState ? "text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]" : "text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E] hover:border-[#EBB3B0] hover:bg-[#EBB3B0]");
         break;
       }
       case "request": {
-        className="w-40 text-userNameText border-button bg-userNameButton hover:text-textActive hover:border-activeField hover:bg-buttonActive mx-auto py-3 rounded";
+        className="w-40 h-[50px] text-userNameText border-button bg-userNameButton hover:text-textActive hover:border-activeField hover:bg-buttonActive mx-auto rounded";
         break;
       }
       case "download": {
@@ -51,8 +51,8 @@ const ActionButton: FC<InputProps> = ({
     }
 
     return (
-      <div style={{ paddingLeft: padding_right }} className="flex">
-        <button type="button" name={type} id="action" onClick={onClick} className={className}>
+      <div style={{ paddingLeft: padding_right + "px" }} className="flex">
+        <button type="button" name={type} id="action" onClick={onClick} className={"h-8 rounded-md border-[1px] text-sm group " + className}>
           {icon ? (
           <div className={"inline-block w-6 h-3 ml-2 " + icon}>
           </div>

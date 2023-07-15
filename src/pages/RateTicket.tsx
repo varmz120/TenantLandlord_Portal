@@ -9,19 +9,24 @@ import React, {MouseEvent, ChangeEvent, FormEvent, useState, useEffect} from 're
 import { useNavigate, useLocation } from "react-router-dom";
 
 function TestFlow() {
+
+  // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
+  var form = locate.state? locate.state.formState :  null; // Temporary -> for demo purposes w/o backend
+  var title = locate.state? form.formTitle : ""; // Temporary -> for demo purposes w/o backend
+  var category = locate.state? form.formCategory : ""; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = locate.state? form.formID :  ""; // Temporary -> for demo purposes w/o backend
+  var status = locate.state? form.formStatus : ""; // // Temporary -> for demo purposes w/o backend
 
-  console.log(locate.state);
-  var form = locate.state? locate.state.formState :  null;
-  var title = locate.state? form.formTitle : "";
-  var category = locate.state? form.formCategory : "";
-  
+  // UseStates & Backend Data
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
   const [formState, setFormState] = useState<string | any>({
     formTitle: title,
     formCategory: category,
+    formID: ticket_ID,
+    formStatus: status,
     formRating: 0,
     formDescription: "",
     formAcknowledgement: false,
@@ -30,7 +35,11 @@ function TestFlow() {
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
+  // Mock static values
+  var location = "Sunplaza";
+  var unit = "01-35";
 
+  // Handlers
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) : void => {
     event.stopPropagation();
     setFirstView(false);
@@ -93,10 +102,7 @@ function TestFlow() {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    //event.stopPropagation();
     event.preventDefault();
-
-    console.log("AM HERE");
 
     if (isClosed) {
       if (!formState.formRating) {
@@ -124,6 +130,17 @@ function TestFlow() {
       console.log(errors);
       console.log(formState);
     } else {
+      if (isClosed) {
+        setFormState({
+          ...formState,
+          formStatus: "Closed"
+        });
+      } else {
+        setFormState({
+          ...formState,
+          formStatus: "In Queue"
+        });
+      }
       setSubmit(true);
       console.log("Success");
     }
@@ -135,11 +152,6 @@ function TestFlow() {
         navigate('/', {state: {formState, isSubmit, isClosed}});
       }, 5000);}
   }, [isSubmit]);
-
-  // Mock static values
-  var ticket_id = "007";
-  var location = "Sunplaza";
-  var unit = "01-35";
 
   const {
     formRating,
@@ -170,11 +182,11 @@ function TestFlow() {
       <div className="flex flex-col font-3xl" id="viewTicket">
             <BackButton
               type="button"
-              label={"all tickets"}
+              label={"ticket details"}
               handleClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: true}})}
               />
             <div className='flex justify-center'>
-                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {location} Unit {unit}</p>
+                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #00{ticket_ID} : {location} Unit {unit}</p>
             </div>
             <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                 <form className="space-y-4" onSubmit={handleSubmit}>
