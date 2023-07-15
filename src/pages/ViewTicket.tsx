@@ -30,14 +30,26 @@ function ViewTicket() {
               type="button"
               label={"all tickets"}
               handleClick={()=>navigate('/', {state: {formState, isSubmit, isClosed}})}
-              layout=''/>
+              />
             <div className='flex justify-center'>
                 <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {building} Unit {unit}</p>
             </div>
             <div className='flex flex-row justify-center'>
             <div className="flex w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                 <form className="space-y-4">
-                    <p className="text-lg text-left font-medium">{title}</p>
+                  <div className='flex flex-row w-full'>
+                    <p className="flex text-lg text-left font-medium">{title}</p>
+                    { isSubmit?
+                    <ActionButton
+                    value={"View Quote"}
+                    padding_right={"30"}
+                    type="quote"
+                    firstViewState={false}
+                    toggle={false}
+                    onClick={()=>navigate('/viewQuote', {state: {formState, isSubmit: false}})}/>
+                    :
+                    null
+                    } </div>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <LineField
                       type={"text"}

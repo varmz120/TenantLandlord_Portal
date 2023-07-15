@@ -4,14 +4,12 @@ interface InputProps {
   type: React.ButtonHTMLAttributes<HTMLButtonElement>["type"]
   label: string 
   handleClick : any
-  layout : string 
 }
 
 const BackButton: FC<InputProps> = ({
    type,
    label,
-   handleClick,
-   layout,
+   handleClick
   }) => {
     return (
       <div className="flex align-left text-left input-wrapper" >

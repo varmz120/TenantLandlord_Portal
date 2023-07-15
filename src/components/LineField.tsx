@@ -18,7 +18,7 @@ const LineField: FC<InputProps> = ({
   type,
   label,
   padding_right,
-  value,
+  value, // TODO: Pass in from MongoDB value if displaying pre-filled information
   name,
   placeholder,
   error,

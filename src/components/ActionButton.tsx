@@ -20,7 +20,6 @@ const ActionButton: FC<InputProps> = ({
     let className = "";
     let icon = "";
 
-    // TODO: Add View Quote button option here
     switch(type) {
       case "accept": {
         className="w-24 " + (toggle && !firstViewState ? "text-headerText border-[#BEDCB5] bg-[#BEDCB5]" : "text-[#6BC04E] border-[#6BC04E] hover:text-headerText hover:border-[#BEDCB5] hover:bg-[#BEDCB5]");
@@ -33,6 +32,12 @@ const ActionButton: FC<InputProps> = ({
       case "download": {
         className="w-40 text-headerText border-button hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 mx-auto my-5";
         icon="bg-50 bg-left bg-no-repeat bg-[url('./images/download_icon.svg')] group-hover:bg-[url('./images/download_icon_dark.svg')]"
+        break;
+      }
+      // TODO: Fix slight icon placement
+      case "quote": {
+        className="w-32 text-headerText border-button hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 ";
+        icon="bg-left bg-no-repeat bg-[url('./images/quote_icon.svg')] group-hover:bg-[url('./images/quote_icon_dark.svg')] h-4 w-7"
         break;
       }
       default: {
