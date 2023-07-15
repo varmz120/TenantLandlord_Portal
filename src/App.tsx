@@ -19,6 +19,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import AdminHome from './pages/AdminHome';
+import '@fontsource-variable/lexend';
 
 function App() {
   return (
