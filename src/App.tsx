@@ -20,6 +20,10 @@ import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import AdminHome from './pages/AdminHome';
 import '@fontsource-variable/lexend';
+import AdminAccManage from './pages/AdminAccManage';
+import ViewAllAccounts from './pages/ViewAllAccounts';
+import Buildings from './pages/Buildings';
+import BuildingDetailsForm from './components/BuildingDetailsForm';
 
 function App() {
   return (
@@ -123,7 +127,16 @@ function AdminPage() {
   return (
     <div className="App h-screen flex flex-col">
       <Navbar />
-      <AdminHome />
+      <BuildingDetailsForm />
+    </div>
+  );
+}
+
+function AdminAccManagePage() {
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <AdminAccManage />
     </div>
   );
 }
