@@ -8,7 +8,7 @@ import AdminAccounts from '../components/tables/AdminAccounts';
 import LandlordAccounts from '../components/tables/LandlordAccounts';
 import TenantAccounts from '../components/tables/TenantAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
-
+import CreateAccountForm from '../components/CreateAccountForm';
 const ViewAllAccounts = () => {
   const [initialRender, setInitialRender] = useState(true);
 
@@ -136,6 +136,8 @@ const ViewAllAccounts = () => {
           </div>
         </div>
       </div>
+      // cannot fit the form beside the table
+      {/* <CreateAccountForm userType={userType} /> */}
     </div>
   );
 };

@@ -57,6 +57,17 @@ const ActionButton: FC<InputProps> = ({
         "bg-left bg-no-repeat bg-[url('./images/quote_icon.svg')] group-hover:bg-[url('./images/quote_icon_dark.svg')] h-4 w-7";
       break;
     }
+    case 'edit': {
+      className =
+        '!mr-3 !h-7  w-20 rounded bg-[#e5e7eb] border-[#e5e7eb] hover:bg-[#BEDCB5] items-center';
+      icon = " bg-50 h-5 !mt-1 bg-left bg-no-repeat bg-[url('./images/pencil_edit_icon.svg')]";
+      break;
+    }
+    case 'delete': {
+      className = ' !h-7 w-20 rounded bg-[#e5e7eb] border-[#e5e7eb] hover:bg-[#c95f5b] ';
+      icon = " bg-50 h-5  !mt-1  bg-left bg-no-repeat bg-[url('./images/delete.svg')] ";
+      break;
+    }
     default: {
       className =
         'w-32 text-headerText border-button hover:text-textActive border-button hover:border-buttonActive hover:bg-buttonActive';
