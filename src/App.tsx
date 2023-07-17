@@ -6,6 +6,7 @@ import ViewTicket from './pages/ViewTicket.tsx';
 import TenantDashboard from './pages/TenantDashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
+import ErrorPage from './pages/ErrorPage.tsx';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/viewDetails" element={<ViewTicketPage />} />
         <Route path="/viewQuote" element={<ViewQuotePage />} />
         <Route path="/feedbackSurvey" element={<RateTicketPage />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
