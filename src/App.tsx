@@ -6,6 +6,7 @@ import ViewTicket from './pages/ViewTicket.tsx';
 import TenantDashboard from './pages/TenantDashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
+import logo from './logo.svg';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
