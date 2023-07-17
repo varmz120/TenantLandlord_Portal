@@ -17,7 +17,7 @@ function RequestTicket() {
   const [errors, setErrors] = useState<string | any>({});
   const [formState, setFormState] = useState<string | any>({
     formTitle: '',
-    formID: 6,
+    formID: 5, // For demo purposes, this is set
     formStatus: 'Opened',
     formCategory: '',
     formDescription: '',
@@ -118,7 +118,7 @@ function RequestTicket() {
         navigate('/', { state: { formState, isSubmit } });
       }, 5000);
     }
-  }, [isSubmit]);
+  }, [isSubmit, formState, navigate]);
 
   const { formTitle, formCategory, formDescription, formAttachments, formAcknowledgement } =
     formState;
