@@ -14,8 +14,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
-        <Route path="/newRequest" element={<RequestTicketPage/>} />
-        <Route path="/viewDetails" element={<ViewTicketPage/>} />
+        <Route path="/newRequest" element={<RequestTicketPage />} />
+        <Route path="/viewDetails" element={<ViewTicketPage />} />
         <Route path="/viewQuote" element={<ViewQuotePage />} />
         <Route path="/feedbackSurvey" element={<RateTicketPage />} />
       </Routes>
@@ -23,7 +23,7 @@ function App() {
   );
 }
 
-function DashboardPage(){
+function DashboardPage() {
   return (
     <div className="App h-screen bg-content">
       <Navbar />
@@ -41,7 +41,7 @@ function RequestTicketPage() {
   );
 }
 
-function ViewTicketPage(){
+function ViewTicketPage() {
   return (
     <div className="App h-screen bg-content">
       <Navbar />
@@ -50,7 +50,7 @@ function ViewTicketPage(){
   );
 }
 
-function ViewQuotePage(){
+function ViewQuotePage() {
   return (
     <div className="App h-screen bg-content">
       <Navbar />
@@ -59,7 +59,7 @@ function ViewQuotePage(){
   );
 }
 
-function RateTicketPage(){
+function RateTicketPage() {
   return (
     <div className="App h-screen bg-content">
       <Navbar />
@@ -68,4 +68,4 @@ function RateTicketPage(){
   );
 }
 
-export default App; // Change to what you wanna see
+export default App;

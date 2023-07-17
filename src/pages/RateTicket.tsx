@@ -5,19 +5,18 @@ import AreaField from '../components/AreaField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
 import UploadField from '../components/UploadField';
-import React, {MouseEvent, ChangeEvent, FormEvent, useState, useEffect} from 'react'
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function TestFlow() {
-
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
-  var form = locate.state? locate.state.formState :  null; // Temporary -> for demo purposes w/o backend
-  var title = locate.state? form.formTitle : ""; // Temporary -> for demo purposes w/o backend
-  var category = locate.state? form.formCategory : ""; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = locate.state? form.formID :  ""; // Temporary -> for demo purposes w/o backend
-  var status = locate.state? form.formStatus : ""; // // Temporary -> for demo purposes w/o backend
+  var form = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
+  var title = locate.state ? form.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  var category = locate.state ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = locate.state ? form.formID : ''; // Temporary -> for demo purposes w/o backend
+  var status = locate.state ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
 
   // UseStates & Backend Data
   const [firstView, setFirstView] = useState(true);
@@ -28,22 +27,22 @@ function TestFlow() {
     formID: ticket_ID,
     formStatus: status,
     formRating: 0,
-    formDescription: "",
+    formDescription: '',
     formAcknowledgement: false,
-    formAttachments: []
+    formAttachments: [],
   });
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
   // Mock static values
-  var location = "Sunplaza";
-  var unit = "01-35";
+  var location = 'Sunplaza';
+  var unit = '01-35';
 
   // Handlers
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) : void => {
+  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
     setFirstView(false);
-    if ('name' in event.target){
+    if ('name' in event.target) {
       let closed = false;
       if (event.target.name === 'accept') {
         closed = true;
@@ -52,51 +51,51 @@ function TestFlow() {
     }
   };
 
-  const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>) : void => {
+  const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('checked' in event.target) {
       setFormState({
         ...formState,
-        [event.target.name]: event.target.checked
+        [event.target.name]: event.target.checked,
       });
     }
   };
 
-  const handleRatingChange = (event: MouseEvent<HTMLButtonElement>) : void => {
+  const handleRatingChange = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
     if ('id' in event.target) {
       setFormState({
         ...formState,
-        ["formRating"]: +(event.target.id as string)
+        ['formRating']: +(event.target.id as string),
       });
     }
   };
 
-  const handleTextChange = (event: ChangeEvent<HTMLDivElement>) : void => {
+  const handleTextChange = (event: ChangeEvent<HTMLDivElement>): void => {
     if ('textContent' in event.target) {
       setFormState({
         ...formState,
-        [event.target.id]: event.target.textContent
+        [event.target.id]: event.target.textContent,
       });
-    } 
+    }
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) : void => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
-      const data : string[] = [];
-      const names : string[] = [];
+      const data: string[] = [];
+      const names: string[] = [];
       if (!event.target.files || event.target.files.length === 0) {
-        console.log("Select a file");
+        console.log('Select a file');
       } else {
-        for (let i=0; i < event.target.files.length; i++) {
+        for (let i = 0; i < event.target.files.length; i++) {
           data.push(URL.createObjectURL(event.target.files[i]));
           names.push(event.target.files[i].name);
         }
-      const updatedAttachments = formState["formAttachments"].concat(data);
-      setFormState({
-        ...formState,
-        [event.target.name]: updatedAttachments
-      });
-      setFilenames(names);
+        const updatedAttachments = formState['formAttachments'].concat(data);
+        setFormState({
+          ...formState,
+          [event.target.name]: updatedAttachments,
+        });
+        setFilenames(names);
       }
     }
   };
@@ -106,188 +105,191 @@ function TestFlow() {
 
     if (isClosed) {
       if (!formState.formRating) {
-        errors.formRating = "Enter a rating!";
+        errors.formRating = 'Enter a rating!';
       } else {
         delete errors.formRating;
       }
     } else {
       if (!formState.formDescription) {
-        errors.formRemarks = "Please list your concerns above.";
+        errors.formRemarks = 'Please list your concerns above.';
       } else {
         delete errors.formRemarks;
       }
     }
     if (!formState.formAcknowledgement) {
-      errors.formAcknowledgement = "Please accept the T&C!"
+      errors.formAcknowledgement = 'Please accept the T&C!';
     } else {
       delete errors.formAcknowledgement;
     }
-    setErrors({...errors});
+    setErrors({ ...errors });
     console.log(errors);
 
     if (Object.keys(errors).length > 0) {
-      console.log("Failed");
+      console.log('Failed');
       console.log(errors);
       console.log(formState);
     } else {
       if (isClosed) {
         setFormState({
           ...formState,
-          formStatus: "Closed"
+          formStatus: 'Closed',
         });
       } else {
         setFormState({
           ...formState,
-          formStatus: "In Queue"
+          formStatus: 'In Queue',
         });
       }
       setSubmit(true);
-      console.log("Success");
+      console.log('Success');
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (isSubmit) {
-      setTimeout(()=> {
-        navigate('/', {state: {formState, isSubmit, isClosed}});
-      }, 5000);}
+      setTimeout(() => {
+        navigate('/', { state: { formState, isSubmit, isClosed } });
+      }, 5000);
+    }
   }, [isSubmit]);
 
-  const {
-    formRating,
-    formDescription, 
-    formAcknowledgement,
-    formAttachments
-  } = formState;
+  const { formRating, formDescription, formAcknowledgement, formAttachments } = formState;
 
   return (
     // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-    {isSubmit ?
-     (
-      <React.Fragment>
-        <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
-        <p>Remarks: {formDescription}</p>
-        <p>Ratings: {formRating && isClosed ? formRating : null}</p>
-        <p>Acknowledgement: {formAcknowledgement ? "yes" : "no"}</p>
-        <p>Attachments below:</p>
-         {formAttachments?.map((file: string) => {
-         return (
-           <iframe src={file} className='flex align-center items-center mx-auto wx-full text-center'/>
-         );
-         })}
-      </React.Fragment>
-      ) : (
-      // ACTUAL PAGE
-      <div className="flex flex-col font-3xl" id="viewTicket">
-            <BackButton
-              type="button"
-              label={"ticket details"}
-              handleClick={()=>navigate('/viewDetails', {state: {formState, isSubmit: true}})}
+      {isSubmit ? (
+        <React.Fragment>
+          <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
+          <p>Remarks: {formDescription}</p>
+          <p>Ratings: {formRating && isClosed ? formRating : null}</p>
+          <p>Acknowledgement: {formAcknowledgement ? 'yes' : 'no'}</p>
+          <p>Attachments below:</p>
+          {formAttachments?.map((file: string) => {
+            return (
+              <iframe
+                src={file}
+                title="Attachments"
+                className="flex align-center items-center mx-auto wx-full text-center"
               />
-            <div className='flex justify-center'>
-                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #00{ticket_ID} : {location} Unit {unit}</p>
-            </div>
-            <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    <p className="text-lg text-left font-medium">{title}</p>
-                    <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                    <div className='flex align-center text-left'>
-                      <p className='text-userNameText'>Do you wish to close the ticket and confirm completion of service?</p>
-                    </div>
-                    <div className='flex flex-row gap-x-5'>
-                      <ActionButton
-                        value={"Yes"}
-                        padding_right={"0"}
-                        type="accept"
-                        toggle={isClosed}
-                        firstViewState={firstView}
-                        onClick={handleButtonClick}/>
-                      <ActionButton
-                        value={"No"}
-                        padding_right={"0"}
-                        type="reject"
-                        toggle={!isClosed}
-                        firstViewState={firstView}
-                        onClick={handleButtonClick}/>
-                    </div>
-                    {
-                    firstView ? 
-                      null : 
-                    isClosed ?                    
-                    <React.Fragment>
-                    <StarRating 
-                      label={"Rating"}
-                      padding_right='24'
-                      rating={formRating}
-                      error={errors.formRating}
-                      handleClick={handleRatingChange}/>
-                    <AreaField
-                      label={"Additional Remarks"}
-                      classnames="w-4/5"
-                      padding_right={"0"}
-                      value={formDescription}
-                      id="formDescription"
-                      disabled={false}
-                      layout={"vertical"}
-                      error={""}
-                      placeholder="Please inclue any additional remarks here."
-                      onChange={handleTextChange}/>
-                    <TermsConditionsCheckbox
-                      link={"#"}
-                      label="Acnowledgement of T&C"
-                      padding_right="0"
-                      value={formAcknowledgement}
-                      name="formAcknowledgement"
-                      error={errors.formAcknowledgement}
-                      disabled={false}
-                      onChange={handleCheckedChange}/>
-                    <SubmitButton
-                      type="submit"
-                      label="Submit"
-                      handleClick={handleSubmit}/>
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
-                    <AreaField
-                      label={"Reasons for reopening of service ticket"}
-                      classnames=""
-                      padding_right={"0"}
-                      value={formDescription}
-                      id="formDescription"
-                      disabled={false}
-                      layout={"vertical"}
-                      error={errors.formDescription}
-                      placeholder="Please inclue any additional remarks here."
-                      onChange={handleTextChange}/>
-                    <UploadField
-                      label="Add Attachments"
-                      name="formAttachments"
-                      padding_right="0"
-                      filenames={filenames}
-                      value={formAttachments}
-                      error={""}
-                      disabled={false}
-                      onChange={handleFileChange}/>
-                    <TermsConditionsCheckbox
-                      link={"#"}
-                      label="Acnowledgement of T&C"
-                      padding_right="0"
-                      value={formAcknowledgement}
-                      name="formAcknowledgement"
-                      error={errors.formAcknowledgement}
-                      disabled={false}
-                      onChange={handleCheckedChange}/>
-                    <SubmitButton
-                      type="submit"
-                      label="Submit"
-                      handleClick={handleSubmit}/>
-                    </React.Fragment> }
-                </form>
-            </div>
-      </div>
-    )}
-  </React.Fragment>
+            );
+          })}
+        </React.Fragment>
+      ) : (
+        // ACTUAL PAGE
+        <div className="flex flex-col font-3xl" id="viewTicket">
+          <BackButton
+            type="button"
+            label={'ticket details'}
+            handleClick={() => navigate('/viewDetails', { state: { formState, isSubmit: true } })}
+          />
+          <div className="flex justify-center">
+            <p className="text-headerText pb-5 text-2xl font-medium">
+              Service Ticket #00{ticket_ID} : {location} Unit {unit}
+            </p>
+          </div>
+          <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <p className="text-lg text-left font-medium">{title}</p>
+              <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+              <div className="flex align-center text-left">
+                <p className="text-userNameText">
+                  Do you wish to close the ticket and confirm completion of service?
+                </p>
+              </div>
+              <div className="flex flex-row gap-x-5">
+                <ActionButton
+                  value={'Yes'}
+                  padding_right={'0'}
+                  type="accept"
+                  toggle={isClosed}
+                  firstViewState={firstView}
+                  onClick={handleButtonClick}
+                />
+                <ActionButton
+                  value={'No'}
+                  padding_right={'0'}
+                  type="reject"
+                  toggle={!isClosed}
+                  firstViewState={firstView}
+                  onClick={handleButtonClick}
+                />
+              </div>
+              {firstView ? null : isClosed ? (
+                <React.Fragment>
+                  <StarRating
+                    label={'Rating'}
+                    padding_right="24"
+                    rating={formRating}
+                    error={errors.formRating}
+                    handleClick={handleRatingChange}
+                  />
+                  <AreaField
+                    label={'Additional Remarks'}
+                    classnames="w-4/5"
+                    padding_right={'0'}
+                    value={formDescription}
+                    id="formDescription"
+                    disabled={false}
+                    layout={'vertical'}
+                    error={''}
+                    placeholder="Please inclue any additional remarks here."
+                    onChange={handleTextChange}
+                  />
+                  <TermsConditionsCheckbox
+                    link={'#'}
+                    label="Acnowledgement of T&C"
+                    padding_right="0"
+                    value={formAcknowledgement}
+                    name="formAcknowledgement"
+                    error={errors.formAcknowledgement}
+                    disabled={false}
+                    onChange={handleCheckedChange}
+                  />
+                  <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <AreaField
+                    label={'Reasons for reopening of service ticket'}
+                    classnames=""
+                    padding_right={'0'}
+                    value={formDescription}
+                    id="formDescription"
+                    disabled={false}
+                    layout={'vertical'}
+                    error={errors.formDescription}
+                    placeholder="Please inclue any additional remarks here."
+                    onChange={handleTextChange}
+                  />
+                  <UploadField
+                    label="Add Attachments"
+                    name="formAttachments"
+                    padding_right="0"
+                    filenames={filenames}
+                    value={formAttachments}
+                    error={''}
+                    disabled={false}
+                    onChange={handleFileChange}
+                  />
+                  <TermsConditionsCheckbox
+                    link={'#'}
+                    label="Acnowledgement of T&C"
+                    padding_right="0"
+                    value={formAcknowledgement}
+                    name="formAcknowledgement"
+                    error={errors.formAcknowledgement}
+                    disabled={false}
+                    onChange={handleCheckedChange}
+                  />
+                  <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                </React.Fragment>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
+    </React.Fragment>
   );
 }
 export default TestFlow;

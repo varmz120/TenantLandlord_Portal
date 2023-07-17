@@ -1,8 +1,5 @@
 import { useState } from 'react';
 import homeImage from '../images/home.svg';
-import userIcon from '../images/user_icon.svg';
-import userIconDark from '../images/user_icon_dark.svg';
-import { url } from 'inspector';
 
 function Navbar() {
   const [usernameIsActive, setUsernameIsActive] = useState(false);
@@ -58,9 +55,7 @@ function Navbar() {
                 Home
               </a>
             </li>
-            <li
-            // className="flex items-center content-center justify-center ml-0"
-            >
+            <li>
               <a
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
@@ -78,7 +73,11 @@ function Navbar() {
                 onMouseUp={handleUsernameInactive}
                 onMouseLeave={handleUsernameInactive}
               >
-              <div className={"w-8 h-5 mx-3 ml-3 bg-contain bg-center bg-no-repeat bg-[url('./images/user_icon.svg')] group-hover:bg-[url('./images/user_icon_dark.svg')]"}></div>
+                <div
+                  className={
+                    "w-8 h-5 mx-3 ml-3 bg-contain bg-center bg-no-repeat bg-[url('./images/user_icon.svg')] group-hover:bg-[url('./images/user_icon_dark.svg')]"
+                  }
+                ></div>
                 <div className="mr-4">Log In</div>
               </a>
             </li>

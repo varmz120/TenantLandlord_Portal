@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   // Removed because it causes useEffect to fire twice when it shouldnt
   // <React.StrictMode>
-    <App />
+  <App />
   //</React.StrictMode>
 );
 
