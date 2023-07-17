@@ -65,7 +65,7 @@ function TestFlow() {
     if ('id' in event.target) {
       setFormState({
         ...formState,
-        ['formRating']: +(event.target.id as string),
+        formRating: +(event.target.id as string),
       });
     }
   };

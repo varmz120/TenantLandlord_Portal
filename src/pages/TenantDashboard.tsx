@@ -20,25 +20,24 @@ const Dashboard = () => {
   const [filterValue, setFilterValue] = useState('');
   // Mock static values
   const [tableData, setTableData] = useState([
-    { ID: 1, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending ' },
-    { ID: 2, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending ' },
+    { ID: 1, Item: 'Fix Floor', Category: 'Repair', Date: ' 01/11/22 ', Status: ' Closed ', Landlord: ' Mr. Smoy ' },
+    { ID: 2, Item: 'Fix Floor', Category: 'Repair', Date: ' 17/12/22 ', Status: ' Closed ', Landlord: ' Mr. Smoy ' },
     {
       ID: 3,
       Item: 'Pest Control',
       Category: 'Cleanliness',
-      Date: ' ',
-      Status: ' ',
-      Landlord: ' Pending ',
+      Date: ' 22/12/22 ',
+      Status: ' Closed ',
+      Landlord: ' Mrs. Lima ',
     },
     {
       ID: 4,
       Item: 'Pest Control',
       Category: 'Cleanliness',
-      Date: ' ',
-      Status: ' ',
-      Landlord: ' Pending ',
+      Date: ' 17/07/23 ',
+      Status: ' Closed ',
+      Landlord: ' Mrs. Lima ',
     },
-    { ID: 5, Item: 'Fix Floor', Category: 'Repair', Date: ' ', Status: ' ', Landlord: ' Pending ' },
   ]);
 
   // Handlers
