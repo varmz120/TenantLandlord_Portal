@@ -8,7 +8,7 @@ import UploadField from '../components/UploadField';
 import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function TestFlow() {
+function RateTicket() {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
@@ -292,4 +292,4 @@ function TestFlow() {
     </React.Fragment>
   );
 }
-export default TestFlow;
+export default RateTicket;
