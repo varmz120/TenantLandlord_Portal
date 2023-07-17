@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'banner': 'repeat(3, 1fr)',
+        banner: 'repeat(3, 1fr)',
       },
       screens: {
         '3xl': '1920px',
@@ -20,7 +20,7 @@ module.exports = {
         buttonActive: '#193446',
       },
       backgroundImage: {
-        'imageUploadIcons': "#ECEAEA url('./images/upload_icon.svg')"
+        imageUploadIcons: "#ECEAEA url('./images/upload_icon.svg')",
       },
       textColor: {
         headerText: '#2E424D',
@@ -30,15 +30,15 @@ module.exports = {
         userNameText: '#3180BA',
         textActive: '#CBE6EC',
         placeholderText: '#9DA3AE',
-        starActive: '#EFCC41'
+        starActive: '#EFCC41',
       },
       borderRadius: {
-        'md': '5px',
+        md: '5px',
       },
       colors: {
-        'button' : '#2E424D',
-        'buttonActive' : '#193446',
-      }
+        button: '#2E424D',
+        buttonActive: '#193446',
+      },
     },
   },
   plugins: [],
