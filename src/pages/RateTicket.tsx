@@ -151,7 +151,7 @@ function TestFlow() {
         navigate('/', { state: { formState, isSubmit, isClosed } });
       }, 5000);
     }
-  }, [isSubmit]);
+  }, [isSubmit, formState, isClosed, navigate]);
 
   const { formRating, formDescription, formAcknowledgement, formAttachments } = formState;
 
