@@ -4,7 +4,7 @@ import filterDarkIcon from '../images/filter_icon_dark.svg';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Dashboard = () => {
+const TenantDashboard = () => {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
@@ -182,4 +182,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default TenantDashboard;
