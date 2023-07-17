@@ -129,7 +129,7 @@ function ViewQuote() {
             <p className="text-lg text-left font-medium text-headerText text-center">
               Document View
             </p>
-            <img src={ExampleQuote} className="flex mx-auto mt-3 h-4/5 w-2/3" alt="Quote PDF"/>
+            <img src={ExampleQuote} className="flex mx-auto mt-3 h-4/5 w-2/3" alt="Quote PDF" />
             {/*
                     <iframe src='..//..//public//Example_Quote.pdf' title='alert' className='flex mx-auto h-4/5 w-2/3'/>
                      <iframe srcDoc={'<html><body><p>Quote will be displayed here in iframe.</p></body></html>'} className='flex mx-auto h-1/4 w-2/3 mb-1'/> 

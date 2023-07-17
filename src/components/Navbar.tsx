@@ -70,10 +70,13 @@ function Navbar() {
               >
                 <div
                   className={
-                    "w-8 h-5 bg-contain bg-center bg-no-repeat " + (usernameIsActive ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2" : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
+                    'w-8 h-5 bg-contain bg-center bg-no-repeat ' +
+                    (usernameIsActive
+                      ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2"
+                      : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
                   }
                 ></div>
-                <div className="mr-4">{usernameIsActive ? "Log Out" : "Log In"}</div>
+                <div className="mr-4">{usernameIsActive ? 'Log Out' : 'Log In'}</div>
               </a>
             </li>
           </ul>

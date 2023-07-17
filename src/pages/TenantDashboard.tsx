@@ -20,8 +20,22 @@ const TenantDashboard = () => {
   const [filterValue, setFilterValue] = useState('');
   // Mock static values
   const [tableData, setTableData] = useState([
-    { ID: 1, Item: 'Fix Floor', Category: 'Repair', Date: ' 01/11/22 ', Status: ' Closed ', Landlord: ' Mr. Smoy ' },
-    { ID: 2, Item: 'Fix Floor', Category: 'Repair', Date: ' 17/12/22 ', Status: ' Closed ', Landlord: ' Mr. Smoy ' },
+    {
+      ID: 1,
+      Item: 'Fix Floor',
+      Category: 'Repair',
+      Date: ' 01/11/22 ',
+      Status: ' Closed ',
+      Landlord: ' Mr. Smoy ',
+    },
+    {
+      ID: 2,
+      Item: 'Fix Floor',
+      Category: 'Repair',
+      Date: ' 17/12/22 ',
+      Status: ' Closed ',
+      Landlord: ' Mr. Smoy ',
+    },
     {
       ID: 3,
       Item: 'Pest Control',
