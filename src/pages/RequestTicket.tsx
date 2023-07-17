@@ -150,7 +150,7 @@ function RequestTicket() {
             <p className="text-sm flex flex-col text-black font-base py-1">
               <span>
                 For {area}, please refer to the Frequently Asked Questions FAQ Page{' '}
-                <a href="#" className="underline">
+                <a href="/#" className="underline">
                   here{' '}
                 </a>
               </span>

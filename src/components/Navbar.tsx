@@ -3,19 +3,16 @@ import homeImage from '../images/home.svg';
 
 function Navbar() {
   const [usernameIsActive, setUsernameIsActive] = useState(false);
-  const handleUsernameActive = () => {
-    setUsernameIsActive(true);
-  };
-
-  const handleUsernameInactive = () => {
-    setUsernameIsActive(false);
+  const handleUsername = () => {
+    // TODO: Replace with check authentication token to see if user is logged into session
+    setUsernameIsActive(!usernameIsActive);
   };
 
   return (
     <nav className="max-w-screen h-12 border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between h-12">
         <a
-          href="#"
+          href="/#"
           className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
         >
@@ -47,7 +44,7 @@ function Navbar() {
           <ul className="h-full font-base text-sm flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
               <a
-                href="#"
+                href="/#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 aria-current="page"
@@ -57,7 +54,7 @@ function Navbar() {
             </li>
             <li>
               <a
-                href="#"
+                href="/#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
               >
@@ -66,19 +63,17 @@ function Navbar() {
             </li>
             <li className="flex items-center mx-3 mr-5">
               <a
-                href="#"
+                href="/#"
                 className="group block rounded flex border-solid border-1 px-1 py-1 
 									flex items-center text-[#3180ba] bg-[#edfdff] hover:text-[#cbe6ec] hover:bg-[#193446] active:text-[#cbe6ec] active:bg-[#193446]"
-                onMouseDown={handleUsernameActive}
-                onMouseUp={handleUsernameInactive}
-                onMouseLeave={handleUsernameInactive}
+                onClick={handleUsername}
               >
                 <div
                   className={
-                    "w-8 h-5 mx-3 ml-3 bg-contain bg-center bg-no-repeat bg-[url('./images/user_icon.svg')] group-hover:bg-[url('./images/user_icon_dark.svg')]"
+                    "w-8 h-5 bg-contain bg-center bg-no-repeat " + (usernameIsActive ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2" : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
                   }
                 ></div>
-                <div className="mr-4">Log In</div>
+                <div className="mr-4">{usernameIsActive ? "Log Out" : "Log In"}</div>
               </a>
             </li>
           </ul>

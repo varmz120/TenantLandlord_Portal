@@ -67,7 +67,7 @@ const Dashboard = () => {
       };
       setTableData((tableData) => [...tableData, newData]);
     }
-  }, [formState]);
+  }, [formState, category, ticket_ID, ticket_status, title]);
 
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
     event.preventDefault();
@@ -99,7 +99,7 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center" onClick={handleButtonClick} id="filter">
             <a /* Filter Icon Button */
-              href="#"
+              href="/#"
               className={
                 'block rounded-full px-5 py-5 mr-4 flex items-center ' +
                 (filterActive ? 'bg-activeField' : 'bg-userNameButton hover:bg-buttonActive')

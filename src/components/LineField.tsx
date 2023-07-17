@@ -30,7 +30,7 @@ const LineField: FC<InputProps> = ({
   return (
     <div
       className={
-        'flex align-center text-left input-wrapper ' + (layout == 'vertical' ? 'flex-col' : '')
+        'flex align-center text-left input-wrapper ' + (layout === 'vertical' ? 'flex-col' : '')
       }
     >
       <label

@@ -8,14 +8,14 @@ import React, { MouseEvent } from 'react';
 import ExampleQuote from '../images/example_quote.png';
 
 // TODO: Pass in Blob URIs here from MongoDB and test here
-const getPdfUrl = async (path: string) => {
-  const url = path;
+// const getPdfUrl = async (path: string) => {
+//   const url = path;
 
-  const response = await fetch(url);
-  const blob = await response.blob();
+//   const response = await fetch(url);
+//   const blob = await response.blob();
 
-  return URL.createObjectURL(blob);
-};
+//   return URL.createObjectURL(blob);
+// };
 
 function ViewQuote() {
   // Navigation & routing
@@ -129,7 +129,7 @@ function ViewQuote() {
             <p className="text-lg text-left font-medium text-headerText text-center">
               Document View
             </p>
-            <img src={ExampleQuote} className="flex mx-auto mt-3 h-4/5 w-2/3" />
+            <img src={ExampleQuote} className="flex mx-auto mt-3 h-4/5 w-2/3" alt="Quote PDF"/>
             {/*
                     <iframe src='..//..//public//Example_Quote.pdf' title='alert' className='flex mx-auto h-4/5 w-2/3'/>
                      <iframe srcDoc={'<html><body><p>Quote will be displayed here in iframe.</p></body></html>'} className='flex mx-auto h-1/4 w-2/3 mb-1'/> 
