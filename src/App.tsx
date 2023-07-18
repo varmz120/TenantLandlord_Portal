@@ -24,6 +24,7 @@ import AdminAccManage from './pages/AdminAccManage';
 import ViewAllAccounts from './pages/ViewAllAccounts';
 import Buildings from './pages/Buildings';
 import BuildingDetailsForm from './components/BuildingDetailsForm';
+import CreateAccountForm from './components/CreateAccountForm';
 
 function App() {
   return (
@@ -127,7 +128,7 @@ function AdminPage() {
   return (
     <div className="App h-screen flex flex-col">
       <Navbar />
-      <BuildingDetailsForm />
+      <ViewAllAccounts />
     </div>
   );
 }

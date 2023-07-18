@@ -11,9 +11,17 @@ import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccou
 import CreateAccountForm from '../components/CreateAccountForm';
 const ViewAllAccounts = () => {
   const [initialRender, setInitialRender] = useState(true);
+  const [isClicked, setClicked] = useState(false);
 
   //Component for filter buttons
   const [filterButtonActive, setFilterButtonActive] = useState('');
+
+  const handleAccClick = () => {
+    setClicked(true);
+  };
+  const handleDeleteClick = () => {
+    setClicked(false);
+  };
 
   const handleToggle = (buttonId: string) => {
     setFilterButtonActive(buttonId === filterButtonActive ? '' : buttonId);
@@ -93,13 +101,13 @@ const ViewAllAccounts = () => {
   const DataTable: React.FC<DataTableProps> = ({ userType }) => {
     switch (userType) {
       case 'Admins':
-        return <AdminAccounts />;
+        return <AdminAccounts clicked={isClicked} handleClick={handleAccClick} />;
       case 'Landlords':
-        return <LandlordAccounts />;
+        return <LandlordAccounts clicked={isClicked} handleClick={handleAccClick} />;
       case 'Service Providers':
-        return <ServiceProvidersAccounts />;
+        return <ServiceProvidersAccounts clicked={isClicked} handleClick={handleAccClick} />;
       default:
-        return <TenantAccounts />;
+        return <TenantAccounts clicked={isClicked} handleClick={handleAccClick} />;
     }
   };
 
@@ -113,32 +121,40 @@ const ViewAllAccounts = () => {
   }, []);
 
   return (
-    <div className="h-auto bg-[#ECEDED] flex-1 ">
-      <div className="flex items-center ml-5 mt-5">
-        <img src={BackArrowIcon}></img>
-        <p className="ml-5 text-xl">Back to Panel</p>
-      </div>
-      <div className="h-auto w-full flex flex-col justify-center items-center">
-        <div className="w-auto md:w-4/5">
-          <div className="flex-grow flex flex-col justify-center items-center">
-            <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
-              <div className="text-left text-3xl w-full mb-4">
-                <p>Accounts</p>
+    <>
+      <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
+        <div className="flex items-center ml-5 mt-5">
+          <img src={BackArrowIcon}></img>
+          <p className="ml-5 text-xl">Back to Panel</p>
+        </div>
+        <div className="h-auto w-full flex flex-col justify-center items-center">
+          <div className="w-auto md:w-4/5">
+            <div className="flex-grow flex flex-col justify-center items-center">
+              <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
+                <div className="text-left text-3xl w-full mb-4">
+                  <p>Accounts</p>
+                </div>
+                <div className="flex justify-between w-4/5 mb-4 text-lg">
+                  {filterButton('tenants', 'Tenants')}
+                  {filterButton('landlords', 'Landlords')}
+                  {filterButton('service-providers', 'Service Providers')}
+                  {filterButton('admins', 'Admins')}
+                </div>
+                <DataTable userType={userType} />
               </div>
-              <div className="flex justify-between w-4/5 mb-4 text-lg">
-                {filterButton('tenants', 'Tenants')}
-                {filterButton('landlords', 'Landlords')}
-                {filterButton('service-providers', 'Service Providers')}
-                {filterButton('admins', 'Admins')}
-              </div>
-              <DataTable userType={userType} />
             </div>
           </div>
         </div>
       </div>
-      // cannot fit the form beside the table
-      {/* <CreateAccountForm userType={userType} /> */}
-    </div>
+      <div className="absolute top-4 right-64">
+        {isClicked && (
+          <CreateAccountForm
+            userType={userType.substring(0, userType.length - 1)}
+            handleDelClick={handleDeleteClick}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
