@@ -42,7 +42,7 @@ const DropdownField: FC<InputProps> = ({
         onChange={onChange}
         value={value}
         className={
-          'mt-2 w-2/5 bg-inputField text-placeholderText focus:outline-none focus:border-sky-599 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 font-light rounded py-1 px-2 text-left inline-flex items-center ' +
+          'mt-2 bg-inputField text-sm md:text-base text-placeholderText focus:outline-none focus:border-sky-599 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 font-light rounded py-1 px-2 text-left inline-flex items-center ' +
           classnames
         }
       >
