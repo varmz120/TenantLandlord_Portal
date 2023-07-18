@@ -4,6 +4,7 @@ import LineField from '../components/LineField';
 import ActionButton from '../components/ActionButton';
 import SubmitButton from './SubmitButton';
 import AreaField from './AreaField';
+import DeleteIcon from '../images/delete.svg';
 
 const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 
@@ -31,12 +32,13 @@ const BuildingDetailsForm = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen ">
+      <div className="flex flex-col items-center justify-center h-screen drop-shadow-2xl">
         <div className="flex flex-col text-left">
           <div className="flex w-fit bg-form border-gray-200 rounded-lg shadow sm:p-5 items-center ">
             <form className="space-y-4 mx-auto ">
-              <div>
-                <p className="text-lg text-left font-medium">Building Deatails</p>
+              <div className="flex flex-row">
+                <p className="text-lg text-left font-medium pr-64">Building Details</p>
+                <img src={DeleteIcon} alt="" className="w-4" />
               </div>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <p className="text-lg text-left font-medium">Account Details</p>

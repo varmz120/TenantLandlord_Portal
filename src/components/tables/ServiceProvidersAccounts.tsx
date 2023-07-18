@@ -4,7 +4,12 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 
-const ServiceProvidersAccounts = () => {
+interface Props {
+  clicked: boolean;
+  handleClick: () => void;
+}
+
+const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
@@ -194,6 +199,7 @@ const ServiceProvidersAccounts = () => {
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             style={{ width: '57px', height: '57px' }}
+            onClick={handleClick}
           >
             <img src={addServiceProviderIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
