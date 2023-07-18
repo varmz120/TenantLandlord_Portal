@@ -141,11 +141,37 @@ const Dashboard = () => {
     setTableData(copy);
   };
 
+  // Implement Assign Landlord function
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    const updatedTableData = tableData.map((row) => {
+      if (checked.includes(row.ID)) {
+        return {...row, Category: category};
+      }
+      return row;
+    });
+    setTableData(updatedTableData);
+    setFilteredTableData(updatedTableData);
+  }
+
+  const categoryOptions = [
+    {value: '', label: 'Selected Category'},
+    {value: 'Pest Exterminators', label: 'Pest Exterminators'},
+    {value: 'Plumbing', label: 'Plumbing'},
+    {value: 'Electrical', label: 'Electrical'},
+    {value: 'General Maintenance', label: 'General Maintenance'},
+  ]
+
   return (
     // Card component that will be used to display the data
     <div className="flex flex-col h-screen">
       <Navbar />
-      <div className='flex-grow flex flex-col justify-center items-center'>
+      <div className='flex-grow flex flex-col h-screen bg-[#ECEDED] justify-center items-center'>
         <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px'}}>
           <div
             className="flex items-center justify-between bg-[#31556F] rounded-t-lg drop-shadow-2xl"
@@ -195,21 +221,39 @@ const Dashboard = () => {
                     alt="?"
                   ></img>
                 </a>
-                <a /* Add Service Provider Icon Button */
-                  href="#"
-                  className="block rounded-full px-5 py-5 mr-4
-                                        flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
-                  onMouseDown={handleUserActive}
-                  onMouseUp={handleUserInactive}
-                  onMouseLeave={handleUserInactive}
-                  style={{ width: '57px', height: '57px' }}
-                >
-                  <img
-                    src={userIsActive ? addServiceProviderIcon : addServiceProviderIcon}
-                    className="mx-auto scale-150"
-                    alt="?"
-                  ></img>
-                </a>
+                <div className="relative">
+                  <a
+                    href="#"
+                    className="block rounded-full px-5 py-5 mr-4
+                      flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
+                    onMouseDown={handleUserActive}
+                    onMouseUp={handleUserInactive}
+                    onMouseLeave={handleUserInactive}
+                    onClick={handleDropdownToggle}
+                    style={{ width: '57px', height: '57px' }}
+                  >
+                    <img
+                      src={userIsActive ? addServiceProviderIcon : addServiceProviderIcon}
+                      className="mx-auto scale-150"
+                      alt="?"
+                    />
+                  </a>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 py-2 bg-white rounded shadow-lg">
+                      {categoryOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
+                          onClick={() => handleCategorySelect(option.value)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+
                 <span /* Select All Button */
                   className="block rounded flex border-solid border-1 px-2 py-1
                                             flex justify-center items-center text-[#3180ba] bg-[#edfdff]"
