@@ -8,10 +8,10 @@ function _404_ErrorPage() {
     <React.Fragment>
       {
         <div className="bg-content flex flex-col h-screen justify-center items-center">
-          <div className="relative flex bg-form border-gray-700 rounded-lg shadow sm:p-5  h-128 w-128 justify-center items-center">
-            <form className="space-y-10">
-              <p className="text-5xl text-center font-bold h-5">404</p>
-              <p className="text-2xl text-center font-bold h-5">Page Not Found</p>
+          <div className="relative flex bg-form border-gray-700 rounded-lg shadow p-5 h-80 w-64 md:h-128 md:w-128 justify-center items-center">
+            <form className="md:space-y-10">
+              <p className="text-5xl text-center font-bold h-10 md:h-5">404</p>
+              <p className="text-2xl text-center font-bold h-10 md:h-5">Page Not Found</p>
               <div className="flex justify-center">
                 {' '}
                 {/* This is for memes, please delete LOL */}
@@ -21,10 +21,10 @@ function _404_ErrorPage() {
                   alt="anya-gif"
                 />
               </div>
-              <div className="absolute bottom-10 right-6">
+              <div className="absolute bottom-5 right-1 md:bottom-10 md:right-6">
                 <ReturnToHomePage link={'/'} message_type={1} />
               </div>
-              <div className="absolute bottom-5 right-6">
+              <div className="absolute bottom-1 right-1 md:bottom-5 md:right-6">
                 <ReturnToHomePage
                   link={
                     'https://docs.google.com/document/d/1_O_hsn5YzNWzTGS3dwcCog4zCpdEBHeitU_q5kNC4B0/edit#'
