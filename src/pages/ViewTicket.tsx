@@ -38,8 +38,7 @@ function ViewTicket() {
             <BackButton
               type="button"
               label={"all tickets"}
-              handleClick={()=>null}
-              layout=''/>
+              handleClick={()=>null}/>
             <div className='flex justify-center'>
                 <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {building} Unit {unit}</p>
             </div>
@@ -69,7 +68,7 @@ function ViewTicket() {
                         disabled={true}
                         layout=''
                         error={""}
-                        placeholder="Please inclue any additional remarks here."
+                        placeholder="Please include any additional remarks here."
                         onChange={()=>null} />
                     <Gallery
                         label={"Attachments"}

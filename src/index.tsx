@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import ViewTicket from './pages/ViewTicket';
+import Dashboard from './pages/Dashboard';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <ViewTicket />
+    <Dashboard />
   </React.StrictMode>
 );
 
