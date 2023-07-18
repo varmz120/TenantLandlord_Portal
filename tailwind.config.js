@@ -33,10 +33,10 @@ module.exports = {
         starActive: '#EFCC41',
       },
       textSize: {
-        '3xl' : '1.875rem',
-        '4xl' : '2.25rem',
-        '5xl' : '3rem',
-        '6xl' : '4rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+        '5xl': '3rem',
+        '6xl': '4rem',
       },
       borderRadius: {
         md: '5px',
@@ -46,10 +46,10 @@ module.exports = {
         buttonActive: '#193446',
       },
       height: {
-        '128' : '32rem',
+        '128': '32rem',
       },
       width: {
-        '128' : '32rem',
+        '128': '32rem',
       },
     },
   },
