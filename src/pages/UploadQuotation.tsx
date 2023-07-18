@@ -99,8 +99,7 @@ function UploadQuote() {
             <BackButton
               type="button"
               label={"view ticket"}
-              handleClick={()=>null}
-              layout=''/>
+              handleClick={()=>null}/>
           <div className='flex-grow flex flex-col justify-center items-center bg-[#ECEDED]'>
               <p className='text-headerText pb-5 text-2xl font-medium'>New Quotation</p>
           </div>
