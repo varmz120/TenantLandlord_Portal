@@ -12,14 +12,14 @@ export const AuthContext = createContext<IAuthContextType>({
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = React.useState<IUser | null>(null);
   const { setItem, getItem, removeItem } = useLocalStorage();
-  //const user_update = useRef(getItem('user'));
-
+  const user_update = getItem('user');
+  
   useEffect(() => {
-    const user_update = getItem('user');
-    if (user_update && user !== null) {
-      setUser(JSON.parse(user_update));
+    console.log(user);
+    if (user ! == null) {
+      setUser(JSON.parse(user_update!));
     }
-  }, [user, getItem]);
+  }, [user, user_update]);
 
   const login = (user: IUser) => {
     setUser({

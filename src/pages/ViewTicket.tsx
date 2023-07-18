@@ -9,18 +9,18 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
-// TODO: Add history of messages
+// TODO: Add history of messages & routing of pages to include when user anyhow goes into path
 function ViewTicket() {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
-  var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
+  const formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
   var isSubmit = locate.state ? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
-  var title = locate.state ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = locate.state ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var description = locate.state ? formState.formDescription : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = locate.state ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
-  var status = locate.state ? formState.formStatus : ''; // // Temporary -> for demo purposes w/o backend
+  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  var category = formState ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
+  var description = formState ? formState.formDescription : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
+  var status = formState ? formState.formStatus : ''; // // Temporary -> for demo purposes w/o backend
   var isClosed = locate.state ? locate.state.isClosed : false; // Temporary -> for demo purposes w/o backend
 
   // Context
@@ -35,7 +35,7 @@ function ViewTicket() {
 
   return (
     <React.Fragment>
-      {user ? (
+      {user && formState ? (
         <div className="flex flex-col font-3xl" id="viewTicket">
           <BackButton
             type="button"
