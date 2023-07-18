@@ -32,6 +32,12 @@ module.exports = {
         placeholderText: '#9DA3AE',
         starActive: '#EFCC41',
       },
+      textSize: {
+        '3xl' : '1.875rem',
+        '4xl' : '2.25rem',
+        '5xl' : '3rem',
+        '6xl' : '4rem',
+      },
       borderRadius: {
         md: '5px',
       },
