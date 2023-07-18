@@ -1,7 +1,7 @@
 import React from 'react';
 import ReturnToHomePage from '../components/ReturnToHomePage';
 
-function ErrorPage404() {
+function _404_ErrorPage() {
   // 404 Error Page (Page Not Found)
 
   return (
@@ -48,4 +48,4 @@ function ErrorPage404() {
   );
 }
 
-export default ErrorPage404;
+export default _404_ErrorPage;
