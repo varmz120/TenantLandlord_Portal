@@ -36,21 +36,21 @@ const UploadField: FC<InputProps> = ({
           className="mt-2 py-2 w-1/3 rounded cursor-pointer bg-disabledField"
         >
           <div className="flex flex-col items-center">
-            <img src={uploadIcons} alt="Upload here" className="ml-24" />
+            <img src={uploadIcons} alt="Upload here" className="" />
           </div>
           <input
             disabled={disabled}
             id="dropzone-file"
             name={name}
             type="file"
-            className="hidden overflow-hidden z-1 "
+            className="hidden overflow-hidden z-1"
             multiple
             onChange={onChange}
           />
         </label>
-        <p className="pt-2 pl-2 font-light text-sm ">
+        <p className="pt-2 pl-2 font-light text-sm text-left break-all">
           {filenames.map((name: string) => {
-            return <li className="inline-block overflow-hidden px-2"> {name} </li>;
+            return <li className="inline-block md:w-64 overflow-hidden px-2"> {name} </li>;
           })}
         </p>
       </span>
