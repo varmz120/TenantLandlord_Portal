@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-function RunTime_ErrorPage() {
+function _RunTime_ErrorPage() {
   // RunTime Error Page
 
   return (
@@ -21,4 +21,4 @@ function RunTime_ErrorPage() {
   );
 }
 
-export default RunTime_ErrorPage;
+export default _RunTime_ErrorPage;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReturnToHomePage from '../components/ReturnToHomePage';
 
-function ErrorPage403() {
+function _403_ErrorPage() {
   // 403 Error Page (Forbidden)
 
   return (
@@ -16,7 +16,7 @@ function ErrorPage403() {
                 please contact the system admin.
               </p>
               <div className="absolute bottom-10 right-6">
-                <ReturnToHomePage link={'/'} message_type={0} />
+                <ReturnToHomePage link={'/'} />
               </div>
             </form>
           </div>
@@ -26,4 +26,4 @@ function ErrorPage403() {
   );
 }
 
-export default ErrorPage403;
+export default _403_ErrorPage;
