@@ -21,10 +21,10 @@ function _404_ErrorPage() {
                   alt="anya-gif"
                 />
               </div>
-              <div className="absolute bottom-5 right-1 md:bottom-10 md:right-6">
+              <div className="absolute bottom-5 right-2 md:bottom-10 md:right-6">
                 <ReturnToHomePage link={'/'} message_type={1} />
               </div>
-              <div className="absolute bottom-1 right-1 md:bottom-5 md:right-6">
+              <div className="absolute bottom-1 right-2 md:bottom-5 md:right-6">
                 <ReturnToHomePage
                   link={
                     'https://docs.google.com/document/d/1_O_hsn5YzNWzTGS3dwcCog4zCpdEBHeitU_q5kNC4B0/edit#'
