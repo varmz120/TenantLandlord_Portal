@@ -25,8 +25,8 @@ function ViewQuote() {
   const locate = useLocation();
   var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
   var isSubmit = locate.state ? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
-  var title = locate.state ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = locate.state ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
+  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
 
   // Context
   const { user } = useContext(AuthContext);
@@ -48,7 +48,7 @@ function ViewQuote() {
 
   return (
     <React.Fragment>
-      {user ? (
+      {user && formState ? (
         <div className="flex flex-col font-3xl" id="viewTicket">
           <BackButton
             type="button"

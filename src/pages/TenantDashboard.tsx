@@ -11,10 +11,10 @@ const TenantDashboard = () => {
   const navigate = useNavigate();
   const locate = useLocation();
   var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var title = locate.state ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = locate.state ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = locate.state ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_status = locate.state ? formState.formStatus : ''; //Temporary -> for demo purposes w/o backend
+  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  var category = formState ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_status = formState ? formState.formStatus : ''; //Temporary -> for demo purposes w/o backend
   var isClosed = locate.state ? locate.state.isClosed : null; // Temporary -> for demo purposes w/o backend
 
   // Context
@@ -70,7 +70,6 @@ const TenantDashboard = () => {
         navigate('/newRequest');
       }
     }
-    console.log(filterActive);
   };
 
   useEffect(() => {
