@@ -1,11 +1,28 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import homeImage from '../images/home.svg';
 
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 function Navbar() {
-  const [usernameIsActive, setUsernameIsActive] = useState(false);
-  const handleUsername = () => {
-    // TODO: Replace with check authentication token to see if user is logged into session
-    setUsernameIsActive(!usernameIsActive);
+  const { user, login, logout } = useContext(AuthContext);
+
+  // Navigation & routing
+  const navigate = useNavigate();
+
+  const handleLogInOut = () => {
+    console.log(user);
+    if (user === null) {
+      login({
+        id: '1',
+        email: 'JamieDole@yahoo.com.sg',
+        userType: 0, // Tenant
+        authToken: '5880',
+      });
+    } else {
+      logout();
+      navigate('/', { replace: true });
+    }
   };
 
   return (
@@ -66,17 +83,17 @@ function Navbar() {
                 href="/#"
                 className="group block rounded flex border-solid border-1 px-1 py-1 
 									flex items-center text-[#3180ba] bg-[#edfdff] hover:text-[#cbe6ec] hover:bg-[#193446] active:text-[#cbe6ec] active:bg-[#193446]"
-                onClick={handleUsername}
+                onClick={handleLogInOut}
               >
                 <div
                   className={
                     'w-8 h-5 bg-contain bg-center bg-no-repeat ' +
-                    (usernameIsActive
+                    (user
                       ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2"
                       : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
                   }
                 ></div>
-                <div className="mr-4">{usernameIsActive ? 'Log Out' : 'Log In'}</div>
+                <div className="mr-4">{user ? 'Log Out' : 'Log In'}</div>
               </a>
             </li>
           </ul>
