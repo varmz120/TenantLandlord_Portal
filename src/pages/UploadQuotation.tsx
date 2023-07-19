@@ -9,6 +9,7 @@ import AttachQuotation from '../components/AttachQuotation';
 import Navbar from '../components/Navbar';
 import BackButton from '../components/BackButton';
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
+import SubmitButton from '../components/SubmitButton';
 
 function UploadQuote() {
   //const navigate = useNavigate();
@@ -176,12 +177,15 @@ function UploadQuote() {
                         onChange={handleFileChange}/>
                         </div>
                         </div>
-
+                    <div className='grid grid-cols-2 gap-x-10'>
                       <UploadQuotationButton
-                      label={"Upload Quote"}
-                      type="submit"
+                      type='checkbox'
                       handleClick={handleSubmit}
                       />
+                      <div className='flex justify-end'>
+                      <SubmitButton type='submit' label={'Submit'} handleClick={''} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

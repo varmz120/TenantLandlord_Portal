@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Dashboard from './pages/Dashboard';
+import AddLease from './pages/AddLease';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
