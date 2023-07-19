@@ -8,7 +8,11 @@ import DeleteIcon from '../images/delete.svg';
 
 const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 
-const BuildingDetailsForm = () => {
+interface Props {
+  handleDelClick: () => void;
+}
+
+const BuildingDetailsForm = ({ handleDelClick }: Props) => {
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
 
@@ -38,7 +42,9 @@ const BuildingDetailsForm = () => {
             <form className="space-y-4 mx-auto ">
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">Building Details</p>
-                <img src={DeleteIcon} alt="" className="w-4" />
+                <a href="#" onClick={handleDelClick}>
+                  <img src={DeleteIcon} alt="" className="w-4" />
+                </a>
               </div>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <p className="text-lg text-left font-medium">Account Details</p>
@@ -50,7 +56,7 @@ const BuildingDetailsForm = () => {
                 name="category"
                 placeholder={''}
                 error={''}
-                disabled={true}
+                disabled={false}
                 layout=""
                 classnames=""
                 onChange={() => null}
@@ -61,7 +67,7 @@ const BuildingDetailsForm = () => {
                 padding_right={'51.25'}
                 value=""
                 id="description"
-                disabled={true}
+                disabled={false}
                 layout=""
                 error={''}
                 placeholder="Please inclue any additional remarks here."
@@ -75,7 +81,7 @@ const BuildingDetailsForm = () => {
                 name="category"
                 placeholder={''}
                 error={''}
-                disabled={true}
+                disabled={false}
                 layout=""
                 classnames=""
                 onChange={() => null}

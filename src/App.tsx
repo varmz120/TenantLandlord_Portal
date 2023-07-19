@@ -128,7 +128,7 @@ function AdminPage() {
   return (
     <div className="App h-screen flex flex-col">
       <Navbar />
-      <ViewAllAccounts />
+      <Buildings />
     </div>
   );
 }
