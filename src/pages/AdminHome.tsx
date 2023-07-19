@@ -8,8 +8,10 @@ import webAppIcon from '../images/webapp_icon.svg';
 import webAppIconDark from '../images/webapp_icon_dark.svg';
 import databaseIcon from '../images/database_icon.svg';
 import databaseIconDark from '../images/database_icon_dark.svg';
+import { useNavigate } from 'react-router-dom';
 
 const AdminHome = () => {
+  const navigate = useNavigate();
   const [buildingsIsActive, setBuildingsIsActive] = useState(false);
   const handleBuildingsActive = () => {
     setBuildingsIsActive(true);
@@ -47,11 +49,11 @@ const AdminHome = () => {
   };
 
   const buildingsOnClick = () => {
-    console.log('buildings clicked');
+    navigate('/Buildings');
   };
 
   const accountsOnClick = () => {
-    console.log('accounts clicked');
+    navigate('/Accounts');
   };
 
   const webAppOnClick = () => {
