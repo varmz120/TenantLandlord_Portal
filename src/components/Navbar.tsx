@@ -59,6 +59,13 @@ const Navbar = () => {
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
+              >
+                Add Lease
+              </a>
+              <a
+                href="#"
+                className="h-full items-center flex text-white rounded md:bg-transparent p-4
+									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 aria-current="page"
               >
                 Home

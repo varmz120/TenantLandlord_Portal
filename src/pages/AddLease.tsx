@@ -9,7 +9,7 @@ import CommencementExpiry from '../components/CommencementExpiry'
 import AddTenantButton from '../components/AddTenantButton';
 import AddBldgButton from '../components/AddBldgButton';
 import SubmitButton from '../components/SubmitButton';
-import AddTenantPopup from '../components/AddTenantPopup';
+import TenantDetails from '../components/TenantDetails';
 
 const AddLease = () => {
   const [firstView, setFirstView] = useState(true);
@@ -19,7 +19,6 @@ const AddLease = () => {
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
-  const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
@@ -30,11 +29,15 @@ const AddLease = () => {
         closed = true;
       }
       setClosed(closed);
+    }
+  };
 
-    if (event.target.name === 'createNewTenant') {
-      setPopupOpen(true);
-    }
-    }
+  const [initialRender, setInitialRender] = useState(true);
+
+  const [isClicked, setClicked] = useState(false);
+
+  const handleDeleteClick = () => {
+    setClicked(false);
   };
 
   return (
@@ -84,13 +87,9 @@ const AddLease = () => {
               <div className='flex flex-center'>
               <SearchTenantField type={'text'} layout={''}/>
               <div>
-              <AddTenantButton type='submit' label={'+ Create New Tenant'} handleClick={handleButtonClick} name='createNewTenant'></AddTenantButton>
+              <AddTenantButton type='submit' label={'+ Create New Tenant'} handleClick={() => setClicked(true)}></AddTenantButton>
               </div>
-              </div> 
-
-              {isPopupOpen && (
-                <AddTenantPopup onClose={() => setPopupOpen(false)} />
-              )}
+              </div>
     
               <LineField
                 type={'text'}
@@ -136,6 +135,13 @@ const AddLease = () => {
         </div>
       </div>
     </div>
+    <div className="absolute top-4 right-64">
+        {isClicked && (
+          <TenantDetails
+            handleDelClick={handleDeleteClick}
+          />
+        )}
+      </div>
     </>
   );
 };
