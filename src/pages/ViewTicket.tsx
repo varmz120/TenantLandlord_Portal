@@ -26,6 +26,7 @@ function ViewTicket() {
 
   // Context
   const { user } = useContext(AuthContext);
+  console.log(user);
 
   // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
   // const [formState, setFormState] = useState<string | any>({
