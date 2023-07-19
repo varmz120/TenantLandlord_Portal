@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   // Persist login session even if reload/refresh page or navigate manually with URL routes
   useEffect(() => {
     setUser(JSON.parse(user_update!));
+    console.log(user);
   }, [user_update]); //localStorage.getItem('user')
 
   const login = (user_details: IUser) => {

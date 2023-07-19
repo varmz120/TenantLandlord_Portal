@@ -70,6 +70,7 @@ const ActionButton: FC<InputProps> = ({
         type="button"
         name={type}
         id="action"
+        value={value}
         onClick={onClick}
         className={'h-8 rounded-md border-[1px] text-sm group ' + className}
       >

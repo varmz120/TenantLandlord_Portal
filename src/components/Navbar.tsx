@@ -12,12 +12,7 @@ function Navbar() {
 
   const handleLogInOut = () => {
     if (user === null) {
-      login({
-        id: '1',
-        email: 'JamieDole@yahoo.com.sg',
-        userType: 0, // Tenant
-        authToken: '5880',
-      });
+      navigate('/', { replace: true });
     } else {
       logout();
       navigate('/', { replace: true });
