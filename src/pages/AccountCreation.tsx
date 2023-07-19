@@ -38,11 +38,11 @@ const AccountCreation = () => {
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col text-left">
           <div className="flex flex-row justify-start">
-            <p className="text-headerText text-[#2E424D] pb-5 text-2xl font-medium">Add Service</p>
+            <p className="text-headerText text-[#2E424D] pb-5 text-2xl font-medium">Account Creation</p>
           </div>
           <div className="flex w-fit bg-white border-gray-200 rounded-lg shadow sm:p-5 items-center ">
             <form className="space-y-4 mx-auto w-fit bg-white">
-              <p className="text-lg text-left font-medium">Service Details</p>
+              <p className="text-lg text-left font-medium">Service Provider Details</p>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <LineField
                 type={'text'}
