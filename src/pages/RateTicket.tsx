@@ -8,7 +8,7 @@ import UploadField from '../components/UploadField';
 
 import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect, useContext } from 'react';
 
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 function RateTicket() {
@@ -16,10 +16,10 @@ function RateTicket() {
   const navigate = useNavigate();
   const locate = useLocation();
   var form = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var title = locate.state ? form.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = locate.state ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = locate.state ? form.formID : ''; // Temporary -> for demo purposes w/o backend
-  var status = locate.state ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
+  var title = form ? form.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  var category = form ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
+  var ticket_ID = form ? form.formID : ''; // Temporary -> for demo purposes w/o backend
+  var status = form ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
 
   // Context
   const { user } = useContext(AuthContext);
@@ -162,148 +162,154 @@ function RateTicket() {
   const { formRating, formDescription, formAcknowledgement, formAttachments } = formState;
 
   return (
-    // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-      {user ? (
+      {/* // When user is not logged in */}
+      {user === null ? (
+        <Navigate to="/401" replace={true} />
+      ) : (
         <React.Fragment>
-          {isSubmit ? (
+          {/* // When user is logged in AND a tenant */}
+          {user?.userType === 0 ? (
             <React.Fragment>
-              <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
-              <p>Remarks: {formDescription}</p>
-              <p>Ratings: {formRating && isClosed ? formRating : null}</p>
-              <p>Acknowledgement: {formAcknowledgement ? 'yes' : 'no'}</p>
-              <p>Attachments below:</p>
-              {formAttachments?.map((file: string) => {
-                return (
-                  <iframe
-                    src={file}
-                    title="Attachments"
-                    className="flex align-center items-center mx-auto wx-full text-center"
+              {isSubmit ? (
+                <React.Fragment>
+                  <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
+                  <p>Remarks: {formDescription}</p>
+                  <p>Ratings: {formRating && isClosed ? formRating : null}</p>
+                  <p>Acknowledgement: {formAcknowledgement ? 'yes' : 'no'}</p>
+                  <p>Attachments below:</p>
+                  {formAttachments?.map((file: string) => {
+                    return (
+                      <iframe
+                        src={file}
+                        title="Attachments"
+                        className="flex align-center items-center mx-auto wx-full text-center"
+                      />
+                    );
+                  })}
+                </React.Fragment>
+              ) : (
+                // ACTUAL PAGE
+                <div className="flex flex-col font-3xl" id="viewTicket">
+                  <BackButton
+                    type="button"
+                    label={'ticket details'}
+                    handleClick={() =>
+                      navigate('/viewDetails', { state: { formState, isSubmit: true } })
+                    }
                   />
-                );
-              })}
-            </React.Fragment>
-          ) : (
-            // ACTUAL PAGE
-            <div className="flex flex-col font-3xl" id="viewTicket">
-              <BackButton
-                type="button"
-                label={'ticket details'}
-                handleClick={() =>
-                  navigate('/viewDetails', { state: { formState, isSubmit: true } })
-                }
-              />
-              <div className="flex justify-center">
-                <p className="text-headerText pb-5 text-2xl font-medium">
-                  Service Ticket #00{ticket_ID} : {location} Unit {unit}
-                </p>
-              </div>
-              <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <p className="text-lg text-left font-medium">{title}</p>
-                  <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                  <div className="flex align-center text-left">
-                    <p className="text-userNameText">
-                      Do you wish to close the ticket and confirm completion of service?
+                  <div className="flex justify-center">
+                    <p className="text-headerText pb-5 text-2xl font-medium">
+                      Service Ticket #00{ticket_ID} : {location} Unit {unit}
                     </p>
                   </div>
-                  <div className="flex flex-row gap-x-5">
-                    <ActionButton
-                      value={'Yes'}
-                      padding_right={'0'}
-                      type="accept"
-                      toggle={isClosed}
-                      firstViewState={firstView}
-                      onClick={handleButtonClick}
-                    />
-                    <ActionButton
-                      value={'No'}
-                      padding_right={'0'}
-                      type="reject"
-                      toggle={!isClosed}
-                      firstViewState={firstView}
-                      onClick={handleButtonClick}
-                    />
+                  <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                      <p className="text-lg text-left font-medium">{title}</p>
+                      <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+                      <div className="flex align-center text-left">
+                        <p className="text-userNameText">
+                          Do you wish to close the ticket and confirm completion of service?
+                        </p>
+                      </div>
+                      <div className="flex flex-row gap-x-5">
+                        <ActionButton
+                          value={'Yes'}
+                          padding_right={'0'}
+                          type="accept"
+                          toggle={isClosed}
+                          firstViewState={firstView}
+                          onClick={handleButtonClick}
+                        />
+                        <ActionButton
+                          value={'No'}
+                          padding_right={'0'}
+                          type="reject"
+                          toggle={!isClosed}
+                          firstViewState={firstView}
+                          onClick={handleButtonClick}
+                        />
+                      </div>
+                      {firstView ? null : isClosed ? (
+                        <React.Fragment>
+                          <StarRating
+                            label={'Rating'}
+                            padding_right="24"
+                            rating={formRating}
+                            error={errors.formRating}
+                            handleClick={handleRatingChange}
+                          />
+                          <AreaField
+                            label={'Additional Remarks'}
+                            classnames="w-4/5"
+                            padding_right={'0'}
+                            value={formDescription}
+                            id="formDescription"
+                            disabled={false}
+                            layout={'vertical'}
+                            error={''}
+                            placeholder="Please inclue any additional remarks here."
+                            onChange={handleTextChange}
+                          />
+                          <TermsConditionsCheckbox
+                            link={'#'}
+                            label="Acnowledgement of T&C"
+                            padding_right="0"
+                            value={formAcknowledgement}
+                            name="formAcknowledgement"
+                            error={errors.formAcknowledgement}
+                            disabled={false}
+                            onChange={handleCheckedChange}
+                          />
+                          <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <AreaField
+                            label={'Reasons for reopening of service ticket'}
+                            classnames=""
+                            padding_right={'0'}
+                            value={formDescription}
+                            id="formDescription"
+                            disabled={false}
+                            layout={'vertical'}
+                            error={errors.formDescription}
+                            placeholder="Please inclue any additional remarks here."
+                            onChange={handleTextChange}
+                          />
+                          <UploadField
+                            label="Add Attachments"
+                            name="formAttachments"
+                            padding_right="0"
+                            filenames={filenames}
+                            value={formAttachments}
+                            error={''}
+                            disabled={false}
+                            onChange={handleFileChange}
+                          />
+                          <TermsConditionsCheckbox
+                            link={'#'}
+                            label="Acnowledgement of T&C"
+                            padding_right="0"
+                            value={formAcknowledgement}
+                            name="formAcknowledgement"
+                            error={errors.formAcknowledgement}
+                            disabled={false}
+                            onChange={handleCheckedChange}
+                          />
+                          <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                        </React.Fragment>
+                      )}
+                    </form>
                   </div>
-                  {firstView ? null : isClosed ? (
-                    <React.Fragment>
-                      <StarRating
-                        label={'Rating'}
-                        padding_right="24"
-                        rating={formRating}
-                        error={errors.formRating}
-                        handleClick={handleRatingChange}
-                      />
-                      <AreaField
-                        label={'Additional Remarks'}
-                        classnames="w-4/5"
-                        padding_right={'0'}
-                        value={formDescription}
-                        id="formDescription"
-                        disabled={false}
-                        layout={'vertical'}
-                        error={''}
-                        placeholder="Please inclue any additional remarks here."
-                        onChange={handleTextChange}
-                      />
-                      <TermsConditionsCheckbox
-                        link={'#'}
-                        label="Acnowledgement of T&C"
-                        padding_right="0"
-                        value={formAcknowledgement}
-                        name="formAcknowledgement"
-                        error={errors.formAcknowledgement}
-                        disabled={false}
-                        onChange={handleCheckedChange}
-                      />
-                      <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <AreaField
-                        label={'Reasons for reopening of service ticket'}
-                        classnames=""
-                        padding_right={'0'}
-                        value={formDescription}
-                        id="formDescription"
-                        disabled={false}
-                        layout={'vertical'}
-                        error={errors.formDescription}
-                        placeholder="Please inclue any additional remarks here."
-                        onChange={handleTextChange}
-                      />
-                      <UploadField
-                        label="Add Attachments"
-                        name="formAttachments"
-                        padding_right="0"
-                        filenames={filenames}
-                        value={formAttachments}
-                        error={''}
-                        disabled={false}
-                        onChange={handleFileChange}
-                      />
-                      <TermsConditionsCheckbox
-                        link={'#'}
-                        label="Acnowledgement of T&C"
-                        padding_right="0"
-                        value={formAcknowledgement}
-                        name="formAcknowledgement"
-                        error={errors.formAcknowledgement}
-                        disabled={false}
-                        onChange={handleCheckedChange}
-                      />
-                      <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
-                    </React.Fragment>
-                  )}
-                </form>
-              </div>
-            </div>
+                </div>
+              )}
+            </React.Fragment>
+          ) : (
+            // When user is logged in but NOT a tenant
+            <Navigate to="/403" replace={true} />
           )}
         </React.Fragment>
-      ) : (
-        <div>
-          <p>WOI PLS LOGIN LEH</p>
-        </div>
       )}
     </React.Fragment>
   );

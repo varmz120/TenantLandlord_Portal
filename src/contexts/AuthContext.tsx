@@ -1,5 +1,5 @@
 import React, { createContext, useEffect } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+// import { useLocalStorage } from '../hooks/useLocalStorage';
 import { IUser, IAuthContextType } from '../interfaces/Auth';
 
 // TODO: Replace with calling UserService client functions here
@@ -9,32 +9,31 @@ export const AuthContext = createContext<IAuthContextType>({
   logout: () => {},
 });
 
+// Notes: If I include user in dependency array, it leads to infinite regress
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = React.useState<IUser | null>(null);
-  const { setItem, getItem, removeItem } = useLocalStorage();
-  const user_update = getItem('user');
-  
-  useEffect(() => {
-    console.log(user);
-    if (user ! == null) {
-      setUser(JSON.parse(user_update!));
-    }
-  }, [user, user_update]);
+  const user_update = localStorage.getItem('user');
+  const [user, setUser] = React.useState<IUser | null>(JSON.parse(user_update!) || null);
+  // const { setItem, getItem, removeItem } = useLocalStorage();
 
-  const login = (user: IUser) => {
+  // Persist login session even if reload/refresh page or navigate manually with URL routes
+  useEffect(() => {
+    setUser(JSON.parse(user_update!));
+  }, [user_update]); //localStorage.getItem('user')
+
+  const login = (user_details: IUser) => {
     setUser({
       ...user,
-      id: user?.id,
-      email: user?.email,
-      userType: user?.userType,
-      authToken: user?.authToken,
+      id: user_details?.id,
+      email: user_details?.email,
+      userType: user_details?.userType,
+      authToken: user_details?.authToken,
     });
-    setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user_details));
   };
 
   const logout = () => {
     setUser(null);
-    removeItem('user');
+    localStorage.removeItem('user');
   };
 
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;

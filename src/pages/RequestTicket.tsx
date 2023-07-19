@@ -7,7 +7,7 @@ import SubmitButton from '../components/SubmitButton';
 
 import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 function RequestTicket() {
@@ -130,136 +130,147 @@ function RequestTicket() {
     formState;
 
   return (
-    // ONLY FOR TESTING PURPOSES
     <React.Fragment>
-      {isSubmit ? (
-        <React.Fragment>
-          <p>"{formTitle}" Ticket has been sent:</p>
-          <p>Category: {formCategory}</p>
-          <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
-          <p>Comments: {formDescription ? formDescription : null}</p>
-          <p>Attachments below:</p>
-          {formAttachments?.map((file: string) => {
-            return (
-              <iframe
-                src={file}
-                title="Attachments"
-                className="flex align-center items-center mx-auto wx-full text-center"
-              />
-            );
-          })}
-        </React.Fragment>
+      {/* // When user is not logged in */}
+      {user === null ? (
+        <Navigate to="/401" replace={true} />
       ) : (
-        // ACTUAL PAGE
-        <div
-          className="flex flex-col w-full items-center pl-10 pr-10 pb-10 bg-content"
-          id="requestTicket"
-        >
-          <div className="flex my-3">
-            <p className="text-sm flex flex-col text-black font-base py-1">
-              <span>
-                For {area}, please refer to the Frequently Asked Questions FAQ Page{' '}
-                <a href="/#" className="underline">
-                  here
-                </a>
-              </span>
-              <span>In case of emergencies, please contact us at {contactNo}</span>
-            </p>
-          </div>
-          <div className="flex bg-form border-gray-700 rounded-lg shadow p-5">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <p className="text-lg text-center font-medium h-5">New Request Form</p>
-              <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-              <div className="grid grid-cols-2 gap-x-10">
-                <LineField
-                  type={'text'}
-                  label="Email"
-                  classnames=""
-                  padding_right="0"
-                  value={email}
-                  name="name"
-                  placeholder={''}
-                  error=""
-                  disabled={true}
-                  layout={'vertical'}
-                  onChange={() => null}
-                />
-                <LineField
-                  type={'text'}
-                  label="Contact"
-                  classnames="md:w-4/5"
-                  padding_right="0"
-                  value={userCtc}
-                  name="userCtc"
-                  placeholder={''}
-                  error=""
-                  disabled={true}
-                  layout={'vertical'}
-                  onChange={() => null}
-                />
-              </div>
-              <LineField
-                type={'text'}
-                label="Title"
-                classnames="md:w-3/4"
-                padding_right="0"
-                value={formTitle}
-                name="formTitle"
-                placeholder={'Please type in a title'}
-                error={errors.formTitle}
-                disabled={false}
-                layout={'vertical'}
-                onChange={handleValueChange}
-              />
-              <DropdownField
-                type={'text'}
-                label="Category"
-                classnames="md:w-1/3"
-                padding_right="0"
-                value={formCategory}
-                name="formCategory"
-                error={errors.formCategory}
-                disabled={false}
-                layout={'vertical'}
-                options={categories}
-                onChange={handleValueChange}
-              />
-              <AreaField
-                label={'Description'}
-                classnames=""
-                padding_right={'0'}
-                value={formDescription}
-                id="formDescription"
-                disabled={false}
-                layout={'vertical'}
-                error={''}
-                placeholder="Please inclue any additional remarks here."
-                onChange={handleTextChange}
-              />
-              <UploadField
-                label="Add Attachments"
-                name="formAttachments"
-                padding_right="0"
-                filenames={filenames}
-                value={formAttachments}
-                error={errors.formAttachments}
-                disabled={false}
-                onChange={handleFileChange}
-              />
-              <TermsConditionsCheckbox
-                link={'#'}
-                label="Acnowledgement of T&C"
-                padding_right="0"
-                value={formAcknowledgement}
-                name="formAcknowledgement"
-                error={errors.formAcknowledgement}
-                disabled={false}
-                onChange={handleCheckedChange}
-              />
-              <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
-            </form>
-          </div>
-        </div>
+        <React.Fragment>
+          {/* // When user is logged in AND a tenant */}
+          {user?.userType === 0 ? (
+            <React.Fragment>
+              {isSubmit ? (
+                <React.Fragment>
+                  <p>"{formTitle}" Ticket has been sent:</p>
+                  <p>Category: {formCategory}</p>
+                  <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
+                  <p>Comments: {formDescription ? formDescription : null}</p>
+                  <p>Attachments below:</p>
+                  {formAttachments?.map((file: string) => {
+                    return (
+                      <iframe
+                        src={file}
+                        title="Attachments"
+                        className="flex align-center items-center mx-auto wx-full text-center"
+                      />
+                    );
+                  })}
+                </React.Fragment>
+              ) : (
+                // ACTUAL PAGE
+                <div className="flex flex-col w-full items-center" id="requestTicket">
+                  <div className="flex bg-content px-10 my-3">
+                    <p className="text-sm flex flex-col text-black font-base py-1">
+                      <span>
+                        For {area}, please refer to the Frequently Asked Questions FAQ Page{' '}
+                        <a href="/#" className="underline">
+                          here{' '}
+                        </a>
+                      </span>
+                      <span>In case of emergencies, please contact us at {contactNo}</span>
+                    </p>
+                  </div>
+                  <div className="flex bg-form border-gray-700 rounded-lg shadow sm:p-5">
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <p className="text-lg text-center font-medium h-5">New Request Form</p>
+                      <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+                      <div className="grid grid-cols-2 gap-x-10">
+                        <LineField
+                          type={'text'}
+                          label="Email"
+                          classnames=""
+                          padding_right="0"
+                          value={email}
+                          name="name"
+                          placeholder={''}
+                          error=""
+                          disabled={true}
+                          layout={'vertical'}
+                          onChange={() => null}
+                        />
+                        <LineField
+                          type={'text'}
+                          label="Contact"
+                          classnames="w-4/5"
+                          padding_right="0"
+                          value={userCtc}
+                          name="userCtc"
+                          placeholder={''}
+                          error=""
+                          disabled={true}
+                          layout={'vertical'}
+                          onChange={() => null}
+                        />
+                      </div>
+                      <LineField
+                        type={'text'}
+                        label="Title"
+                        classnames="w-3/4"
+                        padding_right="0"
+                        value={formTitle}
+                        name="formTitle"
+                        placeholder={'Please type in a title'}
+                        error={errors.formTitle}
+                        disabled={false}
+                        layout={'vertical'}
+                        onChange={handleValueChange}
+                      />
+                      <DropdownField
+                        type={'text'}
+                        label="Category"
+                        classnames="w-1/4"
+                        padding_right="0"
+                        value={formCategory}
+                        name="formCategory"
+                        error={errors.formCategory}
+                        disabled={false}
+                        layout={'vertical'}
+                        options={categories}
+                        onChange={handleValueChange}
+                      />
+                      <AreaField
+                        label={'Description'}
+                        classnames=""
+                        padding_right={'0'}
+                        value={formDescription}
+                        id="formDescription"
+                        disabled={false}
+                        layout={'vertical'}
+                        error={''}
+                        placeholder="Please inclue any additional remarks here."
+                        onChange={handleTextChange}
+                      />
+                      <UploadField
+                        label="Add Attachments"
+                        name="formAttachments"
+                        padding_right="0"
+                        filenames={filenames}
+                        value={formAttachments}
+                        error={errors.formAttachments}
+                        disabled={false}
+                        onChange={handleFileChange}
+                      />
+                      <TermsConditionsCheckbox
+                        link={'#'}
+                        label="Acnowledgement of T&C"
+                        padding_right="0"
+                        value={formAcknowledgement}
+                        name="formAcknowledgement"
+                        error={errors.formAcknowledgement}
+                        disabled={false}
+                        onChange={handleCheckedChange}
+                      />
+                      <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                    </form>
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
+          ) : (
+            // When user is logged in but NOT a tenant
+            <Navigate to="/403" replace={true} />
+          )}
+        </React.Fragment>
       )}
     </React.Fragment>
   );
