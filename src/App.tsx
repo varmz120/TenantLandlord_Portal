@@ -1,3 +1,5 @@
+import React from 'react';
+import logo from './logo.svg';
 import './App.css';
 import '@fontsource-variable/lexend';
 import Navbar from './components/Navbar.tsx';
@@ -37,8 +39,11 @@ function App() {
         <Route path="/viewQuote" element={<ViewQuotePage />} />
         <Route path="/feedbackSurvey" element={<RateTicketPage />} />
         <Route path="/notification" element={<NotificationPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/*" element={<ErrorPage404 />} />
+        <Route path="/adminDashboard" element={<AdminHomePage />} />
+        <Route path="/Accounts" element={<AccountsPage />} />
+        <Route path="/Buildings" element={<Buildings />} />
+        <Route path="/AccountManagement" element={<AdminAccManagePage />} />
+        <Route path="/Buildings" element={<BuildingsPage />} />        <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
         <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
         <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
@@ -124,14 +129,6 @@ function NotificationPage() {
   );
 }
 
-function AdminPage() {
-  return (
-    <div className="App h-screen flex flex-col">
-      <Navbar />
-      <Buildings />
-    </div>
-  );
-}
 
 function AdminAccManagePage() {
   return (
@@ -142,4 +139,30 @@ function AdminAccManagePage() {
   );
 }
 
+function AdminHomePage() {
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <AdminHome />
+    </div>
+  );
+}
+
+function AccountsPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <ViewAllAccounts />
+    </div>
+  );
+}
+
+function BuildingsPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <Navbar />
+      <Buildings />
+    </div>
+  );
+}
 export default App;

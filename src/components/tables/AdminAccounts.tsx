@@ -4,6 +4,7 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import CreateAccountForm from '../CreateAccountForm';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   clicked: boolean;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const AdminAccounts = ({ clicked, handleClick }: Props) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
   const [tableData, setTableData] = useState([{ ID: '', Email: '' }]);
@@ -125,7 +127,9 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
 
   //on modify account button click
   const handleModifyAccount = (id: string) => {
-    console.log(`Modifying account with ID: ${id}`);
+    const accountsOnClick = () => {
+      navigate('/Accounts');
+    };
   };
 
   useEffect(() => {
@@ -256,7 +260,7 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
                   <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                     <div
                       className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                      onClick={() => handleModifyAccount(row.ID)}
+                      onClick={() => handleModifyAccount(row.Email)}
                     >
                       <img className="mr-2" src={pencilEditIcon} />
                       <p>Modify Account</p>
