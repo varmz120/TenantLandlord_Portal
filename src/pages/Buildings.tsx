@@ -10,28 +10,41 @@ import TenantAccounts from '../components/tables/TenantAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
 import CreateAccountForm from '../components/CreateAccountForm';
 import BuildingsTable from '../components/tables/BuildingsTable';
+import BuildingDetailsForm from '../components/BuildingDetailsForm';
 
 const Buildings = () => {
+  const [isClicked, setClicked] = useState(false);
+  const handleAccClick = () => {
+    setClicked(true);
+  };
+  const handleDeleteClick = () => {
+    setClicked(false);
+  };
   return (
-    <div className="h-auto bg-[#ECEDED] flex-1 ">
-      <div className="flex items-center ml-5 mt-5">
-        <img src={BackArrowIcon}></img>
-        <p className="ml-5 text-xl">Back to Panel</p>
-      </div>
-      <div className="h-auto w-full flex flex-col justify-center items-center">
-        <div className="w-auto md:w-4/5">
-          <div className="flex-grow flex flex-col justify-center items-center">
-            <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
-              <div className="text-left text-3xl w-full mb-4">
-                <p>Buildings</p>
-              </div>
+    <>
+      <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
+        <div className="flex items-center ml-5 mt-5">
+          <img src={BackArrowIcon}></img>
+          <p className="ml-5 text-xl">Back to Panel</p>
+        </div>
+        <div className="h-auto w-full flex flex-col justify-center items-center">
+          <div className="w-auto md:w-4/5">
+            <div className="flex-grow flex flex-col justify-center items-center">
+              <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
+                <div className="text-left text-3xl w-full mb-4">
+                  <p>Buildings</p>
+                </div>
 
-              <BuildingsTable />
+                <BuildingsTable clicked={isClicked} handleClick={handleAccClick} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="absolute top-8 right-64">
+        {isClicked && <BuildingDetailsForm handleDelClick={handleDeleteClick} />}
+      </div>
+    </>
   );
 };
 
