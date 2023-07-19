@@ -30,13 +30,13 @@ const UploadField: FC<InputProps> = ({
       >
         {label}
       </label>
-      <span className="flex  items-center">
+      <span className="flex items-center">
         <label
           htmlFor="dropzone-file"
           className="mt-2 py-2 w-1/3 rounded cursor-pointer bg-disabledField"
         >
           <div className="flex flex-col items-center">
-            <img src={uploadIcons} alt="Upload here" className="" />
+            <img src={uploadIcons} alt="Upload here" className="pl-24" />
           </div>
           <input
             disabled={disabled}

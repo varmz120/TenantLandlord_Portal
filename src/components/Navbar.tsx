@@ -11,7 +11,6 @@ function Navbar() {
   const navigate = useNavigate();
 
   const handleLogInOut = () => {
-    console.log(user);
     if (user === null) {
       login({
         id: '1',

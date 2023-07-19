@@ -16,6 +16,7 @@ import ErrorPageRunTime from './pages/RuntimeError.tsx';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
+import ErrorBoundary from './components/ErrorBoundary.tsx';
 
 function App() {
   return (
@@ -38,8 +39,10 @@ function App() {
 function DashboardPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <TenantDashboard />
+      <ErrorBoundary>
+        <Navbar />
+        <TenantDashboard />
+      </ErrorBoundary>
     </div>
   );
 }
@@ -47,8 +50,10 @@ function DashboardPage() {
 function RequestTicketPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <RequestTicket />
+      <ErrorBoundary>
+        <Navbar />
+        <RequestTicket />
+      </ErrorBoundary>
     </div>
   );
 }
@@ -56,8 +61,10 @@ function RequestTicketPage() {
 function ViewTicketPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <ViewTicket />
+      <ErrorBoundary>
+        <Navbar />
+        <ViewTicket />
+      </ErrorBoundary>
     </div>
   );
 }
@@ -65,8 +72,10 @@ function ViewTicketPage() {
 function ViewQuotePage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <ViewQuote />
+      <ErrorBoundary>
+        <Navbar />
+        <ViewQuote />
+      </ErrorBoundary>
     </div>
   );
 }
@@ -74,8 +83,10 @@ function ViewQuotePage() {
 function RateTicketPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <RateTicket />
+      <ErrorBoundary>
+        <Navbar />
+        <RateTicket />
+      </ErrorBoundary>
     </div>
   );
 }
@@ -83,8 +94,10 @@ function RateTicketPage() {
 function LandingPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
-      <Landing />
+      <ErrorBoundary>
+        <Navbar />
+        <Landing />
+      </ErrorBoundary>
     </div>
   );
 }

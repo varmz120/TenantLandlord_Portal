@@ -28,4 +28,4 @@ function _403_ErrorPage() {
   );
 }
 
-export default _403_ErrorPage;
+export default ErrorPage403;
