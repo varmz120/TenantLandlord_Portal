@@ -64,7 +64,7 @@ function Navbar() {
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 aria-current="page"
               >
-                Home
+                Dashboard
               </a>
             </li>
             <li>

@@ -20,6 +20,7 @@ import ErrorPageRunTime from './pages/RuntimeError.tsx';
 import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import AdminNavbar from './components/AdminNavbar';
 import AdminHome from './pages/AdminHome';
 import '@fontsource-variable/lexend';
 import AdminAccManage from './pages/AdminAccManage';
