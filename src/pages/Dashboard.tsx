@@ -139,6 +139,9 @@ const Dashboard = () => {
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
   };
 
   // Implement Assign Landlord function
@@ -305,7 +308,7 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
-                    Category
+                    Personnel Assigned
                     <input
                       type="text"
                       value={searchInputs.Category}
@@ -341,7 +344,7 @@ const Dashboard = () => {
                   <th className="border px-4 py-2 bg-[#3180BA] text-white"></th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Task/Description</th>
-                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Category</th>
+                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Personnel Assigned</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Date</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Status</th>
                 </tr>
