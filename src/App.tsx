@@ -14,7 +14,7 @@ import ErrorPage401 from './pages/401.tsx';
 import ErrorPage403 from './pages/403.tsx';
 import ErrorPageRunTime from './pages/RuntimeError.tsx';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 
