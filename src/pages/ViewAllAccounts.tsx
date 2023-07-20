@@ -9,7 +9,9 @@ import LandlordAccounts from '../components/tables/LandlordAccounts';
 import TenantAccounts from '../components/tables/TenantAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
 import CreateAccountForm from '../components/CreateAccountForm';
+import { useNavigate } from 'react-router-dom';
 const ViewAllAccounts = () => {
+  const navigate = useNavigate();
   const [initialRender, setInitialRender] = useState(true);
   const [isClicked, setClicked] = useState(false);
 
@@ -69,6 +71,9 @@ const ViewAllAccounts = () => {
     // Perform actions specific to admins button
     setUserType('Admins');
   };
+  const handleBack = () => {
+    navigate('/');
+  };
 
   const filterButton = (buttonId: string, buttonText: string) => {
     const isActive = buttonId === filterButtonActive;
@@ -123,10 +128,12 @@ const ViewAllAccounts = () => {
   return (
     <>
       <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
-        <div className="flex items-center ml-5 mt-5">
-          <img src={BackArrowIcon}></img>
-          <p className="ml-5 text-xl">Back to Panel</p>
-        </div>
+        <a href="#">
+          <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
+            <img src={BackArrowIcon}></img>
+            <p className="ml-5 text-xl">Back to Panel</p>
+          </div>
+        </a>
         <div className="h-auto w-full flex flex-col justify-center items-center">
           <div className="w-auto md:w-4/5">
             <div className="flex-grow flex flex-col justify-center items-center">

@@ -7,7 +7,9 @@ import pencilIcon from '../images/pencil_edit_icon.svg';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 
 const AdminAccManage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
+  const [CannotEdit, setCannotEdit] = useState(true);
   const [email, setEmail] = useState(location.state.email);
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
   const [firstView, setFirstView] = useState(true);
@@ -38,12 +40,29 @@ const AdminAccManage = () => {
     setBuildingID(newValue);
   };
 
+  const handleEdit = (): void => {
+    setCannotEdit(false);
+  };
+
+  const handleSubmit = (): void => {
+    setSubmit(true);
+    setCannotEdit(true);
+  };
+  const handleBack = () => {
+    navigate('/Accounts');
+  };
+  const handleDelete = () => {
+    navigate('/Accounts');
+  };
+
   return (
     <>
-      <div className="flex items-center ml-5 mt-5">
-        <img src={BackArrowIcon}></img>
-        <p className="ml-5 text-xl">Back to Panel</p>
-      </div>
+      <a href="#">
+        <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
+          <img src={BackArrowIcon}></img>
+          <p className="ml-5 text-xl">Back to all accounts</p>
+        </div>
+      </a>
       <div className="flex flex-col items-center justify-center h-screen ">
         <div className="flex flex-col text-left">
           <div className="flex flex-row justify-start">
@@ -62,7 +81,7 @@ const AdminAccManage = () => {
                 name="category"
                 placeholder={''}
                 error={''}
-                disabled={true}
+                disabled={CannotEdit}
                 layout=""
                 classnames=""
                 onChange={handleEmailChange}
@@ -76,7 +95,7 @@ const AdminAccManage = () => {
                   name="category"
                   placeholder=""
                   error=""
-                  disabled={true}
+                  disabled={CannotEdit}
                   layout=""
                   classnames=""
                   onChange={handleBuildingChange}
@@ -86,13 +105,31 @@ const AdminAccManage = () => {
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <p className="text-lg text-left font-medium">Account Controls</p>
               <div className="inline-flex">
-                <div className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer w-24">
+                <div
+                  className={`flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer w-24 ${
+                    CannotEdit ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onClick={handleEdit}
+                >
                   <img className="mr-2" src={pencilIcon} />
                   <p>Edit</p>
                 </div>
-                <div className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer w-24">
+                <div
+                  className={`flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer w-24 ${
+                    CannotEdit ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onClick={handleDelete}
+                >
                   <img className="mr-2" src={deleteIcon} />
                   <p>Delete</p>
+                </div>
+                <div
+                  className={`flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer w-24 ${
+                    CannotEdit ? 'opacity-0' : 'opacity-100'
+                  }`}
+                  onClick={handleSubmit}
+                >
+                  <p>Confirm</p>
                 </div>
               </div>
             </form>
