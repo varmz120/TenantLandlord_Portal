@@ -9,11 +9,9 @@ export const AuthContext = createContext<IAuthContextType>({
   logout: () => {},
 });
 
-// Notes: If I include user in dependency array, it leads to infinite regress
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const user_update = localStorage.getItem('user');
   const [user, setUser] = React.useState<IUser | null>(JSON.parse(user_update!) || null);
-  // const { setItem, getItem, removeItem } = useLocalStorage();
 
   // Persist login session even if reload/refresh page or navigate manually with URL routes
   useEffect(() => {

@@ -14,7 +14,7 @@ function _401_ErrorPage() {
                 401 - Unauthorised
               </p>
               <p className="text-l text-center font-medium h-10 md:h-5">
-                You authorisation failed. Please try again.
+                Your authorisation failed. Please try again.
               </p>
               <div className="absolute bottom-5 right-2 md:bottom-10 md:right-6">
                 <ReturnToHomePage link={'/'} message_type={1} />

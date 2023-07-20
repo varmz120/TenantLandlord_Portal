@@ -34,7 +34,7 @@ function Landing() {
     if (user !== null) {
       setTimeout(() => {
         navigate('/tenantDashboard');
-      }, 500);
+      }, 1000);
     }
   }, [user, navigate]);
 
