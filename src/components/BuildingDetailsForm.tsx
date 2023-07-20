@@ -15,6 +15,9 @@ interface Props {
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
 
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
@@ -30,6 +33,18 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
       }
       setClosed(closed);
     }
+  };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setName(newValue);
+  };
+  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setAddress(newValue);
+  };
+  const handlePostalChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setPostalCode(newValue);
   };
 
   let buildingId;
@@ -52,20 +67,20 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 type={'text'}
                 label="Name"
                 padding_right="66.5"
-                value=""
+                value={name}
                 name="category"
                 placeholder={''}
                 error={''}
                 disabled={false}
                 layout=""
                 classnames=""
-                onChange={() => null}
+                onChange={handleNameChange}
               />
               <AreaField
                 label={'Address'}
                 classnames="w-4/5"
                 padding_right={'51.25'}
-                value=""
+                value={address}
                 id="description"
                 disabled={false}
                 layout=""
@@ -77,14 +92,14 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 type={'text'}
                 label="Postal Code"
                 padding_right="20"
-                value=""
+                value={postalCode}
                 name="category"
                 placeholder={''}
                 error={''}
                 disabled={false}
                 layout=""
                 classnames=""
-                onChange={() => null}
+                onChange={handlePostalChange}
               />
 
               <div className="flex justify-end">

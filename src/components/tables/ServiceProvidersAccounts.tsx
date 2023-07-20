@@ -3,6 +3,7 @@ import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   clicked: boolean;
@@ -11,8 +12,10 @@ interface Props {
 
 const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
+  const userType = 'Service Provider';
 
   const [initialRender, setInitialRender] = useState(true);
+  const navigate = useNavigate();
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Email' | 'BuildingID';
@@ -146,8 +149,8 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   //on modify account button click
-  const handleModifyAccount = (id: string) => {
-    console.log(`Modifying account with ID: ${id}`);
+  const handleModifyAccount = (email: string, BuildingID: string) => {
+    navigate('/AccountManagement', { state: { email, BuildingID, userType } });
   };
 
   useEffect(() => {
@@ -290,7 +293,7 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                    onClick={() => handleModifyAccount(row.ID)}
+                    onClick={() => handleModifyAccount(row.Email, row.BuildingID)}
                   >
                     <img className="mr-2" src={pencilEditIcon} />
                     <p>Modify Account</p>

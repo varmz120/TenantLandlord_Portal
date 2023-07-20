@@ -4,6 +4,7 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import deleteIcon from '../../images/delete.svg';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   clicked: boolean;
@@ -11,18 +12,20 @@ interface Props {
 }
 
 const BuildingsTable = ({ clicked, handleClick }: Props) => {
-  const [tableData, setTableData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
+  const [tableData, setTableData] = useState([{ ID: '', Name: '', Address: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
 
+  const navigate = useNavigate();
+
   // Define a type for the column names
-  type TableColumn = 'ID' | 'Email' | 'BuildingID';
+  type TableColumn = 'ID' | 'Name' | 'Address';
 
   // Update the state and event handler with the TableColumn type
   const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
     ID: '',
-    Email: '',
-    BuildingID: '',
+    Name: '',
+    Address: '',
   });
 
   // Implement Filter function for table
@@ -47,8 +50,8 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   const handleClearFilters = () => {
     setSearchInputs({
       ID: '',
-      Email: '',
-      BuildingID: '',
+      Name: '',
+      Address: '',
     });
 
     setFilteredTableData(tableData);
@@ -95,17 +98,17 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
     console.log('Loading Landlord Data...');
     // Perform actions specific to landlord data loading
     let landlordData = [
-      { ID: '16', Email: 'john@example.com', BuildingID: 'XYZ789' },
-      { ID: '17', Email: 'jane@example.com', BuildingID: 'UVW123' },
-      { ID: '18', Email: 'alex@example.com', BuildingID: 'LMN456' },
-      { ID: '19', Email: 'sam@example.com', BuildingID: 'PQR789' },
-      { ID: '20', Email: 'emily@example.com', BuildingID: 'STU012' },
-      { ID: '21', Email: 'chris@example.com', BuildingID: 'VWX345' },
-      { ID: '22', Email: 'lisa@example.com', BuildingID: 'YZA678' },
-      { ID: '23', Email: 'matt@example.com', BuildingID: 'BCD901' },
-      { ID: '24', Email: 'sarah@example.com', BuildingID: 'EFG234' },
-      { ID: '25', Email: 'alexander@example.com', BuildingID: 'HIJ567' },
-      { ID: '26', Email: 'olivia@example.com', BuildingID: 'KLM890' },
+      { ID: '16', Name: 'john@example.com', Address: 'XYZ789' },
+      { ID: '17', Name: 'jane@example.com', Address: 'UVW123' },
+      { ID: '18', Name: 'alex@example.com', Address: 'LMN456' },
+      { ID: '19', Name: 'sam@example.com', Address: 'PQR789' },
+      { ID: '20', Name: 'emily@example.com', Address: 'STU012' },
+      { ID: '21', Name: 'chris@example.com', Address: 'VWX345' },
+      { ID: '22', Name: 'lisa@example.com', Address: 'YZA678' },
+      { ID: '23', Name: 'matt@example.com', Address: 'BCD901' },
+      { ID: '24', Name: 'sarah@example.com', Address: 'EFG234' },
+      { ID: '25', Name: 'alexander@example.com', Address: 'HIJ567' },
+      { ID: '26', Name: 'olivia@example.com', Address: 'KLM890' },
     ];
     setTableData(landlordData);
     setFilteredTableData(landlordData);
@@ -231,8 +234,8 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                 <input
                   className="mx-2 px-2 w-96"
                   type="text"
-                  value={searchInputs.Email}
-                  onChange={(e) => handleSearchInputChange('Email', e.target.value)}
+                  value={searchInputs.Name}
+                  onChange={(e) => handleSearchInputChange('Name', e.target.value)}
                   placeholder="Search Email"
                   style={{ color: 'gray' }}
                 />
@@ -242,8 +245,8 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                 <input
                   className="mx-2 px-2 text-center w-40"
                   type="text"
-                  value={searchInputs.BuildingID}
-                  onChange={(e) => handleSearchInputChange('BuildingID', e.target.value)}
+                  value={searchInputs.Address}
+                  onChange={(e) => handleSearchInputChange('Address', e.target.value)}
                   placeholder="Search Building ID"
                   style={{ color: 'gray' }}
                 />
@@ -270,8 +273,8 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                   />
                 </td>
                 <td className="px-2 py-2">{row.ID}</td>
-                <td className="px-2 py-2">{row.Email}</td>
-                <td className="px-2 py-2">{row.BuildingID}</td>
+                <td className="px-2 py-2">{row.Name}</td>
+                <td className="px-2 py-2">{row.Address}</td>
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer">
                     <img className="mr-2" src={deleteIcon} />

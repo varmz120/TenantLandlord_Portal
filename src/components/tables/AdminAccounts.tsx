@@ -13,6 +13,7 @@ interface Props {
 
 const AdminAccounts = ({ clicked, handleClick }: Props) => {
   const navigate = useNavigate();
+  const userType = 'Admin';
   const [isOpen, setIsOpen] = useState(true);
 
   const [tableData, setTableData] = useState([{ ID: '', Email: '' }]);
@@ -126,10 +127,8 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   //on modify account button click
-  const handleModifyAccount = (id: string) => {
-    const accountsOnClick = () => {
-      navigate('/Accounts');
-    };
+  const handleModifyAccount = (email: string) => {
+    navigate('/AccountManagement', { state: { email, userType } });
   };
 
   useEffect(() => {
