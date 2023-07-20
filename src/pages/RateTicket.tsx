@@ -169,7 +169,7 @@ function RateTicket() {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 ? (
+          {user?.userType === 0 && formState ? (
             <React.Fragment>
               {isSubmit ? (
                 <React.Fragment>

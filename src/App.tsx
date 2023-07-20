@@ -20,19 +20,20 @@ import ErrorBoundary from './components/ErrorBoundary.tsx';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/newRequest" element={<RequestTicketPage />} />
-        <Route path="/viewDetails" element={<ViewTicketPage />} />
-        <Route path="/viewQuote" element={<ViewQuotePage />} />
-        <Route path="/feedbackSurvey" element={<RateTicketPage />} />
-        <Route path="/*" element={<ErrorPage404 />} />
-        <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
-        <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
-        <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
-      </Routes>
-    </Router>
+    <AuthContextProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/tenantDashboard" element={<DashboardPage />} />
+          <Route path="/newRequest" element={<RequestTicketPage />} />
+          <Route path="/viewDetails" element={<ViewTicketPage />} />
+          <Route path="/viewQuote" element={<ViewQuotePage />} />
+          <Route path="/feedbackSurvey" element={<RateTicketPage />} />
+          <Route path="/*" element={<ErrorPage404 />} />
+          <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
+          <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
+          <Route path="/Error" element={<RunTimeErrorPage />} /> {/* To add proper routing.*/}
+        </Routes>
+    </AuthContextProvider>
   );
 }
 
