@@ -5,7 +5,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
-  const { user, login, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
   // Navigation & routing
   const navigate = useNavigate();
@@ -75,6 +75,7 @@ function Navbar() {
             <li className="flex items-center mx-3 mr-5">
               <a
                 href="/#"
+                id="user"
                 className="group block rounded flex border-solid border-1 px-1 py-1 
 									flex items-center text-[#3180ba] bg-[#edfdff] hover:text-[#cbe6ec] hover:bg-[#193446] active:text-[#cbe6ec] active:bg-[#193446]"
                 onClick={handleLogInOut}
