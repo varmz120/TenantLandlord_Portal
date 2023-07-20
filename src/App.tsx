@@ -41,7 +41,7 @@ function App() {
         <Route path="/notification" element={<NotificationPage />} />
         <Route path="/adminDashboard" element={<AdminHomePage />} />
         <Route path="/Accounts" element={<AccountsPage />} />
-        <Route path="/Buildings" element={<Buildings />} />
+        <Route path="/Buildings" element={<BuildingsPage />} />
         <Route path="/AccountManagement" element={<AdminAccManagePage />} />
         <Route path="/Buildings" element={<BuildingsPage />} />        <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}

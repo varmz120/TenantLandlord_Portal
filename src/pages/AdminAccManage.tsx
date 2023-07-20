@@ -7,13 +7,16 @@ import pencilIcon from '../images/pencil_edit_icon.svg';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 
 const AdminAccManage = () => {
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state.email);
+  const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
 
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
-  const [userType, setUserType] = useState('Admin');
+  const [userType, setUserType] = useState(location.state.userType);
 
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
@@ -26,8 +29,14 @@ const AdminAccManage = () => {
       setClosed(closed);
     }
   };
-
-  let buildingId;
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setEmail(newValue);
+  };
+  const handleBuildingChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setBuildingID(newValue);
+  };
 
   return (
     <>
@@ -48,29 +57,29 @@ const AdminAccManage = () => {
               <LineField
                 type={'text'}
                 label="Email"
-                padding_right="20"
-                value="some email"
+                padding_right="65.5"
+                value={email}
                 name="category"
                 placeholder={''}
                 error={''}
                 disabled={true}
                 layout=""
                 classnames=""
-                onChange={() => null}
+                onChange={handleEmailChange}
               />
               {userType !== 'Admin' && userType !== 'Tenant' && (
                 <LineField
                   type="text"
                   label="Building ID"
                   padding_right="20"
-                  value="some email"
+                  value={BuildingID}
                   name="category"
                   placeholder=""
                   error=""
                   disabled={true}
                   layout=""
                   classnames=""
-                  onChange={() => null}
+                  onChange={handleBuildingChange}
                 />
               )}
 
