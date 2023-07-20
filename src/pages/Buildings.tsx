@@ -11,8 +11,10 @@ import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccou
 import CreateAccountForm from '../components/CreateAccountForm';
 import BuildingsTable from '../components/tables/BuildingsTable';
 import BuildingDetailsForm from '../components/BuildingDetailsForm';
+import { useNavigate } from 'react-router-dom';
 
 const Buildings = () => {
+  const navigate = useNavigate();
   const [isClicked, setClicked] = useState(false);
   const handleAccClick = () => {
     setClicked(true);
@@ -20,13 +22,18 @@ const Buildings = () => {
   const handleDeleteClick = () => {
     setClicked(false);
   };
+  const handleBack = () => {
+    navigate('/');
+  };
   return (
     <>
       <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
-        <div className="flex items-center ml-5 mt-5">
-          <img src={BackArrowIcon}></img>
-          <p className="ml-5 text-xl">Back to Panel</p>
-        </div>
+        <a href="#">
+          <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
+            <img src={BackArrowIcon}></img>
+            <p className="ml-5 text-xl">Back to Panel</p>
+          </div>
+        </a>
         <div className="h-auto w-full flex flex-col justify-center items-center">
           <div className="w-auto md:w-4/5">
             <div className="flex-grow flex flex-col justify-center items-center">

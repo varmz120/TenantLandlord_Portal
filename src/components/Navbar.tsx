@@ -19,6 +19,9 @@ function Navbar() {
     }
   };
 
+  const handleHome = () => {
+    navigate('/');
+  };
   return (
     <nav className="max-w-screen h-12 border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between h-12">
@@ -26,6 +29,7 @@ function Navbar() {
           href="/#"
           className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
+          onClick={handleHome}
         >
           <img src={homeImage} className="h-6" alt="Flowbite Logo" />
         </a>
