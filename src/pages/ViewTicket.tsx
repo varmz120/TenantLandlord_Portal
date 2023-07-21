@@ -6,7 +6,7 @@ import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React, { useContext, MouseEvent} from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
 // TODO: Add history of messages & routing of pages to include when user anyhow goes into path
@@ -26,14 +26,30 @@ function ViewTicket() {
 
   // Context
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
+  // const [formState, setFormState] = useState<string | any>({
+  //   formTitle: title,
+  //   formID: ticket_ID,
+  //   formStatus: status,
+  //   formCategory: category,
+  //   formDescription: description,
+  //   formAttachments: attachments,
+  //   formAcknowledgement: form.formAcknowledgement,
+  // });
   // Mock static Values
   var building = 'SunPlaza';
   var unit = '01-42';
 
-  // Handlers - None
+  // Handlers
+  const handleCloseTicket = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
+    event.preventDefault();
+
+    formState.formStatus = "Closed";
+    navigate('/tenantDashboard', {
+      state: { formState, isSubmit: true, isClosed: true },
+    })
+  };
 
   return (
     <React.Fragment>
@@ -73,7 +89,7 @@ function ViewTicket() {
                             navigate('/viewQuote', { state: { formState, isSubmit: false } })
                           }
                         />
-                      ) : null}{' '}
+                      ) : null}
                     </div>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <LineField
@@ -119,7 +135,7 @@ function ViewTicket() {
                             alert={true}
                           />
                         )}
-                        <div className="flex flex-row">
+                        <div className="flex flex-col gap-y-4">
                           {isClosed ? null : isSubmit ? (
                             <ActionButton
                               value={'Rate Ticket'}
@@ -134,6 +150,7 @@ function ViewTicket() {
                               }
                             />
                           ) : (
+                            <React.Fragment>
                             <ActionButton
                               value={'View Quote'}
                               padding_right={'30'}
@@ -146,6 +163,15 @@ function ViewTicket() {
                                 })
                               }
                             />
+                            <ActionButton
+                              value={'Close Ticket'}
+                              padding_right={'30'}
+                              type=""
+                              firstViewState={false}
+                              toggle={false}
+                              onClick={handleCloseTicket}
+                            />
+                            </React.Fragment>
                           )}
                         </div>
                       </div>

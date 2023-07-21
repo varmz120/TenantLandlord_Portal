@@ -54,7 +54,7 @@ const DropdownField: FC<InputProps> = ({
           hidden
           className="z-50 text-white font-light bg-gray-500 divide-y divide-gray-100 rounded shadow w-48"
         >
-          Select an option
+          Select here
         </option>
         {options.map((option) => (
           <option

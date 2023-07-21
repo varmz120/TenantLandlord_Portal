@@ -24,7 +24,7 @@ function RequestTicket() {
   const [formState, setFormState] = useState<string | any>({
     formTitle: '',
     formID: 5, // For demo purposes, this is set
-    formStatus: 'Opened',
+    formStatus: 'In Queue',
     formCategory: '',
     formDescription: '',
     formAttachments: [],
@@ -140,12 +140,12 @@ function RequestTicket() {
           {user?.userType === 0 ? (
             <React.Fragment>
               {isSubmit ? (
-                <React.Fragment>
-                  <p>"{formTitle}" Ticket has been sent:</p>
+                <div className='h-full w-full flex flex-col items-center justify-center'>
+                  <p>"{formTitle}" Ticket has been sent!</p>
                   <p>Category: {formCategory}</p>
                   <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
-                  <p>Comments: {formDescription ? formDescription : null}</p>
-                  <p>Attachments below:</p>
+                  {formDescription ? <p>Description: {formDescription}</p>: null}
+                  {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
                   {formAttachments?.map((file: string) => {
                     return (
                       <iframe
@@ -155,7 +155,7 @@ function RequestTicket() {
                       />
                     );
                   })}
-                </React.Fragment>
+                </div>
               ) : (
                 // ACTUAL PAGE
                 <div className="flex flex-col w-full items-center" id="requestTicket">
