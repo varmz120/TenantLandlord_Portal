@@ -1,10 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
     const PasswordResetSuccessful = () => {
+        //creating variable for navigation
+        const navigate = useNavigate();
+
         // Event handler for clicking on back button
         const handlePageBack = () => {
-            console.log("go page back");
-    };
+            navigate('/logintenant')
+        };
 
     return(
         //first div sets background
@@ -18,7 +22,7 @@ import React, { ChangeEvent, useState } from 'react';
                     <p className="text-4xl text-headerText text-center">Password Reset</p>
                     <p className="text-4xl text-headerText text-center block">Successful</p>
                     <div className = "mt-4">
-                        <button type ="submit" className = "bg-[#335B77] rounded-lg h-12 w-[280px] text-2xl font-bold text-white p-1 mt-2" >
+                        <button type ="submit" className = "bg-[#335B77] rounded-lg h-12 w-[280px] text-2xl font-bold text-white p-1 mt-2 " onClick = {handlePageBack} >
                             Back
                         </button>
                     </div>

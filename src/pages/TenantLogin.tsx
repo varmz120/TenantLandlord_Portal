@@ -1,6 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, {useContext, ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 const TenantLogin = () => {
+  //creating variable for navigation
+  const navigate = useNavigate();
+
+  // Context
+  const { user, login } = useContext(AuthContext);
+
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,14 +25,19 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = () => {
-    console.log(username, password);
+    login({
+      id: '1',
+      email: 'JamieDole@yahoo.com.sg',
+      userType: 0, // Tenant
+      authToken: '5880',
+  })
+    navigate('/TenantDashboard');
   };
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
-    console.log('forgot password clicked');
+    navigate('/reset1');
   };
-
 
   return (
     //first div sets background

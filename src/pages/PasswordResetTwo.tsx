@@ -1,6 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordResetOne = () => {
+    //creating variable for navigation
+    const navigate = useNavigate();
+
     // Creating state variables for password 1 and password 2
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
@@ -17,12 +21,14 @@ const PasswordResetOne = () => {
 
     // Event handler for clicking password reset button
     const handlePasswordReset = () => {
-    console.log(password1);
+        //TODO - Add authentication for storing new password in database
+        navigate('/resetsuccessful'); // if successful, redirects to Password Reset Successful page
+        // navigate('/resetunsuccessful'); // if unsuccessful, redirects to Password Reset Successful page
     };
 
     // Event handler for clicking on back button
     const handlePageBack = () => {
-        console.log("go page back");
+        navigate('/logintenant');
     };
 
     return(
