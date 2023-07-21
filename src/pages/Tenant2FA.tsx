@@ -1,6 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Tenant2FA = () => {
+    // Navigation & routing
+    const navigate = useNavigate();
+
     // Creating state variables for authentication
     const [auth, setAuth] = useState('');
 
@@ -11,7 +15,7 @@ const Tenant2FA = () => {
 
     // Event handler for clicking on the verify button
     const handleVerifyClick = () => {
-    console.log(auth);
+        navigate('/reset2');
     };
 
     return(

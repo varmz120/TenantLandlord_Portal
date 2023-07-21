@@ -1,6 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordResetOne = () => {
+    //creating variable for navigation
+    const navigate = useNavigate();
+
     // Creating state variables for email
     const [email, setEmail] = useState('');
 
@@ -11,12 +15,12 @@ const PasswordResetOne = () => {
 
     // Event handler for clicking password reset button
     const handlePasswordReset = () => {
-    console.log(email);
+        navigate('/reset2FA');
     };
 
     // Event handler for clicking on back button
     const handlePageBack = () => {
-        console.log("go page back");
+        navigate('/logintenant');
     };
 
     return(

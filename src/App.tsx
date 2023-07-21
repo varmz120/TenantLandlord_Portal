@@ -9,6 +9,14 @@ import RateTicket from './pages/RateTicket.tsx';
 import Landing from './pages/Landing.tsx';
 import Notification from './pages/Notification.tsx';
 
+//Login pages
+import TenantLogin from './pages/TenantLogin.tsx';
+import PasswordResetOne from './pages/PasswordResetOne.tsx';
+import Tenant2FA from './pages/Tenant2FA.tsx';
+import PasswordResetTwo from './pages/PasswordResetTwo.tsx';
+import PasswordResetSuccessful from './pages/PasswordResetSuccessful.tsx';
+import PasswordResetUnsuccessful from './pages/PasswordResetUnsuccessful.tsx';
+
 // Error Pages
 import ErrorPage404 from './pages/404.tsx';
 import ErrorPage401 from './pages/401.tsx';
@@ -18,6 +26,8 @@ import ErrorPageRunTime from './pages/RuntimeError.tsx';
 import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+
+
 import '@fontsource-variable/lexend';
 import AdminAccManage from './pages/AdminAccManage';
 import AdminHome from './pages/AdminHome';
@@ -28,6 +38,18 @@ function App() {
   return (
     <AuthContextProvider>
       <Routes>
+          {/*Routing for landlord */}
+          <Route path = "/logintenant" element = {<TenantLoginPage/>}/>
+
+          {/*Routing for password reset */}
+          <Route path = "/reset1" element = {<PasswordResetPage1/>}/>
+          <Route path = "/reset2FA" element = {<Reset2FAPage/>}/>
+          <Route path = "/reset2" element = {<PasswordResetPage2/>}/>
+          <Route path = "/resetsuccessful" element = {<PasswordResetSuccessfulPage/>}/>
+          <Route path = "/resetunsuccessful" element = {<PasswordResetUnsuccessfulPage/>}/>
+
+
+          {/*Routing for tenant */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/tenantDashboard" element={<DashboardPage />} />
         <Route path="/newRequest" element={<RequestTicketPage />} />
@@ -49,6 +71,74 @@ function App() {
   );
 }
 
+{/* Functions for Login */}
+function TenantLoginPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <TenantLogin />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function PasswordResetPage1(){
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetOne/>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function Reset2FAPage(){
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <Tenant2FA/>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function PasswordResetPage2(){
+  return (
+      <div className="App h-screen bg-content">
+        <ErrorBoundary>
+          <Navbar />
+          <PasswordResetTwo/>
+        </ErrorBoundary>
+      </div>
+    );
+}
+
+function PasswordResetSuccessfulPage(){
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetSuccessful/>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function PasswordResetUnsuccessfulPage(){
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetUnsuccessful/>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+{/* Functions for tenant */}
 function DashboardPage() {
   return (
     <div className="App h-full bg-content">
