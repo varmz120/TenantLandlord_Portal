@@ -12,7 +12,7 @@ import { MemoryRouter} from 'react-router-dom';
 
 // ROUTING RENDER TESTS
 // #1 : Render landing page (user not logged in)
-test('renders landing page with navbar and two buttons', () => {
+test('not logged in: renders landing page with navbar and two buttons', () => {
   render(
     <MemoryRouter>
       <App/>
@@ -29,7 +29,7 @@ test('renders landing page with navbar and two buttons', () => {
   expect(loginButton2).toBeInTheDocument();
 });
 // #2: Render 401 page navigating sensitive routes (user not logged in)
-describe('renders 401 page on all routes beyond /', () => {
+describe('not logged in: renders 401 page on all routes beyond /', () => {
     let test_paths = [
       '/viewDetails',
       '/viewQuote',
@@ -51,7 +51,7 @@ describe('renders 401 page on all routes beyond /', () => {
     });
 });
 // #3 : Render landing page redirecting to dashboard (tenant user logged in)
-test('renders landing page and redirects to tenant dashboard after timeout for 0.5s', async () => {
+test('tenant logged in: renders landing page and redirects to tenant dashboard after timeout for 0.5s', async () => {
   jest.useFakeTimers();
   jest.spyOn(global, 'setTimeout');
   render(
@@ -65,7 +65,7 @@ test('renders landing page and redirects to tenant dashboard after timeout for 0
   const loginButton = screen.getByRole("button", {name: "Login as Tenant"});
   await userEvent.click(loginButton);
 
-  const successMsg = screen.getByText(/Successfully logged in! Welcome User 1!/);
+  const successMsg = screen.getByText(/Successfully logged in!/);
   expect(successMsg).toBeInTheDocument();
   
   expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
@@ -88,7 +88,7 @@ test('renders landing page and redirects to tenant dashboard after timeout for 0
 });
 // #4: Render 403 error when navigating to recognised routes w/o data (tenant user logged in)
 // #5: Render landing page redirecting to 403 error (landlord user logged in) NOTE: This should be last...
-test('renders landing page and redirects to 403 error after timeout for 0.5s', async () => {
+test('landlord logged in: renders landing page and redirects to 403 error after timeout for 0.5s', async () => {
   jest.useFakeTimers();
   jest.spyOn(global, 'setTimeout');
   render(
@@ -102,7 +102,7 @@ test('renders landing page and redirects to 403 error after timeout for 0.5s', a
   const loginButton = screen.getByRole("button", {name: "Login as Landlord"});
   await userEvent.click(loginButton);
 
-  const successMsg = screen.getByText(/Successfully logged in! Welcome User 2!/);
+  const successMsg = screen.getByText(/Successfully logged in!/);
   expect(successMsg).toBeInTheDocument();
   
   expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
@@ -119,7 +119,7 @@ test('renders landing page and redirects to 403 error after timeout for 0.5s', a
   jest.useRealTimers();
 });
 // #6: Render 403 error page for all tenant pages (landlord user logged in)
-describe('renders 403 page on all routes beyond /', () => {
+describe('landlord logged in: renders 403 page on all routes beyond /', () => {
   let test_paths = [
     '/tenantDashboard',
     '/viewDetails',
@@ -142,7 +142,7 @@ describe('renders 403 page on all routes beyond /', () => {
   });
 });
 // #7: Render 404 error page navigating to unrecognised route
-test('renders 404 page navigating unrecognised path', async () => {
+test('not/are logged in: renders 404 page navigating unrecognised path', async () => {
   render(
     <MemoryRouter initialEntries={['/some-unknown-path']}>
       <App/>
@@ -159,3 +159,7 @@ test('renders 404 page navigating unrecognised path', async () => {
 // Alternate flow #1: Login -> Raise request -> View Details -> Reject Quote -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket
 // Alternate flow #2: Login -> Raise request -> View Details -> Reject Quote -> View Details -> Accept Quote -> Rate Ticket -> Reopen Ticket 
 // -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket
+
+// FORM TESTS
+// /newRequest form should display all error messages
+// /rateTicket form should display all error messages

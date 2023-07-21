@@ -41,15 +41,15 @@ function Landing() {
   return (
     <React.Fragment>
       {user ? (
-        <div>
-          <p>Successfully logged in! Welcome User {user.id}!</p>
+        <div className='h-full w-full flex items-center justify-center'>
+          <p>Successfully logged in!</p>
         </div>
       ) : (
-        <div className='h-max-content'>
+        <div className='h-full w-full flex flex-col items-center justify-center'>
           <p>
             Demo of Frontend Tenant Pages. Please click on Log-In buttons above to start demo features.
           </p>
-          <div className='items-center mx-auto my-auto flex flex-col gap-y-10 pt-10'>
+          <div className='items-center flex flex-col gap-y-10 mt-10'>
           <ActionButton
             value={'Login as Tenant'}
             padding_right={'0'}

@@ -91,7 +91,7 @@ const TenantDashboard = () => {
       };
       setTableData((tableData) => [...tableData, newData]);
     }
-  }, [formState, category, ticket_ID, ticket_status, title, currentDate]);
+  }, [isClosed, formState, category, ticket_ID, ticket_status, title, currentDate]);
 
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
     event.preventDefault();
@@ -159,7 +159,7 @@ const TenantDashboard = () => {
                         type="text"
                         value={filterValue}
                         onChange={(e) => setFilterValue(e.target.value)}
-                        placeholder="Filter by Item"
+                        placeholder="Filter using keywords"
                         className="border border-gray-300 rounded px-4 py-2"
                       />
                       {filterValue && (

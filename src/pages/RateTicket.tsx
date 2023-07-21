@@ -172,12 +172,12 @@ function RateTicket() {
           {user?.userType === 0 && formState ? (
             <React.Fragment>
               {isSubmit ? (
-                <React.Fragment>
+                <div className='h-full w-full flex flex-col items-center justify-center'>
                   <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
                   <p>Remarks: {formDescription}</p>
-                  <p>Ratings: {formRating && isClosed ? formRating : null}</p>
-                  <p>Acknowledgement: {formAcknowledgement ? 'yes' : 'no'}</p>
-                  <p>Attachments below:</p>
+                  {formRating && isClosed ? <p>Rating: {formRating}</p>: null}
+                  <p>Acknowledgement: {formAcknowledgement ? 'yes' : ''}</p>
+                  {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
                   {formAttachments?.map((file: string) => {
                     return (
                       <iframe
@@ -187,7 +187,7 @@ function RateTicket() {
                       />
                     );
                   })}
-                </React.Fragment>
+                </div>
               ) : (
                 // ACTUAL PAGE
                 <div className="flex flex-col font-3xl" id="viewTicket">
