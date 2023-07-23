@@ -4,22 +4,27 @@ import { useState } from 'react'
 interface InputProps {
   type: 'text'
   layout: string
+  error: string
 }
 
 const SearchBldgField: FC<InputProps> = ({
   type,
   layout,
+  error,
 }) => {
 
 const [value, setValue] = useState('');
+const [isOptionSelected, setIsOptionSelected] = useState(false);
 
 const onChange = (event: { target: { value: SetStateAction<string> } }) => {
   setValue(event.target.value);
+  setIsOptionSelected(false);
 }
 
 const onSearch = (searchTerm: SetStateAction<string>) => {
   setValue(searchTerm);
   //console.log('search', searchTerm);
+  setIsOptionSelected(true);
 }
 
 const options = [
@@ -61,6 +66,7 @@ const options = [
       ))}
         </div>
       </div>
+      {error && !isOptionSelected && <p className="error text-red-500">{error}</p>}
     </div>
   )
 }
