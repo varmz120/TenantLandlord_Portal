@@ -8,11 +8,13 @@ import UploadQuotationButton from '../components/UploadQuotationButton';
 import AttachQuotation from '../components/AttachQuotation';
 import Navbar from '../components/Navbar';
 import BackButton from '../components/BackButton';
+import Example_quote from '../images/example_quote.png'
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
 import SubmitButton from '../components/SubmitButton';
+import { useNavigate, useLocation } from "react-router-dom";
 
 function UploadQuote() {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState<string | any>({
     totalAmount: "",
@@ -31,6 +33,10 @@ function UploadQuote() {
       });
     }
   };
+
+  const handleBack = () => {
+    navigate('/ViewTicket')
+  }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) : void => {
     if ('files' in event.target) {
@@ -53,19 +59,22 @@ function UploadQuote() {
     }
   };
 
+  const [noQuotationNeeded, setNoQuotationNeeded] = useState(false);
+
+  const handleCheckBoxChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setNoQuotationNeeded(event.target.checked);
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!formState.totalAmount) {
-      errors.formTitle = "Enter a Amount!";
+    if (!noQuotationNeeded && !formState.totalAmount) {
+      errors.formTotalAmount = "Enter a Amount!";
     } else {
-      delete errors.totalAmount;
+      delete errors.formTotalAmount;
+      navigate('/ViewTicket');
     }
-    if (!formState.formCategory) {
-      errors.formCategory = "Enter a category!";
-    } else {
-      delete errors.formCategory;
-    }
+
     setErrors({...errors});
 
     if (Object.keys(errors).length > 0) {
@@ -78,7 +87,7 @@ function UploadQuote() {
 
       // Will redirect to home/dashboard after 5 seconds
       // setTimeout(()=> {
-      //     navigate('/', {state: {formState, isSubmit }});
+      //     navigate('/ViewTicket', {state: {formState, isSubmit }});
       //     }, 5000);
     }
   };
@@ -94,18 +103,18 @@ function UploadQuote() {
 
 
     return (
-      <div className="flex flex-col h-screen bg-[#ECEDED]">
+      <div className="flex flex-col h-1000px bg-[#ECEDED]">
         <Navbar />
         <div className="flex flex-col font-3xl" id="viewTicket">
             <BackButton
               type="button"
               label={"view ticket"}
-              handleClick={()=>null}/>
+              handleClick={handleBack}/>
           <div className='flex-grow flex flex-col justify-center items-center bg-[#ECEDED]'>
               <p className='text-headerText pb-5 text-2xl font-medium'>New Quotation</p>
           </div>
-          <div className="flex mx-auto my-auto max-w-content bg-white border-gray-200 rounded-lg shadow sm:p-7">
-          <div className='grid grid-cols-2'>
+          <div className="flex mx-auto my-auto w-4/5 bg-white border-gray-200 rounded-lg shadow sm:p-7">
+          <div className='grid grid-cols-2 w-fit'>
           <form onSubmit={handleSubmit} className="space-y-5">
           <p className="text-lg text-center font-medium h-5">New Request Form</p>
           <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
@@ -134,18 +143,6 @@ function UploadQuote() {
               disabled={true}
               layout={"vertical"}
               onChange={()=> null}/>
-            <LineField
-              type={"text"}
-              label="Date"
-              classnames="w-4/5"
-              padding_right="0"
-              value={date}
-              name="date"
-              placeholder={""}
-              error=""
-              disabled={true}
-              layout={"vertical"}
-              onChange={()=> null}/>
           </div>
           <LineField
             type={"text"}
@@ -155,7 +152,7 @@ function UploadQuote() {
             value={totalAmount}
             name="totalAmount"
             placeholder={"Please key in amount"}
-            error={errors.formTitle}
+            error={errors.formTotalAmount}
             disabled={false}
             layout={"vertical"}
             onChange={handleValueChange}/>
@@ -163,7 +160,13 @@ function UploadQuote() {
                   <div className='border-l-2 border-gray-300 items-center bg-[white]'>
                   <div className='border-l-2 border-gray-300 flex flex-col items-center bg-[white]'>
                       <p className='text-lg text-left font-medium text-headerText text-center'>Document View</p>
-                        <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/>
+                      <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
+                      <img
+                      src={Example_quote}
+                      className="flex mx-auto mt-3 h-4/5 w-2/3"
+                      alt="Quote PDF"
+                      />
+                        {/* <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/> */}
  
                         <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
                         <AttachQuotation
@@ -178,12 +181,19 @@ function UploadQuote() {
                         </div>
                         </div>
                     <div className='grid grid-cols-2 gap-x-10'>
-                      <UploadQuotationButton
-                      type='checkbox'
-                      handleClick={handleSubmit}
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="noQuotation"
+                        checked={noQuotationNeeded}
+                        onChange={handleCheckBoxChange}
                       />
+                      <label htmlFor="noQuotation" className="ml-2">
+                        No need quotation
+                      </label>
+                    </div>
                       <div className='flex justify-end'>
-                      <SubmitButton type='submit' label={'Submit'} handleClick={''} />
+                      <SubmitButton type='submit' label={'Submit'} handleClick={handleSubmit} />
                       </div>
                     </div>
                   </div>

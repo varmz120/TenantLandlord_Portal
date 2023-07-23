@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import homeImage from '../images/home.svg';
 import userIcon from '../images/user_icon.svg';
 import userIconDark from '../images/user_icon_dark.svg';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [usernameIsActive, setUsernameIsActive] = useState(false);
   const handleUsernameActive = () => {
     setUsernameIsActive(true);
@@ -12,6 +14,19 @@ const Navbar = () => {
   const handleUsernameInactive = () => {
     setUsernameIsActive(false);
   };
+
+  const homeOnClick = () => {
+    navigate('/');
+  }
+
+  const addServiceOnClick = () => {
+    navigate('/AddService');
+  };
+
+  const addLeaseOnClick = () => {
+    navigate('/AddLease');
+  }
+
 
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-[#31556F]">
@@ -52,13 +67,15 @@ const Navbar = () => {
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
+                onClick={addServiceOnClick}
               >
-                Add Tenant
+                Add Service
               </a>
               <a
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
+                onClick={addLeaseOnClick}
               >
                 Add Lease
               </a>
@@ -66,7 +83,8 @@ const Navbar = () => {
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                aria-current="page"
+                // aria-current="page"
+                onClick={homeOnClick}
               >
                 Home
               </a>

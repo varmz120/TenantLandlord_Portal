@@ -13,6 +13,11 @@ const AddService = () => {
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
+  const [formState, setFormState] = useState<string | any>({
+    nameService: "",
+    //isSubmitted: false
+  });
+
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
     setFirstView(false);
@@ -25,7 +30,14 @@ const AddService = () => {
     }
   };
 
-  let buildingId;
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
+    if ('value' in event.target) {
+      setFormState({
+        ...formState,
+        [event.target.name]: event.target.value
+      });
+    }
+  };
 
   return (
     <>
