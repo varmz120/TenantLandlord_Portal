@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent, useEffect } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 // making a dashboard component
 const Dashboard = () => {
   // useStates
+  const navigate = useNavigate();
   const [userIsActive, setUserIsActive] = useState(false);
 
   const handleUserActive = () => {
@@ -48,6 +50,13 @@ const Dashboard = () => {
     Date: '',
     Status: '',
   });
+
+  //Implement row click to View Specific Ticket
+  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
+    event.preventDefault();
+
+    navigate('/ViewTicket');
+  };
 
   // Implement Filter function for table
   const [filteredTableData, setFilteredTableData] = useState(tableData);
@@ -99,7 +108,8 @@ const Dashboard = () => {
     }
   };
 
-  const handleCheck = (itemId: string) => {
+  const handleCheck = (itemId: string, event:React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
     if (checked.includes(itemId)) {
       setChecked((prevItems) => prevItems.filter((id) => id !== itemId));
     } else {
@@ -118,6 +128,7 @@ const Dashboard = () => {
 
   // Function to update the status of the row for dropdown selection
   const handleStatusUpdate = (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.stopPropagation();
     const updateTableData = tableData.map((row) => {
       if (row.ID === itemId) {
         return { ...row, Status: e.target.value };
@@ -351,12 +362,13 @@ const Dashboard = () => {
               </thead>
               <tbody className="">
                 {filteredTableData.map((row) => (
-                  <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID}>
+                  <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID} onClick={handleRowClick}>
                     <td className="px-4 py-2">
                       <input
                         type="checkbox"
                         checked={checked.includes(row.ID)}
-                        onChange={() => handleCheck(row.ID)}
+                        onChange={(event) => handleCheck(row.ID, event)}
+                        onClick={(event) => event.stopPropagation()}
                       />
                     </td>
                     <td className="px-4 py-2">{row.ID}</td>
@@ -367,6 +379,7 @@ const Dashboard = () => {
                       <select
                         value={row.Status}
                         onChange={(e) => handleStatusUpdate(row.ID, e)}
+                        onClick={(event) => event.stopPropagation()}
                         className="block appearance-none w-full bg-white border border-gray-300 
                                                     hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                       >
