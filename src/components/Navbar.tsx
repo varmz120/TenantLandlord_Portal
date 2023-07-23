@@ -19,6 +19,19 @@ function Navbar() {
     }
   };
 
+  const homeOnClick = () => {
+    navigate('/');
+  }
+
+  const addServiceOnClick = () => {
+    navigate('/AddService');
+  };
+
+  const addLeaseOnClick = () => {
+    navigate('/AddLease');
+  }
+
+
   return (
     <nav className="max-w-screen h-12 border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between h-12">
@@ -58,6 +71,7 @@ function Navbar() {
                 href="/#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
+                onClick={addLeaseOnClick}
               >
                 Add Lease
               </a>
@@ -65,7 +79,8 @@ function Navbar() {
                 href="#"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                aria-current="page"
+                // aria-current="page"
+                onClick={homeOnClick}
               >
                 Home
               </a>
