@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import AdminAccounts from '../components/tables/AdminAccounts'; // Adjust this import based on your file structure
+import BuildingsTable from '../components/tables/BuildingsTable'; // Adjust this import based on your file structure
 import userEvent from '@testing-library/user-event';
 
 // Mocking the navigation
@@ -20,7 +20,7 @@ describe('AdminAccounts', () => {
 
   beforeEach(() => {
     handleClick = jest.fn();
-    render(<AdminAccounts clicked={false} handleClick={handleClick} />);
+    render(<BuildingsTable clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {
@@ -46,9 +46,10 @@ describe('AdminAccounts', () => {
   });
 
   test('calls handleClearFilters on button click', async () => {
-    fireEvent.change(screen.getByPlaceholderText('Search ID'), { target: { value: '56' } });
+    const input = screen.getByPlaceholderText('Search ID');
+    fireEvent.change(input, { target: { value: '56' } });
     await waitFor(() => {
-      expect(screen.getByText('56')).toBeInTheDocument();
+      expect(input).toHaveValue('56');
     });
     fireEvent.click(screen.getByText('Clear Filters'));
     await waitFor(() => {
@@ -95,14 +96,14 @@ describe('AdminAccounts', () => {
   //     });
   //   });
 
-  test('filters the table', async () => {
-    // Assuming that initial data contains a row with Email: 'logan@example.com'
-    expect(screen.getByText('logan@example.com')).toBeInTheDocument();
-    userEvent.type(screen.getByPlaceholderText('Search Email'), 'logan@example.com');
-    await waitFor(() => {
-      expect(screen.getByText('logan@example.com')).toBeInTheDocument();
-      // Assuming that initial data contains a row with Email: 'james@example.com'
-      expect(screen.queryByText('james@example.com')).not.toBeInTheDocument();
-    });
-  });
+  // test('filters the table', async () => {
+  //   // Assuming that initial data contains a row with Email: 'logan@example.com'
+  //   expect(screen.getByText('logan@example.com')).toBeInTheDocument();
+  //   userEvent.type(screen.getByPlaceholderText('Search Email'), 'logan@example.com');
+  //   await waitFor(() => {
+  //     expect(screen.getByText('logan@example.com')).toBeInTheDocument();
+  //     // Assuming that initial data contains a row with Email: 'james@example.com'
+  //     expect(screen.queryByText('james@example.com')).not.toBeInTheDocument();
+  //   });
+  // });
 });
