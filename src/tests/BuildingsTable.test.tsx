@@ -15,7 +15,7 @@ jest.mock('../images/add_service_provider_icon.svg', () => 'addServiceProviderIc
 jest.mock('../images/filter_icon.svg', () => 'filterIcon');
 jest.mock('../images/pencil_edit_icon.svg', () => 'pencilEditIcon');
 
-describe('AdminAccounts', () => {
+describe('BuildingsTable', () => {
   let handleClick: jest.Mock;
 
   beforeEach(() => {
