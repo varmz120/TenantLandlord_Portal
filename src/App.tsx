@@ -17,6 +17,12 @@ import PasswordResetTwo from './pages/PasswordResetTwo.tsx';
 import PasswordResetSuccessful from './pages/PasswordResetSuccessful.tsx';
 import PasswordResetUnsuccessful from './pages/PasswordResetUnsuccessful.tsx';
 
+//Admin pages
+import AdminDashboard from './pages/AdminDashboard.tsx';
+
+//Landlord pages
+import LandlordDashboard from './pages/LandlordDashboard.tsx';
+
 // Error Pages
 import ErrorPage404 from './pages/404.tsx';
 import ErrorPage401 from './pages/401.tsx';
@@ -139,12 +145,34 @@ function PasswordResetUnsuccessfulPage(){
 }
 
 {/* Functions for tenant */}
-function DashboardPage() {
+function TenantDashboardPage() {
   return (
     <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <TenantDashboard />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function AdminDashboardPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <AdminDashboard />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function LandlordDashboardPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <LandlordDashboard />
       </ErrorBoundary>
     </div>
   );
@@ -194,16 +222,6 @@ function RateTicketPage() {
   );
 }
 
-function LandingPage() {
-  return (
-    <div className="App h-screen bg-content">
-      <ErrorBoundary>
-        <Navbar />
-        <Landing />
-      </ErrorBoundary>
-    </div>
-  );
-}
 
 function NotificationPage() {
   return (

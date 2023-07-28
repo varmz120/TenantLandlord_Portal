@@ -19,7 +19,6 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
     const newValue = event.target.value;
     setName(newValue);
   };
-
   const handlePostalChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setPostalCode(newValue);

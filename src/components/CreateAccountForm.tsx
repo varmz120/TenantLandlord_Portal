@@ -12,7 +12,6 @@ const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
   const [email, setEmail] = useState('');
   const [buildingID, setBuildingID] = useState('');
-
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);
