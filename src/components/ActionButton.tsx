@@ -20,13 +20,14 @@ const ActionButton: FC<InputProps> = ({
   let className = '';
   let icon = '';
 
+  // TODO: Add View Quote button option here
   switch (type) {
     case 'accept': {
       className =
         'w-24 ' +
         (toggle && !firstViewState
           ? 'text-headerText border-[#BEDCB5] bg-[#BEDCB5]'
-          : 'text-[#6BC04E] border-[#6BC04E] hover:text-headerText hover:border-[#BEDCB5] hover:bg-[#BEDCB5]');
+          : 'text-[#6BC04E] border-[#6BC04E] hover:text-headerText');
       break;
     }
     case 'reject': {
@@ -34,12 +35,7 @@ const ActionButton: FC<InputProps> = ({
         'w-24 ' +
         (toggle && !firstViewState
           ? 'text-[#4D2E2E] border-[#EBB3B0] bg-[#EBB3B0]'
-          : 'text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E] hover:border-[#EBB3B0] hover:bg-[#EBB3B0]');
-      break;
-    }
-    case 'request': {
-      className =
-        'w-40 h-[50px] text-userNameText border-button bg-userNameButton hover:text-textActive hover:border-activeField hover:bg-buttonActive mx-auto rounded';
+          : 'text-[#EB4841] border-[#EB4841] hover:text-[#4D2E2E]');
       break;
     }
     case 'download': {
@@ -49,12 +45,15 @@ const ActionButton: FC<InputProps> = ({
         "bg-50 bg-left bg-no-repeat bg-[url('./images/download_icon.svg')] group-hover:bg-[url('./images/download_icon_dark.svg')]";
       break;
     }
-    // TODO: Fix slight icon placement
-    case 'quote': {
+    case 'edit': {
       className =
-        'w-32 text-headerText border-button hover:text-textActive hover:border-buttonActive hover:bg-buttonActive pr-2 ';
-      icon =
-        "bg-left bg-no-repeat bg-[url('./images/quote_icon.svg')] group-hover:bg-[url('./images/quote_icon_dark.svg')] h-4 w-7";
+        '!mr-3 !h-7  w-20 rounded bg-[#e5e7eb] border-[#e5e7eb] hover:bg-[#BEDCB5] items-center';
+      icon = " bg-50 h-5 !mt-1 bg-left bg-no-repeat bg-[url('./images/pencil_edit_icon.svg')]";
+      break;
+    }
+    case 'delete': {
+      className = ' !h-7 w-20 rounded bg-[#e5e7eb] border-[#e5e7eb] hover:bg-[#c95f5b] ';
+      icon = " bg-50 h-5  !mt-1  bg-left bg-no-repeat bg-[url('./images/delete.svg')] ";
       break;
     }
     case 'edit': {
@@ -76,15 +75,8 @@ const ActionButton: FC<InputProps> = ({
   }
 
   return (
-    <div style={{ paddingLeft: padding_right + 'px' }} className="flex">
-      <button
-        type="button"
-        name={type}
-        id="action"
-        value={value}
-        onClick={onClick}
-        className={'h-8 rounded-md border-[1px] text-sm group ' + className}
-      >
+    <div style={{ paddingLeft: padding_right }} className="flex">
+      <button type="button" name={type} onClick={onClick} className={className}>
         {icon ? <div className={'inline-block w-6 h-3 ml-2 ' + icon}></div> : null}
         {value}
       </button>
