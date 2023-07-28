@@ -38,8 +38,8 @@ function App() {
   return (
     <AuthContextProvider>
       <Routes>
-          {/*Routing for landlord */}
-          <Route path = "/logintenant" element = {<TenantLoginPage/>}/>
+          {/*Routing for login pages */}
+          <Route path="/" element={<TenantLoginPage />} />
 
           {/*Routing for password reset */}
           <Route path = "/reset1" element = {<PasswordResetPage1/>}/>

@@ -9,6 +9,9 @@ const TenantLogin = () => {
   // Context
   const { user, login } = useContext(AuthContext);
 
+  // State to store fetched user data
+  const [fetchedUserData, setFetchedUserData] = useState<any>(null);
+
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,13 +28,32 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = () => {
+    //Variable called 'userTypeFromBackend' representing user's type fetched from backend
+    const userTypeFromBackend = 1;
+
+    //use setFetchedUserData({}) to call from backend and save in state
+
     login({
       id: '1',
       email: 'JamieDole@yahoo.com.sg',
-      userType: 0, // Tenant
-      authToken: '5880',
-  })
-    navigate('/TenantDashboard');
+      userType: userTypeFromBackend, // Tenant
+      authToken: '5880',  
+    })
+
+    //Redirect user based on UserType
+    switch(userTypeFromBackend){
+      case 0: //Tenant
+        navigate('/tenantDashboard');
+        break;
+      
+      case 1: //Landlord
+        navigate('/landlordDashboard');
+        break;
+
+      case 2: //Admin
+        navigate('/adminDashboard');
+        break;
+    }
   };
 
   // Event handler for clicking forgot password
@@ -73,6 +95,7 @@ const TenantLogin = () => {
           <button
             type="submit"
             className="bg-[#335B77] rounded-lg mt-24 text-2xl font-bold text-white p-1"
+            onClick = {handleLoginClick}
           >
             Login
           </button>
