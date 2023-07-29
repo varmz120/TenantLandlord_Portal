@@ -65,7 +65,7 @@ function Navbar() {
             </li>
             <li>
               <a
-                href="/#"
+                href="/Notification"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
               >

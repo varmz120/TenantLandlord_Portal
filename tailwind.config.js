@@ -18,6 +18,7 @@ module.exports = {
         navbar: '#31556F',
         userNameButton: '#EDFDFF',
         buttonActive: '#193446',
+        tableHover: '#BEDBEB',
       },
       backgroundImage: {
         imageUploadIcons: "#ECEAEA url('./images/upload_icon.svg')",
@@ -46,10 +47,18 @@ module.exports = {
         buttonActive: '#193446',
       },
       height: {
+        'icon_button' : ' 3.5rem',
         '128': '32rem',
+        '144': '36rem',
+        '656': '41rem',
       },
       width: {
+        'icon_button' : ' 3.5rem',
         '128': '32rem',
+        '144': '36rem',
+        '156': '39rem',
+        '656': '41rem',
+        '1320': '82.5rem',
       },
     },
   },

@@ -7,6 +7,7 @@ import TenantDashboard from './pages/TenantDashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
 import Landing from './pages/Landing.tsx';
+import Notification from './pages/Notification.tsx';
 
 // Error Pages
 import ErrorPage404 from './pages/404.tsx';
@@ -28,6 +29,7 @@ function App() {
           <Route path="/viewDetails" element={<ViewTicketPage />} />
           <Route path="/viewQuote" element={<ViewQuotePage />} />
           <Route path="/feedbackSurvey" element={<RateTicketPage />} />
+          <Route path="/notification" element={<NotificationPage />} />
           <Route path="/*" element={<ErrorPage404 />} />
           <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
           <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
@@ -39,7 +41,7 @@ function App() {
 
 function DashboardPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <TenantDashboard />
@@ -50,7 +52,7 @@ function DashboardPage() {
 
 function RequestTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <RequestTicket />
@@ -61,7 +63,7 @@ function RequestTicketPage() {
 
 function ViewTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <ViewTicket />
@@ -72,7 +74,7 @@ function ViewTicketPage() {
 
 function ViewQuotePage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <ViewQuote />
@@ -83,7 +85,7 @@ function ViewQuotePage() {
 
 function RateTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-full bg-content">
       <ErrorBoundary>
         <Navbar />
         <RateTicket />
@@ -98,6 +100,17 @@ function LandingPage() {
       <ErrorBoundary>
         <Navbar />
         <Landing />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function NotificationPage() {
+  return (
+    <div className="App h-screen overflow-y-auto bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <Notification />
       </ErrorBoundary>
     </div>
   );
