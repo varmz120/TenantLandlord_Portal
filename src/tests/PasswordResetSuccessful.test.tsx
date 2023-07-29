@@ -1,18 +1,21 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history'
-import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import PasswordResetSuccessful from '../pages/PasswordResetSuccessful';
 
-describe('PasswordResetSuccessful', () => {
-  const history = createMemoryHistory()
+// Mock useNavigate
+let mockNavigate = jest.fn();
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+describe('PasswordResetSuccessful', () => {
   beforeEach(() => {
-    render(
-      <Router history={history}>
-        <PasswordResetSuccessful />
-      </Router>
-    );
+    // Reset mockNavigate before each test to clean up previous interactions.
+    mockNavigate.mockReset();
+
+    render(<PasswordResetSuccessful />);
   });
 
   test('renders without crashing', () => {
@@ -35,6 +38,6 @@ describe('PasswordResetSuccessful', () => {
 
   test('navigates to / when Back button is clicked', () => {
     fireEvent.click(screen.getByText(/Back/i));
-    expect(history.location.pathname).toBe('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

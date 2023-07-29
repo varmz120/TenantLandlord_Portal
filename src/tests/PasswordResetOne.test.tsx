@@ -1,22 +1,24 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history'
-import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import PasswordResetOne from '../pages/PasswordResetOne';
 
-describe('PasswordResetOne', () => {
-  const history = createMemoryHistory()
+// Mock useNavigate
+let mockNavigate = jest.fn();
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+describe('PasswordResetOne', () => {
   beforeEach(() => {
-    render(
-      <Router history={history}>
-        <PasswordResetOne />
-      </Router>
-    );
+    // Reset mockNavigate before each test to clean up previous interactions.
+    mockNavigate.mockReset();
+
+    render(<PasswordResetOne />);
   });
 
   test('renders without crashing', () => {
-    // screen.logTestingPlaygroundURL();
     const passwordResetElement = screen.getByText(/Tenant Portal/i);
     expect(passwordResetElement).toBeInTheDocument();
   });
@@ -31,11 +33,11 @@ describe('PasswordResetOne', () => {
 
   test('navigates to /reset2FA when Request Password Reset button is clicked', () => {
     fireEvent.click(screen.getByText(/Request Password Reset/i));
-    expect(history.location.pathname).toBe('/reset2FA');
+    expect(mockNavigate).toHaveBeenCalledWith('/reset2FA');
   });
 
   test('navigates to / when Back button is clicked', () => {
     fireEvent.click(screen.getByText(/Back/i));
-    expect(history.location.pathname).toBe('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

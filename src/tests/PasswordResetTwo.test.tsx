@@ -1,15 +1,21 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import PasswordResetTwo from '../pages/PasswordResetTwo';
+
+// Mock useNavigate
+let mockNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 
 describe('PasswordResetTwo', () => {
   beforeEach(() => {
-    render(
-      <Router>
-        <PasswordResetTwo />
-      </Router>
-    );
+    // Reset mockNavigate before each test to clean up previous interactions.
+    mockNavigate.mockReset();
+
+    render(<PasswordResetTwo />);
   });
 
   test('renders without crashing', () => {
@@ -31,11 +37,11 @@ describe('PasswordResetTwo', () => {
 
   test('navigates to /resetsuccessful when Confirm New Password button is clicked', () => {
     fireEvent.click(screen.getByText(/Confirm New Password/i));
-    expect(screen.getByText(/Password Reset/i)).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith('/resetsuccessful');
   });
 
-  test('navigates to /logintenant when Back to Login button is clicked', () => {
+  test('navigates to / when Back to Login button is clicked', () => {
     fireEvent.click(screen.getByText(/Back to Login/i));
-    expect(screen.getByText(/Login/i)).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

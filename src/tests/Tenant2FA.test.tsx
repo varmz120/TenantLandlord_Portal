@@ -1,18 +1,21 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history'
-import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 import Tenant2FA from '../pages/Tenant2FA';
 
-describe('Tenant2FA', () => {
-  const history = createMemoryHistory()
+// Mock useNavigate
+let mockNavigate = jest.fn();
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+describe('Tenant2FA', () => {
   beforeEach(() => {
-    render(
-      <Router history={history}>
-        <Tenant2FA />
-      </Router>
-    );
+    // Reset mockNavigate before each test to clean up previous interactions.
+    mockNavigate.mockReset();
+
+    render(<Tenant2FA />);
   });
 
   test('renders without crashing', () => {
@@ -48,6 +51,6 @@ describe('Tenant2FA', () => {
 
   test('navigates to /reset2 when Verify button is clicked', () => {
     fireEvent.click(screen.getByText(/Verify/i));
-    expect(history.location.pathname).toBe('/reset2');
+    expect(mockNavigate).toHaveBeenCalledWith('/reset2');
   });
 });
