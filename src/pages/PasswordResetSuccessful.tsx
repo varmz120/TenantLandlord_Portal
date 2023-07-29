@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
         // Event handler for clicking on back button
         const handlePageBack = () => {
-            navigate('/logintenant')
+            navigate('/')
         };
 
     return(

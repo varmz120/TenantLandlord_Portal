@@ -20,7 +20,7 @@ const PasswordResetOne = () => {
 
     // Event handler for clicking on back button
     const handlePageBack = () => {
-        navigate('/logintenant');
+        navigate('/');
     };
 
     return(

@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history'
 import { BrowserRouter as Router } from "react-router-dom";
 import PasswordResetUnsuccessful from '../pages/PasswordResetUnsuccessful';
 
