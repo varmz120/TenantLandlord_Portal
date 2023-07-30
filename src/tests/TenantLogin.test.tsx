@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { AuthContext } from '../contexts/AuthContext';
 import TenantLogin from '../pages/TenantLogin';
 
@@ -16,23 +16,24 @@ describe('TenantLogin', () => {
 
   const mockUser = null;
 
-  beforeEach(() => {
-    // Reset mockNavigate before each test to clean up previous interactions.
-    mockNavigate.mockReset();
-
+  test('renders without crashing', () => {
     render(
       <AuthContext.Provider value={{ user: mockUser, login: mockLogin }}>
         <TenantLogin />
       </AuthContext.Provider>
     );
-  });
 
-  test('renders without crashing', () => {
     const tenantPortalElement = screen.getByText(/Tenant Portal/i);
     expect(tenantPortalElement).toBeInTheDocument();
   });
 
   test('username and password fields update on change', () => {
+    render(
+      <AuthContext.Provider value={{ user: mockUser, login: mockLogin }}>
+        <TenantLogin />
+      </AuthContext.Provider>
+    );
+
     fireEvent.change(screen.getByPlaceholderText(/Username/i), {
       target: { value: 'test' },
     });
@@ -45,6 +46,12 @@ describe('TenantLogin', () => {
   });
 
   test('calls the login function with the correct username and password when login button is clicked', () => {
+    render(
+      <AuthContext.Provider value={{ user: mockUser, login: mockLogin }}>
+        <TenantLogin />
+      </AuthContext.Provider>
+    );
+
     fireEvent.click(
       screen.getByRole('button', {
         name: /login/i,
@@ -60,6 +67,12 @@ describe('TenantLogin', () => {
   });
 
   test('navigates to password reset page when "Forgot your login details?" is clicked', () => {
+    render(
+      <AuthContext.Provider value={{ user: mockUser, login: mockLogin }}>
+        <TenantLogin />
+      </AuthContext.Provider>
+    );
+
     fireEvent.click(screen.getByText(/Click here/i));
     expect(mockNavigate).toHaveBeenCalledWith('/reset1');
   });

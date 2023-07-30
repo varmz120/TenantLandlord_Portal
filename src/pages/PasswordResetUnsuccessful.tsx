@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React from 'react';
 
 const PasswordResetUnsuccessful = () => {
   // Event handler for clicking on back button
@@ -21,6 +21,7 @@ const PasswordResetUnsuccessful = () => {
             <button
               type="submit"
               className="bg-[#335B77] rounded-lg h-12 w-[280px] text-2xl font-bold text-white p-1 mt-2"
+              onClick={handlePageBack}
             >
               Back
             </button>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import PasswordResetUnsuccessful from '../pages/PasswordResetUnsuccessful';
 
 describe('PasswordResetUnsuccessful', () => {
   beforeEach(() => {
+    // eslint-disable-next-line
     render(
       <Router>
         <PasswordResetUnsuccessful />
