@@ -31,4 +31,4 @@ function _404_ErrorPage() {
   );
 }
 
-export default ErrorPage404;
+export default _404_ErrorPage;
