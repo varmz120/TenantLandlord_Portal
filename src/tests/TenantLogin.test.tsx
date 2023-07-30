@@ -45,9 +45,11 @@ describe('TenantLogin', () => {
   });
 
   test('calls the login function with the correct username and password when login button is clicked', () => {
-    fireEvent.click(screen.getByRole('button', {
-      name: /login/i
-    }));
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /login/i,
+      })
+    );
 
     expect(mockLogin).toHaveBeenCalledWith({
       id: '1',
@@ -55,10 +57,10 @@ describe('TenantLogin', () => {
       userType: 1, // Tenant
       authToken: '5880',
     });
-  });  
+  });
 
   test('navigates to password reset page when "Forgot your login details?" is clicked', () => {
     fireEvent.click(screen.getByText(/Click here/i));
     expect(mockNavigate).toHaveBeenCalledWith('/reset1');
   });
-}); 
+});

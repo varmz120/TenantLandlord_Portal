@@ -31,8 +31,12 @@ describe('PasswordResetTwo', () => {
       target: { value: 'newpassword' },
     });
 
-    expect((screen.getByPlaceholderText(/Set new password/i) as HTMLInputElement).value).toBe('newpassword');
-    expect((screen.getByPlaceholderText(/Confirm new password/i) as HTMLInputElement).value).toBe('newpassword');
+    expect((screen.getByPlaceholderText(/Set new password/i) as HTMLInputElement).value).toBe(
+      'newpassword'
+    );
+    expect((screen.getByPlaceholderText(/Confirm new password/i) as HTMLInputElement).value).toBe(
+      'newpassword'
+    );
   });
 
   test('navigates to /resetsuccessful when Confirm New Password button is clicked', () => {

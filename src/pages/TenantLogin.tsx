@@ -1,4 +1,4 @@
-import React, {useContext, ChangeEvent, useState } from 'react';
+import React, { useContext, ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -16,7 +16,7 @@ const TenantLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Event handler for change in username field 
+  // Event handler for change in username field
   const handleUsernameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -37,15 +37,15 @@ const TenantLogin = () => {
       id: '1',
       email: 'JamieDole@yahoo.com.sg',
       userType: userTypeFromBackend, // Tenant
-      authToken: '5880',  
-    })
+      authToken: '5880',
+    });
 
     //Redirect user based on UserType
-    switch(userTypeFromBackend){
+    switch (userTypeFromBackend) {
       case 0: //Tenant
         navigate('/tenantDashboard');
         break;
-      
+
       case 1: //Landlord
         navigate('/landlordDashboard');
         break;
@@ -75,7 +75,9 @@ const TenantLogin = () => {
           }}
         >
           <p className="text-5xl my-3">Tenant Portal</p>
-          <p className="text-3xl text-start mt-10 mb-3" data-testid = "login">Login</p>
+          <p className="text-3xl text-start mt-10 mb-3" data-testid="login">
+            Login
+          </p>
           <input
             className={
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500 '
@@ -95,7 +97,7 @@ const TenantLogin = () => {
           <button
             type="submit"
             className="bg-[#335B77] rounded-lg mt-24 text-2xl font-bold text-white p-1"
-            onClick = {handleLoginClick}
+            onClick={handleLoginClick}
           >
             Login
           </button>
