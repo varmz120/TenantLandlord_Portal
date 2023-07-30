@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreateAccountForm from '../components/CreateAccountForm';
 import AdminAccounts from '../components/tables/AdminAccounts';
@@ -21,11 +21,11 @@ const ViewAllAccounts = () => {
     setClicked(false);
   };
 
-  const handleToggle = (buttonId: string) => {
+  const handleToggle = useCallback((buttonId: string) => {
     setFilterButtonActive(buttonId === filterButtonActive ? '' : buttonId);
-  };
+  }, [filterButtonActive]);
 
-  const handleClick = (buttonId: string) => {
+  const handleClick = useCallback((buttonId: string) => {
     switch (buttonId) {
       case 'tenants':
         handleTenantsClick();
@@ -42,7 +42,7 @@ const ViewAllAccounts = () => {
       default:
         break;
     }
-  };
+  }, []);
 
   const handleTenantsClick = () => {
     console.log('Tenants button clicked.');
