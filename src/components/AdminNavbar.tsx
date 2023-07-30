@@ -1,8 +1,7 @@
 import { useContext } from 'react';
-import homeImage from '../images/home.svg';
-
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import homeImage from '../images/home.svg';
 
 function Navbar() {
   const { user, logout } = useContext(AuthContext);

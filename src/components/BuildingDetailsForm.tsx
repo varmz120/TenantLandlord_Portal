@@ -1,10 +1,8 @@
-import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { FormEvent, MouseEvent, useState } from 'react';
 import LineField from '../components/LineField';
-import ActionButton from '../components/ActionButton';
-import SubmitButton from './SubmitButton';
-import AreaField from './AreaField';
 import DeleteIcon from '../images/delete.svg';
+import AreaField from './AreaField';
+import SubmitButton from './SubmitButton';
 
 const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 
