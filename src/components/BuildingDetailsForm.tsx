@@ -12,7 +12,7 @@ interface Props {
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [address] = useState('');
   const [postalCode, setPostalCode] = useState('');
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -33,7 +33,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
             <form className="space-y-4 mx-auto ">
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">Building Details</p>
-                <a href="#" onClick={handleDelClick}>
+                <a href="/Buildings" onClick={handleDelClick}>
                   <img src={DeleteIcon} alt="" className="w-4" />
                 </a>
               </div>

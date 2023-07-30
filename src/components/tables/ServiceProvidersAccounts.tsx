@@ -138,7 +138,7 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
       loadServiceProvidersData();
       setInitialRender(false);
     }
-  }, []);
+  }, [initialRender]);
 
   return (
     <div className="h-auto bg-[#ECEDED] flex-1 ">

@@ -88,7 +88,6 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   };
 
   //Component for filter buttons
-  const [filterButtonActive, setFilterButtonActive] = useState('');
 
   const loadLandlordData = () => {
     console.log('Loading Landlord Data...');
@@ -110,30 +109,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
     setFilteredTableData(landlordData);
   };
 
-  const filterButton = (buttonId: string, buttonText: string) => {
-    const isActive = buttonId === filterButtonActive;
-    const buttonStyle = isActive
-      ? 'mx-5 w-1/5 border bg-[#EDFDFF] border-[#3180BA] text-[#3180BA] py-2 rounded-2xl'
-      : 'mx-5 w-1/5 border bg-white border-[#63696E] text-[#63696E] py-2 rounded-2xl';
-
-    return (
-      <button
-        key={buttonId}
-        className={buttonStyle}
-        onClick={() => {
-          loadLandlordData();
-        }}
-      >
-        {buttonText}
-      </button>
-    );
-  };
-
   //on modify account button click
-  const handleModifyAccount = (id: string) => {
-    console.log(`Modifying account with ID: ${id}`);
-  };
-
   useEffect(() => {
     if (initialRender) {
       loadLandlordData();

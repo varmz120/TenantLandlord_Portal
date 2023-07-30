@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
@@ -120,7 +120,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
       loadLandlordData();
       setInitialRender(false);
     }
-  }, []);
+  }, [initialRender]);
 
   return (
     <div className="h-auto bg-[#ECEDED] flex-1 ">
