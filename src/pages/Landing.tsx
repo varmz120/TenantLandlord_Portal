@@ -13,19 +13,20 @@ function Landing() {
 
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     if ('value' in event.target) {
-      if (event.target.value === "Login as Tenant") {
+      if (event.target.value === 'Login as Tenant') {
         login({
           id: '1',
           email: 'JamieDole@yahoo.com.sg',
           userType: 0, // Tenant
           authToken: '5880',
-      })} else if (event.target.value === "Login as Landlord") {
+        });
+      } else if (event.target.value === 'Login as Landlord') {
         login({
           id: '2',
           email: 'LimaRae@yahoo.com.sg',
           userType: 2, // Tenant
           authToken: '5412',
-      })
+        });
       }
     }
   };
@@ -41,29 +42,32 @@ function Landing() {
   return (
     <React.Fragment>
       {user ? (
-        <div className='h-full w-full flex items-center justify-center'>
+        <div className="h-full w-full flex items-center justify-center">
           <p>Successfully logged in!</p>
         </div>
       ) : (
-        <div className='h-full w-full flex flex-col items-center justify-center'>
+        <div className="h-full w-full flex flex-col items-center justify-center">
           <p>
-            Demo of Frontend Tenant Pages. Please click on Log-In buttons above to start demo features.
+            Demo of Frontend Tenant Pages. Please click on Log-In buttons above to start demo
+            features.
           </p>
-          <div className='items-center flex flex-col gap-y-10 mt-10'>
-          <ActionButton
-            value={'Login as Tenant'}
-            padding_right={'0'}
-            type=""
-            toggle={false}
-            firstViewState={false}
-            onClick={handleButtonClick}/>
-          <ActionButton
-            value={'Login as Landlord'}
-            padding_right={'0'}
-            type=""
-            toggle={false}
-            firstViewState={false}
-            onClick={handleButtonClick}/>
+          <div className="items-center flex flex-col gap-y-10 mt-10">
+            <ActionButton
+              value={'Login as Tenant'}
+              padding_right={'0'}
+              type=""
+              toggle={false}
+              firstViewState={false}
+              onClick={handleButtonClick}
+            />
+            <ActionButton
+              value={'Login as Landlord'}
+              padding_right={'0'}
+              type=""
+              toggle={false}
+              firstViewState={false}
+              onClick={handleButtonClick}
+            />
           </div>
         </div>
       )}
