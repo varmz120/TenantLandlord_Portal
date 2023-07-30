@@ -21,13 +21,11 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import AdminNavbar from './components/AdminNavbar';
-import AdminHome from './pages/AdminHome';
 import '@fontsource-variable/lexend';
 import AdminAccManage from './pages/AdminAccManage';
-import ViewAllAccounts from './pages/ViewAllAccounts';
+import AdminHome from './pages/AdminHome';
 import Buildings from './pages/Buildings';
-import BuildingDetailsForm from './components/BuildingDetailsForm';
-import CreateAccountForm from './components/CreateAccountForm';
+import ViewAllAccounts from './pages/ViewAllAccounts';
 
 function App() {
   return (
@@ -143,7 +141,7 @@ function AdminAccManagePage() {
 function AdminHomePage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
+      <AdminNavbar />
       <AdminHome />
     </div>
   );
@@ -152,7 +150,7 @@ function AdminHomePage() {
 function AccountsPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
+      <AdminNavbar />
       <ViewAllAccounts />
     </div>
   );
@@ -161,7 +159,7 @@ function AccountsPage() {
 function BuildingsPage() {
   return (
     <div className="App h-screen bg-content">
-      <Navbar />
+      <AdminNavbar />
       <Buildings />
     </div>
   );
