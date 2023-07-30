@@ -119,14 +119,14 @@ const ViewAllAccounts = () => {
       setUserType('Tenants');
     }
     setInitialRender(false);
-  }, [handleClick, handleToggle,initialRender]);
+  }, [initialRender]);
 
   return (
     <>
       <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
-        <a href="#">
+        <a href="/#">
           <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
-            <img src={BackArrowIcon}></img>
+            <img src={BackArrowIcon} alt='back arrow'></img>
             <p className="ml-5 text-xl">Back to Panel</p>
           </div>
         </a>
