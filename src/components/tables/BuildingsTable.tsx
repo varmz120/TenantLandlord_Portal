@@ -115,7 +115,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       loadLandlordData();
       setInitialRender(false);
     }
-  }, []);
+  }, [initialRender]);
 
   return (
     <div className="h-auto bg-[#ECEDED] flex-1 ">
@@ -134,7 +134,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
         </div>
         <div className="flex items-center">
           <a /* Filter Icon Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             onClick={toggleRowVisibility}
@@ -143,7 +143,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Delete Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
             onClick={() => {
@@ -155,7 +155,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
             <img src={trashBinIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Add Service Provider Icon Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             style={{ width: '57px', height: '57px' }}
@@ -249,7 +249,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                 <td className="px-2 py-2">{row.Address}</td>
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer">
-                    <img className="mr-2" src={deleteIcon} />
+                    <img className="mr-2" alt='delete icon' src={deleteIcon} />
                     <p>Delete</p>
                   </div>
                 </td>

@@ -139,7 +139,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
         </div>
         <div className="flex items-center">
           <a /* Filter Icon Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             onClick={toggleRowVisibility}
@@ -148,7 +148,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Delete Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
             onClick={() => {
@@ -160,7 +160,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
             <img src={trashBinIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Add Service Provider Icon Button */
-            href="#"
+            href = "#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             style={{ width: '57px', height: '57px' }}
@@ -257,7 +257,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
                     onClick={() => handleModifyAccount(row.Email, row.BuildingID)}
                   >
-                    <img className="mr-2" src={pencilEditIcon} />
+                    <img className="mr-2" alt='pencil icon'   src={pencilEditIcon} />
                     <p>Modify Account</p>
                   </div>
                 </td>

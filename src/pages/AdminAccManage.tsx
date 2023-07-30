@@ -40,9 +40,9 @@ const AdminAccManage = () => {
 
   return (
     <>
-      <a href="#">
+      <a href="/#">
         <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
-          <img src={BackArrowIcon}></img>
+          <img src={BackArrowIcon} alt='back arrow'></img>
           <p className="ml-5 text-xl">Back to all accounts</p>
         </div>
       </a>
@@ -94,7 +94,7 @@ const AdminAccManage = () => {
                   }`}
                   onClick={handleEdit}
                 >
-                  <img className="mr-2" src={pencilIcon} />
+                  <img className="mr-2" alt='pencil icon' src={pencilIcon} />
                   <p>Edit</p>
                 </div>
                 <div
@@ -103,7 +103,7 @@ const AdminAccManage = () => {
                   }`}
                   onClick={handleDelete}
                 >
-                  <img className="mr-2" src={deleteIcon} />
+                  <img className="mr-2" alt='trashbin icon' src={deleteIcon} />
                   <p>Delete</p>
                 </div>
                 <div
