@@ -103,7 +103,7 @@ const TenantDashboard = () => {
                         <tr
                           className="hover:bg-tableHover hover:shadow-lg"
                           key={row.Notification_details}
-                          color={row.Background}
+                          bgcolor={row.Background}
                           onClick={(event) => handleRowClick(event, tableData.indexOf(row))}
                         >
                           <td className="pb-10 pt-5 py-2 px-5 text-left">
