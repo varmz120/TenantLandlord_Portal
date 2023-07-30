@@ -1,4 +1,4 @@
-import React, { useContext, ChangeEvent, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -7,10 +7,7 @@ const TenantLogin = () => {
   const navigate = useNavigate();
 
   // Context
-  const { user, login } = useContext(AuthContext);
-
-  // State to store fetched user data
-  const [fetchedUserData, setFetchedUserData] = useState<any>(null);
+  const { login } = useContext(AuthContext);
 
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
@@ -28,10 +25,10 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = () => {
-    //Variable called 'userTypeFromBackend' representing user's type fetched from backend
+    // Variable called 'userTypeFromBackend' representing user's type fetched from backend
     const userTypeFromBackend = 1;
 
-    //use setFetchedUserData({}) to call from backend and save in state
+    // use setFetchedUserData({}) to call from backend and save in state
 
     login({
       id: '1',
@@ -40,17 +37,17 @@ const TenantLogin = () => {
       authToken: '5880',
     });
 
-    //Redirect user based on UserType
+    // Redirect user based on UserType
     switch (userTypeFromBackend) {
-      case 0: //Tenant
+      case 0: // Tenant
         navigate('/tenantDashboard');
         break;
 
-      case 1: //Landlord
+      case 1: // Landlord
         navigate('/landlordDashboard');
         break;
 
-      case 2: //Admin
+      case 2: // Admin
         navigate('/adminDashboard');
         break;
     }

@@ -15,6 +15,7 @@ describe('PasswordResetTwo', () => {
     // Reset mockNavigate before each test to clean up previous interactions.
     mockNavigate.mockReset();
 
+    // eslint-disable-next-line
     render(<PasswordResetTwo />);
   });
 
