@@ -26,7 +26,7 @@ const TenantLogin = () => {
   // Event handler for clicking login button
   const handleLoginClick = () => {
     // Variable called 'userTypeFromBackend' representing user's type fetched from backend
-    const userTypeFromBackend = 1;
+    const userTypeFromBackend = 0;
 
     // use setFetchedUserData({}) to call from backend and save in state
 

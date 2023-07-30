@@ -16,13 +16,6 @@ const TenantDashboard = () => {
   var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
   var ticket_status = formState ? formState.formStatus : ''; //Temporary -> for demo purposes w/o backend
   var isClosed = locate.state ? locate.state.isClosed : null; // Temporary -> for demo purposes w/o backend
-  
-  
-  const date = new Date();
-  let currentDay= String(date.getDate()).padStart(2, '0');
-  let currentMonth = String(date.getMonth()+1).padStart(2,"0");
-  let currentYear = date.getFullYear() % 100;
-  let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
 
   const date = new Date();
   let currentDay = String(date.getDate()).padStart(2, '0');
