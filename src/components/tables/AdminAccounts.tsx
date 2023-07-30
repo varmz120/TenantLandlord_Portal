@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
-import CreateAccountForm from '../CreateAccountForm';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -14,7 +13,6 @@ interface Props {
 const AdminAccounts = ({ clicked, handleClick }: Props) => {
   const navigate = useNavigate();
   const userType = 'Admin';
-  const [isOpen, setIsOpen] = useState(true);
 
   const [tableData, setTableData] = useState([{ ID: '', Email: '' }]);
 

@@ -1,4 +1,4 @@
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import SubmitButton from './SubmitButton';
@@ -12,24 +12,7 @@ const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
   const [email, setEmail] = useState('');
   const [buildingID, setBuildingID] = useState('');
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
 
-  const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string | any>({});
-
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);

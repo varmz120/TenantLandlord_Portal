@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
-import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import deleteIcon from '../../images/delete.svg';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   clicked: boolean;
@@ -15,8 +13,6 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Name: '', Address: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
-
-  const navigate = useNavigate();
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Name' | 'Address';
