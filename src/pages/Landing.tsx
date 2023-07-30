@@ -20,6 +20,12 @@ function Landing() {
           userType: 0, // Tenant
           authToken: '5880',
         });
+      } else if (event.target.value === 'Login as Service Provider') {
+        login({
+          id: '4',
+          email: 'Dian@yahoo.com.sg',
+          userType: 1, // Service Provider
+        });
       } else if (event.target.value === 'Login as Landlord') {
         login({
           id: '2',
@@ -27,15 +33,31 @@ function Landing() {
           userType: 2, // Tenant
           authToken: '5412',
         });
+      } else if (event.target.value === 'Login as Admin') {
+        login({
+          id: '3',
+          email: 'Varmzz@yahoo.com.sg',
+          userType: 3, // Admin
+        });
       }
     }
   };
 
   useEffect(() => {
     if (user !== null) {
-      setTimeout(() => {
-        navigate('/tenantDashboard');
-      }, 1000);
+      if (user.userType === 0) {
+        setTimeout(() => {
+          navigate('/tenantDashboard');
+        }, 1000);
+      } else if (user.userType === 3) {
+        setTimeout(() => {
+          navigate('/adminDashboard');
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      }
     }
   }, [user, navigate]);
 
@@ -61,7 +83,23 @@ function Landing() {
               onClick={handleButtonClick}
             />
             <ActionButton
+              value={'Login as Service Provider'}
+              padding_right={'0'}
+              type=""
+              toggle={false}
+              firstViewState={false}
+              onClick={handleButtonClick}
+            />
+            <ActionButton
               value={'Login as Landlord'}
+              padding_right={'0'}
+              type=""
+              toggle={false}
+              firstViewState={false}
+              onClick={handleButtonClick}
+            />
+            <ActionButton
+              value={'Login as Admin'}
               padding_right={'0'}
               type=""
               toggle={false}

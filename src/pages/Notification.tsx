@@ -85,8 +85,8 @@ const TenantDashboard = () => {
         <Navigate to="/401" replace={true} />
       ) : (
         <React.Fragment>
-          {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 ? (
+          {/* // When user is logged in */}
+          {user?.userType !== null ? (
             <div className="flex justify-center items-center">
               <div className="container mx-auto mt-10 mb-10 h-156 w-656">
                 <div className="bg-white h-full overflow-y-auto rounded-lg drop-shadow-2xl">
@@ -125,7 +125,7 @@ const TenantDashboard = () => {
               </div>
             </div>
           ) : (
-            // When user is logged in but NOT a tenant
+            // When user is logged in but for some reason shouldnt have access
             <Navigate to="/403" replace={true} />
           )}
         </React.Fragment>

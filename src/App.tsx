@@ -1,5 +1,3 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import '@fontsource-variable/lexend';
 import Navbar from './components/Navbar.tsx';
@@ -20,7 +18,6 @@ import ErrorPageRunTime from './pages/RuntimeError.tsx';
 import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
-import AdminNavbar from './components/AdminNavbar';
 import '@fontsource-variable/lexend';
 import AdminAccManage from './pages/AdminAccManage';
 import AdminHome from './pages/AdminHome';
@@ -141,7 +138,7 @@ function AdminAccManagePage() {
 function AdminHomePage() {
   return (
     <div className="App h-screen bg-content">
-      <AdminNavbar />
+      <Navbar />
       <AdminHome />
     </div>
   );
@@ -150,7 +147,7 @@ function AdminHomePage() {
 function AccountsPage() {
   return (
     <div className="App h-screen bg-content">
-      <AdminNavbar />
+      <Navbar />
       <ViewAllAccounts />
     </div>
   );
@@ -159,7 +156,7 @@ function AccountsPage() {
 function BuildingsPage() {
   return (
     <div className="App h-screen bg-content">
-      <AdminNavbar />
+      <Navbar />
       <Buildings />
     </div>
   );
