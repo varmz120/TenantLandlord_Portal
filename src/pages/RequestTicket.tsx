@@ -140,11 +140,11 @@ function RequestTicket() {
           {user?.userType === 0 ? (
             <React.Fragment>
               {isSubmit ? (
-                <div className='h-full w-full flex flex-col items-center justify-center'>
+                <div className="h-full w-full flex flex-col items-center justify-center">
                   <p>"{formTitle}" Ticket has been sent!</p>
                   <p>Category: {formCategory}</p>
                   <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
-                  {formDescription ? <p>Description: {formDescription}</p>: null}
+                  {formDescription ? <p>Description: {formDescription}</p> : null}
                   {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
                   {formAttachments?.map((file: string) => {
                     return (

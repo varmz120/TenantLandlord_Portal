@@ -172,10 +172,10 @@ function RateTicket() {
           {user?.userType === 0 && formState ? (
             <React.Fragment>
               {isSubmit ? (
-                <div className='h-full w-full flex flex-col items-center justify-center'>
+                <div className="h-full w-full flex flex-col items-center justify-center">
                   <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
                   <p>Remarks: {formDescription}</p>
-                  {formRating && isClosed ? <p>Rating: {formRating}</p>: null}
+                  {formRating && isClosed ? <p>Rating: {formRating}</p> : null}
                   <p>Acknowledgement: {formAcknowledgement ? 'yes' : ''}</p>
                   {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
                   {formAttachments?.map((file: string) => {

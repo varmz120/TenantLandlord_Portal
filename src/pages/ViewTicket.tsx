@@ -6,7 +6,7 @@ import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import React, { useContext, MouseEvent} from 'react';
+import React, { useContext, MouseEvent } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
 // TODO: Add history of messages & routing of pages to include when user anyhow goes into path
@@ -45,10 +45,10 @@ function ViewTicket() {
   const handleCloseTicket = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
     event.preventDefault();
 
-    formState.formStatus = "Closed";
+    formState.formStatus = 'Closed';
     navigate('/tenantDashboard', {
       state: { formState, isSubmit: true, isClosed: true },
-    })
+    });
   };
 
   return (
@@ -151,26 +151,26 @@ function ViewTicket() {
                             />
                           ) : (
                             <React.Fragment>
-                            <ActionButton
-                              value={'View Quote'}
-                              padding_right={'30'}
-                              type=""
-                              firstViewState={false}
-                              toggle={false}
-                              onClick={() =>
-                                navigate('/viewQuote', {
-                                  state: { formState, isSubmit: true },
-                                })
-                              }
-                            />
-                            <ActionButton
-                              value={'Close Ticket'}
-                              padding_right={'30'}
-                              type=""
-                              firstViewState={false}
-                              toggle={false}
-                              onClick={handleCloseTicket}
-                            />
+                              <ActionButton
+                                value={'View Quote'}
+                                padding_right={'30'}
+                                type=""
+                                firstViewState={false}
+                                toggle={false}
+                                onClick={() =>
+                                  navigate('/viewQuote', {
+                                    state: { formState, isSubmit: true },
+                                  })
+                                }
+                              />
+                              <ActionButton
+                                value={'Close Ticket'}
+                                padding_right={'30'}
+                                type=""
+                                firstViewState={false}
+                                toggle={false}
+                                onClick={handleCloseTicket}
+                              />
                             </React.Fragment>
                           )}
                         </div>

@@ -47,13 +47,13 @@ module.exports = {
         buttonActive: '#193446',
       },
       height: {
-        'icon_button' : ' 3.5rem',
+        icon_button: ' 3.5rem',
         '128': '32rem',
         '144': '36rem',
         '656': '41rem',
       },
       width: {
-        'icon_button' : ' 3.5rem',
+        icon_button: ' 3.5rem',
         '128': '32rem',
         '144': '36rem',
         '156': '39rem',
