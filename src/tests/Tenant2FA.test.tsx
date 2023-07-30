@@ -46,7 +46,9 @@ describe('Tenant2FA', () => {
       target: { value: '123456' },
     });
 
-    expect((screen.getByPlaceholderText(/Enter authentication code/i) as HTMLInputElement).value).toBe('123456');
+    expect(
+      (screen.getByPlaceholderText(/Enter authentication code/i) as HTMLInputElement).value
+    ).toBe('123456');
   });
 
   test('navigates to /reset2 when Verify button is clicked', () => {

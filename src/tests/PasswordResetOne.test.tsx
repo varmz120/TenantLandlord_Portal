@@ -28,7 +28,9 @@ describe('PasswordResetOne', () => {
       target: { value: 'test@example.com' },
     });
 
-    expect((screen.getByPlaceholderText(/Email address/i) as HTMLInputElement).value).toBe('test@example.com');
+    expect((screen.getByPlaceholderText(/Email address/i) as HTMLInputElement).value).toBe(
+      'test@example.com'
+    );
   });
 
   test('navigates to /reset2FA when Request Password Reset button is clicked', () => {

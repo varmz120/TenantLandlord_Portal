@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import PasswordResetUnsuccessful from '../pages/PasswordResetUnsuccessful';
 
 describe('PasswordResetUnsuccessful', () => {
@@ -29,5 +29,4 @@ describe('PasswordResetUnsuccessful', () => {
     const buttonElement = screen.getByText(/Back/i);
     expect(buttonElement).toBeInTheDocument();
   });
-
 });
