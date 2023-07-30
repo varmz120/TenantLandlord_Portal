@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import BackArrowIcon from '../images/back_arrow_icon.svg';
-import trashBinIcon from '../images/trash_bin_icon.svg';
-import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
-import filterIcon from '../images/filter_icon.svg';
-import pencilEditIcon from '../images/pencil_edit_icon.svg';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CreateAccountForm from '../components/CreateAccountForm';
 import AdminAccounts from '../components/tables/AdminAccounts';
 import LandlordAccounts from '../components/tables/LandlordAccounts';
-import TenantAccounts from '../components/tables/TenantAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
-import CreateAccountForm from '../components/CreateAccountForm';
-import { useNavigate } from 'react-router-dom';
+import TenantAccounts from '../components/tables/TenantAccounts';
+import BackArrowIcon from '../images/back_arrow_icon.svg';
 const ViewAllAccounts = () => {
   const navigate = useNavigate();
   const [initialRender, setInitialRender] = useState(true);
