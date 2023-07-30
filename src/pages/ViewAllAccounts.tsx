@@ -119,7 +119,7 @@ const ViewAllAccounts = () => {
       setUserType('Tenants');
     }
     setInitialRender(false);
-  }, []);
+  }, [handleClick, handleToggle,initialRender]);
 
   return (
     <>

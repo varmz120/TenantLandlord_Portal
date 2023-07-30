@@ -144,7 +144,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
       loadTenantData();
       setInitialRender(false);
     }
-  }, []);
+  }, [initialRender]);
 
   return (
     <div className="h-auto bg-[#ECEDED] flex-1 ">

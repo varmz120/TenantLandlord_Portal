@@ -85,6 +85,7 @@ const AdminHome = () => {
             <p className={buildingsIsActive ? 'text-white' : 'text-black'}>Buildings</p>
             <img
               src={buildingsIsActive ? buildingsIconDark : buildingsIcon}
+              alt = "Buildings Icon"
               className="mt-3 w-auto h-auto max-w-full max-h-full"
             />
           </div>
@@ -97,6 +98,7 @@ const AdminHome = () => {
             <p className={accountsIsActive ? 'text-white' : 'text-black'}>Accounts</p>
             <img
               src={accountsIsActive ? accountsIconDark : accountsIcon}
+              alt = "Accounts Icon"
               className="mt-3 w-auto h-auto max-w-full max-h-full"
             />
           </div>
@@ -109,6 +111,7 @@ const AdminHome = () => {
             <p className={webAppIsActive ? 'text-white' : 'text-black'}>Web App</p>
             <img
               src={webAppIsActive ? webAppIconDark : webAppIcon}
+              alt = "Web App Icon"
               className="mt-3 w-auto h-auto max-w-full max-h-full"
             />
           </div>
@@ -121,6 +124,7 @@ const AdminHome = () => {
             <p className={databaseIsActive ? 'text-white' : 'text-black'}>Database</p>
             <img
               src={databaseIsActive ? databaseIconDark : databaseIcon}
+              alt = "Database Icon"
               className="mt-3 w-auto h-auto max-w-full max-h-full"
             />
           </div>

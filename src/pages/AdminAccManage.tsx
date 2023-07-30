@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
@@ -11,8 +11,8 @@ const AdminAccManage = () => {
   const [CannotEdit, setCannotEdit] = useState(true);
   const [email, setEmail] = useState(location.state.email);
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
-  const [isSubmit, setSubmit] = useState(false);
-  const [userType, setUserType] = useState(location.state.userType);
+  const [, setSubmit] = useState(false);
+  const [userType] = useState(location.state.userType);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;

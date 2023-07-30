@@ -23,8 +23,6 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     setBuildingID(newValue);
   };
 
-  let buildingId;
-
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen drop-shadow-2xl ">
@@ -53,7 +51,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                 classnames=""
                 onChange={handleEmailChange}
               />
-              {(userType == 'Landlord' || userType == 'Service Provider') && (
+              {(userType === 'Landlord' || userType === 'Service Provider') && (
                 <LineField
                   type="text"
                   label="Building ID"
