@@ -1,4 +1,4 @@
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import AreaField from './AreaField';
@@ -11,41 +11,19 @@ interface Props {
 }
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');
 
-  const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string | any>({});
-
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setName(newValue);
   };
-  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value;
-    setAddress(newValue);
-  };
+
   const handlePostalChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setPostalCode(newValue);
   };
-
-  let buildingId;
 
   return (
     <>

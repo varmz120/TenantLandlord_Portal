@@ -11,25 +11,9 @@ const AdminAccManage = () => {
   const [CannotEdit, setCannotEdit] = useState(true);
   const [email, setEmail] = useState(location.state.email);
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
-
   const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string | any>({});
   const [userType, setUserType] = useState(location.state.userType);
 
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);
