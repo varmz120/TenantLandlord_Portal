@@ -55,7 +55,7 @@ function Landing() {
         }, 1000);
       } else {
         setTimeout(() => {
-          navigate('/');
+          navigate('/tenantDashboard');
         }, 1000);
       }
     }
