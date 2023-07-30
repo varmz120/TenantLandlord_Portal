@@ -1,6 +1,6 @@
 import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 const TenantDashboard = () => {
