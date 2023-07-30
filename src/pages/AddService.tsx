@@ -6,17 +6,22 @@ import BackButton from '../components/BackButton';
 import SubmitButton from '../components/SubmitButton';
 
 const AddService = () => {
+  const navigate = useNavigate();
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
 
   const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
   const [formState, setFormState] = useState<string | any>({
     nameService: "",
     //isSubmitted: false
   });
+
+  const {
+    nameService
+  } = formState;
+
 
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
@@ -30,6 +35,10 @@ const AddService = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/')
+  }
+
   const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
     if ('value' in event.target) {
       setFormState({
@@ -39,6 +48,33 @@ const AddService = () => {
     }
   };
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!formState.nameService) {
+      errors.nameService = "Enter Service Provider!";
+    } else {
+      delete errors.nameService;
+    }
+
+    setErrors({ ...errors });
+
+    if (Object.keys(errors).length > 0) {
+    } else {
+      setSubmit(true);
+      navigate('/');
+    }
+
+  };
+
+  useEffect(() => {
+    if (isSubmit) {
+      setTimeout(() => {
+        navigate('/', { state: { formState, isSubmit } });
+      }, 5000);
+    }
+  }, [isSubmit, formState, navigate]);
+
   return (
     <>
     <div className="flex flex-col h-screen bg-[#ECEDED]">
@@ -46,7 +82,7 @@ const AddService = () => {
     <BackButton
               type="button"
               label={"home"}
-              handleClick={()=>null}/>
+              handleClick={handleBack}/>
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col text-left">
           <div className="flex flex-row justify-start">
@@ -60,17 +96,17 @@ const AddService = () => {
                 type={'text'}
                 label="Name"
                 padding_right="45"
-                value="Bobby"
-                name="name"
-                placeholder={''}
-                error={''}
-                disabled={true}
+                value={nameService}
+                name="nameService"
+                placeholder={'enter service provider'}
+                error={errors.nameService}
+                disabled={false}
                 layout=""
                 classnames="w-3/5"
-                onChange={() => null}
+                onChange={handleValueChange}
               />
               <div className='flex justify-end'>
-              <SubmitButton type="submit" label={'Submit'} handleClick={''} />
+              <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
               </div>
             </form>
           </div>
