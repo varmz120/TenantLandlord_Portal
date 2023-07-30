@@ -33,7 +33,7 @@ function App() {
         <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
         <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
-        <Route path="/Error" element={<RunTimeErrorPage />} /> {/* To add proper routing.*/}
+        <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
       </Routes>
     </AuthContextProvider>
   );
