@@ -40,7 +40,7 @@ const AdminAccManage = () => {
 
   return (
     <>
-      <a href="/#">
+      <a href="/Accounts">
         <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
           <img src={BackArrowIcon} alt='back arrow'></img>
           <p className="ml-5 text-xl">Back to all accounts</p>
