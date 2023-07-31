@@ -9,7 +9,6 @@ import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import React, { useContext, MouseEvent } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
-// TODO: Add history of messages & routing of pages to include when user anyhow goes into path
 function ViewTicket() {
   // Navigation & routing
   const navigate = useNavigate();

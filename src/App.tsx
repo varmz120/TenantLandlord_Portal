@@ -51,7 +51,7 @@ function App() {
 
 function DashboardPage() {
   return (
-    <div className="App h-full bg-content">
+    <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
         <TenantDashboard />
@@ -62,7 +62,7 @@ function DashboardPage() {
 
 function RequestTicketPage() {
   return (
-    <div className="App h-full bg-content">
+    <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
         <RequestTicket />
@@ -73,7 +73,7 @@ function RequestTicketPage() {
 
 function ViewTicketPage() {
   return (
-    <div className="App h-full bg-content">
+    <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
         <ViewTicket />
@@ -95,7 +95,7 @@ function ViewQuotePage() {
 
 function RateTicketPage() {
   return (
-    <div className="App h-full bg-content">
+    <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
         <RateTicket />
