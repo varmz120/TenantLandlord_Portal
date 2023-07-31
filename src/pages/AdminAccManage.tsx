@@ -13,14 +13,20 @@ const AdminAccManage = () => {
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
   const [, setSubmit] = useState(false);
   const [userType] = useState(location.state.userType);
+  const [emailError, setEmailError] = useState('');
+  const [buildingIDError, setBuildingIDError] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    setEmailError(emailRegex.test(newValue) ? '' : 'Invalid email format');
   };
+
   const handleBuildingChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setBuildingID(newValue);
+    setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
   };
 
   const handleEdit = (): void => {
@@ -28,12 +34,25 @@ const AdminAccManage = () => {
   };
 
   const handleSubmit = (): void => {
-    setSubmit(true);
-    setCannotEdit(true);
+    // Validate the fields before submitting the form
+    if (!emailError) {
+      setEmailError(email.trim() ? '' : 'Email is required');
+    }
+
+    if (email.trim() && !buildingIDError && !emailError) {
+      // All fields are filled and email format is valid, you can proceed with the form submission
+      setSubmit(true);
+      setCannotEdit(true);
+      console.log('Form submitted:', { email, BuildingID });
+    } else {
+      console.log('Please fill in all required fields and correct the errors.');
+    }
   };
+
   const handleBack = () => {
     navigate('/Accounts');
   };
+
   const handleDelete = () => {
     navigate('/Accounts');
   };
@@ -42,7 +61,7 @@ const AdminAccManage = () => {
     <>
       <a href="/Accounts">
         <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
-          <img src={BackArrowIcon} alt='back arrow'></img>
+          <img src={BackArrowIcon} alt="back arrow"></img>
           <p className="ml-5 text-xl">Back to all accounts</p>
         </div>
       </a>
@@ -53,9 +72,9 @@ const AdminAccManage = () => {
           </div>
           <div className="flex w-fit bg-form border-gray-200 rounded-lg shadow sm:p-5 items-center ">
             <form className="space-y-4 mx-auto ">
-              <p className="text-lg text-left font-medium">{userType}</p>
+              <p className="text-lg text-left font-medium">{userType} Account Details </p>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-              <p className="text-lg text-left font-medium">Account Details</p>
+
               <LineField
                 type={'text'}
                 label="Email"
@@ -63,9 +82,9 @@ const AdminAccManage = () => {
                 value={email}
                 name="category"
                 placeholder={''}
-                error={''}
+                error={emailError}
                 disabled={CannotEdit}
-                layout=""
+                layout="vertical"
                 classnames=""
                 onChange={handleEmailChange}
               />
@@ -77,9 +96,9 @@ const AdminAccManage = () => {
                   value={BuildingID}
                   name="category"
                   placeholder=""
-                  error=""
+                  error={buildingIDError}
                   disabled={CannotEdit}
-                  layout=""
+                  layout="vertical"
                   classnames=""
                   onChange={handleBuildingChange}
                 />
@@ -94,7 +113,7 @@ const AdminAccManage = () => {
                   }`}
                   onClick={handleEdit}
                 >
-                  <img className="mr-2" alt='pencil icon' src={pencilIcon} />
+                  <img className="mr-2" alt="pencil icon" src={pencilIcon} />
                   <p>Edit</p>
                 </div>
                 <div
@@ -103,7 +122,7 @@ const AdminAccManage = () => {
                   }`}
                   onClick={handleDelete}
                 >
-                  <img className="mr-2" alt='trashbin icon' src={deleteIcon} />
+                  <img className="mr-2" alt="trashbin icon" src={deleteIcon} />
                   <p>Delete</p>
                 </div>
                 <div
