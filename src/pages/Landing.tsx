@@ -70,8 +70,7 @@ function Landing() {
       ) : (
         <div className="h-full w-full flex flex-col items-center justify-center">
           <p>
-            Demo of Frontend Tenant Pages. Please click on Log-In buttons above to start demo
-            features.
+            Demo of Frontend Pages. Please click on Log-In buttons above to start demo features.
           </p>
           <div className="items-center flex flex-col gap-y-10 mt-10">
             <ActionButton
