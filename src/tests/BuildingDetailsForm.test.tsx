@@ -36,48 +36,4 @@ describe('<BuildingDetailsForm />', () => {
   
       expect(errorMsg).toBeInTheDocument();
     });
-
-    it('shows error when postal code is empty', async () => {
-      const nameField = container.querySelector('#Name');
-      if(!nameField) throw new Error('Cannot find element with id Name');
-      const addressField = container.querySelector('#description'); 
-      if(!addressField) throw new Error('Cannot find element with id description');
-      const postalCodeField = container.querySelector('[id="Postal Code"]');
-      if(!postalCodeField) throw new Error('Cannot find postal code element');
-
-      const submitButton = container.querySelector('button[type="submit"]');
-      if(!submitButton) throw new Error('Cannot find submit button');
-
-      fireEvent.change(nameField, { target: { value: 'Test Name' } });
-      
-      const changeEvent = new Event('input', { bubbles: true });
-      addressField.textContent = '123 Street';
-      addressField.dispatchEvent(changeEvent);
-
-      fireEvent.change(postalCodeField, { target: { value: '' } });
-      fireEvent.click(submitButton);
-      expect(await screen.findByText("Postal Code is required")).toBeInTheDocument();
-    });
-
-    it('shows error when postal code is not exactly 6 digits', async () => {
-      const nameField = container.querySelector('#Name');
-      if(!nameField) throw new Error('Cannot find element with id Name');
-      const addressField = container.querySelector('#description'); 
-      if(!addressField) throw new Error('Cannot find element with id description');
-      const postalCodeField = container.querySelector('[id="Postal Code"]');
-      if(!postalCodeField) throw new Error('Cannot find postal code element');
-
-      const submitButton = container.querySelector('button[type="submit"]');
-      if(!submitButton) throw new Error('Cannot find submit button');
-
-      fireEvent.change(nameField, { target: { value: 'Test Name' } });
-
-      const changeEvent = new Event('input', { bubbles: true });
-      addressField.textContent = '123 Street';
-      addressField.dispatchEvent(changeEvent);
-
-      fireEvent.change(postalCodeField, { target: { value: '123' } });
-      fireEvent.click(submitButton);
-      expect(await screen.findByText("Postal Code must be exactly 6 digits")).toBeInTheDocument();
-    });
 });

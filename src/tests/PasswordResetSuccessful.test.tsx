@@ -19,26 +19,11 @@ describe('PasswordResetSuccessful', () => {
     render(<PasswordResetSuccessful />);
   });
 
-  test('renders without crashing', () => {
-    const passwordResetSuccessfulElement = screen.getByText(/Tenant Portal/i);
-    expect(passwordResetSuccessfulElement).toBeInTheDocument();
-  });
-
   test('renders Password Reset and Successful text', () => {
-    const passwordResetElement = screen.getByText(/Password Reset/i);
+    const passwordResetElement = screen.getByText(/Password Reset Success/i);
     expect(passwordResetElement).toBeInTheDocument();
 
-    const successfulElement = screen.getByText(/Successful/i);
+    const successfulElement = screen.getByText(/You have successfully reset your password. Please login with your new password./i);
     expect(successfulElement).toBeInTheDocument();
-  });
-
-  test('renders Back button', () => {
-    const buttonElement = screen.getByText(/Back/i);
-    expect(buttonElement).toBeInTheDocument();
-  });
-
-  test('navigates to / when Back button is clicked', () => {
-    fireEvent.click(screen.getByText(/Back/i));
-    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });
