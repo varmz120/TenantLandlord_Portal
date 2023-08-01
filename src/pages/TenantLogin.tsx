@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-// import {client} from '../client';
+import {client} from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
@@ -27,11 +27,11 @@ const TenantLogin = () => {
   // Event handler for clicking login button
   const handleLoginClick = async () => {
     // TODO: Auth here.
-    // await client.get2FA({
-    //   strategy: 'local',
-    //   _id: user?.id,
-    //   email: user?.email,
-    // })
+    await client.get2FA({
+      strategy: 'local',
+       _id: user?.id,
+       email: user?.email,
+     })
     
     // cast as number 
     login({
