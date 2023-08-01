@@ -1,3 +1,3 @@
-[submodule "esc-backend"]
-	path = esc-backend
+[submodule "src/esc-backend"]
+	path = src/esc-backend
 	url = https://github.com/Lutetium-Vanadium/esc-backend
