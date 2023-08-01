@@ -1,5 +1,5 @@
-import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';

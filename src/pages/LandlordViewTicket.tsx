@@ -4,7 +4,7 @@ import Gallery from '../components/Gallery';
 import Status from '../components/Status';
 import BackButton from '../components/BackButton';
 import LandlordNavbar from '../components/LandlordNavbar';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 
 function ViewTicket() {
