@@ -86,7 +86,7 @@ const TenantDashboard = () => {
       ) : (
         <React.Fragment>
           {/* // When user is logged in */}
-          {user?.userType !== null ? (
+          {user?.typ !== null ? (
             <div className="flex justify-center items-center">
               <div className="container mx-auto mt-10 mb-10 h-156 w-656">
                 <div className="bg-white h-full overflow-y-auto rounded-lg drop-shadow-2xl">

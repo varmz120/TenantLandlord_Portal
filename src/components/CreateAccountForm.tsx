@@ -31,7 +31,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             <form className="space-y-4 mx-auto ">
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">{userType}</p>
-                <a href="/#" onClick={handleDelClick}>
+                <a href="#/" onClick={handleDelClick}>
                   <img src={DeleteIcon} alt="" className="w-4" />
                 </a>
               </div>

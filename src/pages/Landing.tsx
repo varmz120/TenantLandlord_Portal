@@ -17,27 +17,25 @@ function Landing() {
         login({
           id: '1',
           email: 'JamieDole@yahoo.com.sg',
-          userType: 0, // Tenant
-          authToken: '5880',
+          typ: 0, // Tenant
         });
       } else if (event.target.value === 'Login as Service Provider') {
         login({
           id: '4',
           email: 'Dian@yahoo.com.sg',
-          userType: 1, // Service Provider
+          typ: 1, // Service Provider
         });
       } else if (event.target.value === 'Login as Landlord') {
         login({
           id: '2',
           email: 'LimaRae@yahoo.com.sg',
-          userType: 2, // Tenant
-          authToken: '5412',
+          typ: 2, // Tenant
         });
       } else if (event.target.value === 'Login as Admin') {
         login({
           id: '3',
           email: 'Varmzz@yahoo.com.sg',
-          userType: 3, // Admin
+          typ: 3, // Admin
         });
       }
     }
@@ -45,11 +43,11 @@ function Landing() {
 
   useEffect(() => {
     if (user !== null) {
-      if (user.userType === 0) {
+      if (user.typ === 0) {
         setTimeout(() => {
           navigate('/tenantDashboard');
         }, 1000);
-      } else if (user.userType === 3) {
+      } else if (user.typ === 3) {
         setTimeout(() => {
           navigate('/adminDashboard');
         }, 1000);

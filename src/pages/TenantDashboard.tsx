@@ -110,7 +110,7 @@ const TenantDashboard = () => {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 ? (
+          {user?.typ === 0 ? (
             <div className="flex justify-center items-center">
               <div
                 className="container mx-auto mt-10"

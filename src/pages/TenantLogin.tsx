@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -7,8 +7,8 @@ const TenantLogin = () => {
   const navigate = useNavigate();
 
   // Context
-  const { login } = useContext(AuthContext);
-
+  const {user, login } = useContext(AuthContext);
+  
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,38 +25,38 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = () => {
-    // Variable called 'userTypeFromBackend' representing user's type fetched from backend
-    const userTypeFromBackend = 0;
 
-    // use setFetchedUserData({}) to call from backend and save in state
-
-    login({
+    // TODO: Auth here.
+    login({ 
       id: '1',
-      email: 'JamieDole@yahoo.com.sg',
-      userType: userTypeFromBackend, // Tenant
-      authToken: '5880',
+      email: '',
+      typ: Number(username), // Tenant
     });
 
-    // Redirect user based on UserType
-    switch (userTypeFromBackend) {
-      case 0: // Tenant
-        navigate('/tenantDashboard');
-        break;
-
-      case 1: // Landlord
-        navigate('/landlordDashboard');
-        break;
-
-      case 2: // Admin
-        navigate('/adminDashboard');
-        break;
-    }
   };
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
     navigate('/reset1');
   };
+
+  useEffect(() => {
+    if (user !== null) {
+      if (user.typ === 0) {
+        setTimeout(() => {
+          navigate('/tenantDashboard');
+        }, 1000);
+      } else if (user.typ === 3) {
+        setTimeout(() => {
+          navigate('/adminDashboard');
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          navigate('/tenantDashboard');
+        }, 1000);
+      }
+    }
+  }, [user, navigate]);
 
   return (
     //first div sets background
