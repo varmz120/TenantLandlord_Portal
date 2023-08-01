@@ -71,7 +71,7 @@ function App() {
   );
 }
 
-{/* Functions for Login */}
+/* Functions for Login */
 function TenantLoginPage() {
   return (
     <div className="App h-screen bg-content">
