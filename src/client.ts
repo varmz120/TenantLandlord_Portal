@@ -1,4 +1,4 @@
-import { createClient } from '../esc-backend/src/client';
+import { createClient } from './esc-backend/src/client';
 import rest from '@feathersjs/rest-client';
 import axios from 'axios';
 
