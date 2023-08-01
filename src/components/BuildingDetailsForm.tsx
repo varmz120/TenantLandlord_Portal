@@ -14,7 +14,6 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
   const [postalCode, setPostalCode] = useState('');
   const [nameError, setNameError] = useState('');
   const [addressError, setAddressError] = useState('');
-  const [postalCodeError, setPostalCodeError] = useState('');
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -28,36 +27,16 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
     setAddressError(newValue.trim() ? '' : 'Address is required');
   };
 
-  const handlePostalChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value;
-    setPostalCode(newValue);
-
-    if (!newValue.trim()) {
-      setPostalCodeError('Postal Code is required');
-    } else if (!/^\d{6}$/.test(newValue)) {
-      setPostalCodeError('Postal Code must be exactly 6 digits');
-    } else {
-      setPostalCodeError('');
-    }
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     // Validate the fields before submitting the form
     setNameError(name.trim() ? '' : 'Name is required');
     setAddressError(address.trim() ? '' : 'Address is required');
-    if (!postalCode.trim()) {
-      setPostalCodeError('Postal Code is required');
-    } else if (!/^\d{6}$/.test(postalCode)) {
-      setPostalCodeError('Postal Code must be exactly 6 digits');
-    } else {
-      setPostalCodeError('');
-    }
 
-    if (name.trim() && address.trim() && postalCode.trim() && /^\d{6}$/.test(postalCode)) {
+    if (name.trim() && address.trim()) {
       // All fields are filled and postal code is valid, you can proceed with the form submission
-      console.log('Form submitted:', { name, address, postalCode });
+      console.log('Form submitted:', { name, address });
       handleDelClick();
     } else {
       console.log('Please fill in all required fields and correct the errors.');
@@ -72,7 +51,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
             <form className="space-y-4 mx-auto " onSubmit={handleSubmit}>
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">Building Details</p>
-                <a href="/Buildings" onClick={handleDelClick}>
+                <a href="#" onClick={handleDelClick}>
                   <img src={DeleteIcon} alt="" className="w-4" />
                 </a>
               </div>
@@ -102,19 +81,6 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 error={addressError}
                 placeholder="Please include any additional remarks here."
                 onChange={handleAddressChange}
-              />
-              <LineField
-                type={'text'}
-                label="Postal Code"
-                padding_right="20"
-                value={postalCode}
-                name="category"
-                placeholder={''}
-                error={postalCodeError}
-                disabled={false}
-                layout="vertical"
-                classnames=""
-                onChange={handlePostalChange}
               />
 
               <div className="flex justify-end">
