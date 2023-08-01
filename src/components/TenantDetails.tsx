@@ -1,4 +1,4 @@
-import React, { MouseEvent, FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import SubmitButton from './SubmitButton';
 import DeleteIcon from '../images/delete.svg';
