@@ -13,8 +13,9 @@ import { MemoryRouter } from 'react-router-dom';
 // ROUTING RENDER TESTS
 // #1 : Render landing page (user not logged in)
 test('not logged in: renders landing page with navbar and two buttons', () => {
+  let test_path = '/landing'
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[test_path]}>
       <App />
     </MemoryRouter>
   );
@@ -54,8 +55,9 @@ describe('not logged in: renders 401 page on all routes beyond /', () => {
 test('tenant logged in: renders landing page and redirects to tenant dashboard after timeout for 0.5s', async () => {
   jest.useFakeTimers();
   jest.spyOn(global, 'setTimeout');
+  let test_path = '/landing'
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[test_path]}>
       <App />
     </MemoryRouter>
   );
@@ -94,8 +96,9 @@ test('tenant logged in: renders landing page and redirects to tenant dashboard a
 test('landlord logged in: renders landing page and redirects to 403 error after timeout for 0.5s', async () => {
   jest.useFakeTimers();
   jest.spyOn(global, 'setTimeout');
+  let test_path = '/landing'
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[test_path]}>
       <App />
     </MemoryRouter>
   );
