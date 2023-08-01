@@ -3,6 +3,7 @@ import LineField from '../components/LineField';
 import SubmitButton from './SubmitButton';
 import DeleteIcon from '../images/delete.svg';
 
+
 interface Props {
   handleDelClick: () => void;
 }
