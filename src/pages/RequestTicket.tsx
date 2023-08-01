@@ -9,6 +9,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from '
 
 import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import BackButton from '../components/BackButton';
 
 function RequestTicket() {
   // Navigation & routing
@@ -158,7 +159,15 @@ function RequestTicket() {
                 </div>
               ) : (
                 // ACTUAL PAGE
-                <div className="flex flex-col w-full items-center" id="requestTicket">
+                <div className='flex flex-row'>
+                  <BackButton
+                    type="button"
+                    label={'all tickets'}
+                    handleClick={() =>
+                    navigate('/tenantDashboard')
+                    }
+                  />
+                <div className="flex flex-col w-4/5 items-center" id="requestTicket">
                   <div className="flex bg-content px-10 my-3">
                     <p className="text-sm flex flex-col text-black font-base py-1">
                       <span>
@@ -263,6 +272,7 @@ function RequestTicket() {
                       <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
                     </form>
                   </div>
+                </div>
                 </div>
               )}
             </React.Fragment>
