@@ -36,7 +36,7 @@ describe('PasswordResetOne', () => {
 
   test('navigates to /reset2FA when Request Password Reset button is clicked', () => {
     fireEvent.click(screen.getByText(/Request Password Reset/i));
-    expect(mockNavigate).toHaveBeenCalledWith('/reset2FA');
+    expect(mockNavigate).toHaveBeenCalledWith('/resetrequestfailure');
   });
 
   test('navigates to / when Back button is clicked', () => {

@@ -269,7 +269,7 @@ function RequestTicket() {
                         disabled={false}
                         onChange={handleCheckedChange}
                       />
-                      <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
+                      <SubmitButton type="button" label="Submit" handleClick={handleSubmit} />
                     </form>
                   </div>
                 </div>

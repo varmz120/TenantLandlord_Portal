@@ -13,6 +13,7 @@ const TenantLogin = () => {
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
   const handleUsernameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +27,14 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = async () => {
-    // TODO: Auth here.
-    await client.get2FA({
-      strategy: 'local',
-       _id: user?.id,
-       email: user?.email,
-     })
     
+    // // TODO: Auth here.
+    // await client.get2FA({
+    //   strategy: 'local',
+    //    _id: user?.id,
+    //    email: user?.email,
+    //  })
+
     // cast as number 
     login({
       id: '1',
@@ -47,22 +49,13 @@ const TenantLogin = () => {
   };
 
   useEffect(() => {
+
+    // Assume username and password are correct
     if (user !== null) {
-      if (user.typ === 0) {
-        setTimeout(() => {
-          navigate('/tenantDashboard');
-        }, 1000);
-      } else if (user.typ === 3) {
-        setTimeout(() => {
-          navigate('/adminDashboard');
-        }, 1000);
-      } else {
-        setTimeout(() => {
-          navigate('/tenantDashboard');
-        }, 1000);
-      }
-    }
-  }, [user, navigate]);
+      setTimeout(() => {
+        navigate('/Tenant2FA');
+      }, 1000); }
+    }, [user, navigate]);
 
   return (
     //first div sets background

@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState, FormEvent, } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import SubmitButton from '../components/SubmitButton';
 
 const Tenant2FA = () => {
   // Navigation & routing
   const navigate = useNavigate();
+
+  // Context
+  const { user, login } = useContext(AuthContext);
+
+  // Creating state variables for username and password
+  const [isSubmit, setSubmit] = useState(false);
+
 
   // Creating state variables for authentication
   const [auth, setAuth] = useState('');
@@ -14,9 +23,35 @@ const Tenant2FA = () => {
   };
 
   // Event handler for clicking on the verify button
-  const handleVerifyClick = () => {
-    navigate('/reset2');
+  const handleVerifyClick = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmit(true);
   };
+
+  useEffect(() => {
+    if (isSubmit) {
+      if (auth !== null){
+        if (user !== null) {
+          if (user.typ === 0) {
+            setTimeout(() => {
+              navigate('/tenantDashboard');
+            }, 1000);
+          } else if (user.typ === 3) {
+            setTimeout(() => {
+              navigate('/adminDashboard');
+            }, 1000);
+          } else {
+            setTimeout(() => {
+              navigate('/tenantDashboard');
+            }, 1000);
+          }
+        }
+      }
+      else {
+        console.log("Invalid authentication code");
+      }
+  }
+  }, [user, navigate, isSubmit, auth]);
 
   return (
     //first div sets background
@@ -25,12 +60,7 @@ const Tenant2FA = () => {
       <div className="relative flex bg-form border-gray-700 rounded-lg shadow sm:p-5  h-128 w-128 justify-center items-start">
         {/*two factor authentication form below */}
         <form
-          className="flex flex-col justify-start w-full p-4"
-          onSubmit={(event) => {
-            event.preventDefault();
-            handleVerifyClick();
-          }}
-        >
+          className="flex flex-col justify-start w-full p-4">
           <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
           <p className="text-3xl text-start mt-10 mr-1 text-headerText">Two-Factor</p>
           <p className="text-3xl text-start mb-1 text-headerText block">Authentication</p>
@@ -45,12 +75,7 @@ const Tenant2FA = () => {
           />
 
           <p className="mb-10"></p>
-          <button
-            type="submit"
-            className="bg-[#335B77] rounded-lg mt-24 h-12 text-2xl font-bold text-white p-1"
-          >
-            Verify
-          </button>
+          <SubmitButton type="button" label="Submit" handleClick={handleVerifyClick} />
         </form>
       </div>
     </div>
