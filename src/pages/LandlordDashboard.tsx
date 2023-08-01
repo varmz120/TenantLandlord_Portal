@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, useEffect } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
@@ -223,7 +223,7 @@ const Dashboard = () => {
             </div>
             <div className="flex items-center">
               <a /* Filter Icon Button */
-                href="#"
+                href="#/"
                 className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
                 onMouseDown={handleUserActive}
@@ -235,11 +235,11 @@ const Dashboard = () => {
                 <img
                   src={userIsActive ? filterIcon : filterIcon}
                   className="mx-auto scale-150"
-                  alt="?"
+                  alt="Filter"
                 ></img>
               </a>
               <a /* Delete Button */
-                href="#"
+                href="#/"
                 className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
                 onMouseDown={handleUserActive}
@@ -254,12 +254,12 @@ const Dashboard = () => {
                 <img
                   src={userIsActive ? trashBinIcon : trashBinIcon}
                   className="mx-auto scale-150"
-                  alt="?"
+                  alt="Delete Button"
                 ></img>
               </a>
               <div className="relative">
                 <a
-                  href="#"
+                  href="#/"
                   className="block rounded-full px-5 py-5 mr-4
                       flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
                   onMouseDown={handleUserActive}
@@ -271,7 +271,7 @@ const Dashboard = () => {
                   <img
                     src={userIsActive ? addServiceProviderIcon : addServiceProviderIcon}
                     className="mx-auto scale-150"
-                    alt="?"
+                    alt="+ServiceProvider"
                   />
                 </a>
                 {isDropdownOpen && (

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, SetStateAction } from 'react'
+import { FC, SetStateAction } from 'react'
 import { useState } from 'react'
 
 interface InputProps {
@@ -40,7 +40,7 @@ const options = [
 ]
 
   return (
-    <div className={"flex align-center text-left input-wrapper py-3 " + (layout == 'vertical' ? 'flex-col' : '')}>
+    <div className={"flex align-center text-left input-wrapper py-3 " + (layout === 'vertical' ? 'flex-col' : '')}>
       <label style={{ paddingRight: 60 }} className="pr-4 font-medium text-headerText">Building ID</label>
       <div className='search-container'>
         <div className='flex flex-center search-inner'>

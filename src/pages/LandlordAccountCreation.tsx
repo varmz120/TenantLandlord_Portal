@@ -7,30 +7,16 @@ import SubmitButton from '../components/SubmitButton';
 
 const AccountCreation = () => {
   const navigate = useNavigate();
-  const locate = useLocation();
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
+  // const [firstView, setFirstView] = useState(true);
+  // const [isClosed, setClosed] = useState(false);
 
   const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
   const [formState, setFormState] = useState<string | any>({
     formEmail: "",
     formBldgID: "",
   });
-
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
 
   const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>) : void => {
     if ('value' in event.target) {

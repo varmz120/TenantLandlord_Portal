@@ -2,21 +2,17 @@ import AreaField from '../components/AreaField';
 import LineField from '../components/LineField';
 import Gallery from '../components/Gallery';
 import Status from '../components/Status';
-import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
-import ActionButton from '../components/ActionButton';
 import LandlordNavbar from '../components/LandlordNavbar';
-import Example_quote from '../images/example_quote.png'
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState } from 'react';
 
 function ViewTicket() {
   const navigate = useNavigate();
-  const locate = useLocation();
 
   //console.log(locate.state);
 
-  const [userIsActive, setUserIsActive] = useState(false);
+  const [, setUserIsActive] = useState(false);
   const handleUserActive = () => {
     setUserIsActive(true);
   };
@@ -36,7 +32,6 @@ function ViewTicket() {
   var ticket_id = "007";
   var building = "SunPlaza";
   var unit = "01-42";
-  var formState = "hi";
   //var isSubmit = locate.state? locate.state.isSubmit : false;
   var title = "Ticket Details";
   var category = "Pest Control";
@@ -126,7 +121,7 @@ function ViewTicket() {
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                 <div className='flex justify-end' style={{paddingTop: '380px'}}>
                 <a /* Give Quotation Button */
-                href="#"
+                href="/LandlordUploadQuotation"
                 className="block rounded flex border-solid border-1 px-2 py-1 mr-4
                                           flex justify-center items-center text-[white] bg-[#31556F] active:text-[white] active:bg-[#193446]"
                 onMouseDown={handleUserActive}

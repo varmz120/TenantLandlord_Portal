@@ -1,5 +1,5 @@
 import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
@@ -7,8 +7,6 @@ import SubmitButton from '../components/SubmitButton';
 
 const AddService = () => {
   const navigate = useNavigate();
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
 
   const [isSubmit, setSubmit] = useState(false);
   const [errors, setErrors] = useState<string | any>({});
@@ -21,19 +19,6 @@ const AddService = () => {
   const {
     nameService
   } = formState;
-
-
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
 
   const handleBack = () => {
     navigate('/LandlordDashboard')
