@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreateAccountForm from '../components/CreateAccountForm';
 import AdminAccounts from '../components/tables/AdminAccounts';
@@ -21,9 +21,12 @@ const ViewAllAccounts = () => {
     setClicked(false);
   };
 
-  const handleToggle = useCallback((buttonId: string) => {
-    setFilterButtonActive(buttonId === filterButtonActive ? '' : buttonId);
-  }, [filterButtonActive]);
+  const handleToggle = useCallback(
+    (buttonId: string) => {
+      setFilterButtonActive(buttonId === filterButtonActive ? '' : buttonId);
+    },
+    [filterButtonActive]
+  );
 
   const handleClick = useCallback((buttonId: string) => {
     switch (buttonId) {
@@ -126,7 +129,7 @@ const ViewAllAccounts = () => {
       <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
         <a href="#/">
           <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
-            <img src={BackArrowIcon} alt='back arrow'></img>
+            <img src={BackArrowIcon} alt="back arrow"></img>
             <p className="ml-5 text-xl">Back to Panel</p>
           </div>
         </a>

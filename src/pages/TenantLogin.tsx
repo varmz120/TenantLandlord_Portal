@@ -7,8 +7,8 @@ const TenantLogin = () => {
   const navigate = useNavigate();
 
   // Context
-  const {user, login } = useContext(AuthContext);
-  
+  const { user, login } = useContext(AuthContext);
+
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,14 +25,12 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = () => {
-
     // TODO: Auth here.
-    login({ 
+    login({
       id: '1',
       email: '',
       typ: Number(username), // Tenant
     });
-
   };
 
   // Event handler for clicking forgot password
