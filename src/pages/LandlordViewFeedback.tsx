@@ -3,11 +3,8 @@ import AreaField from '../components/AreaField';
 import LineField from '../components/LineField';
 import Gallery from '../components/Gallery';
 import StarRating from '../components/StarRating';
-import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
-import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChangeEvent } from 'react';
 
 function ViewTicket() {
   const navigate = useNavigate();
@@ -21,14 +18,11 @@ function ViewTicket() {
 
   // Mock static values
   var ticket_id = "007";
-  var building = "SunPlaza";
   var unit = "01-42";
   var location = "Sunplaza"
-  var formState = "formState";
   var completed_date = "06/06/2023"
   //var isSubmit = locate.state? locate.state.isSubmit : false;
   var title = "Feedback";
-  var category = "";
   var remarks=  "Good work, appreciate it! No other work needs to be done for now.";
   //var isClosed = locate.state? locate.state.isClosed : false;
 

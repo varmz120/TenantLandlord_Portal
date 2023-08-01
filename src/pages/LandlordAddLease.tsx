@@ -1,5 +1,5 @@
-import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
@@ -10,14 +10,12 @@ import AddTenantButton from '../components/AddTenantButton';
 import AddBldgButton from '../components/AddBldgButton';
 import SubmitButton from '../components/SubmitButton';
 import TenantDetails from '../components/TenantDetails';
+import BuildingDetailsForm from '../components/BuildingDetailsForm';
 
 const AddLease = () => {
   const navigate = useNavigate();
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
 
   const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
   const [formState, setFormState] = useState<string | any>({
@@ -32,24 +30,15 @@ const AddLease = () => {
     //isSubmitted: false
   });
 
-  // const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-  //   event.stopPropagation();
-  //   setFirstView(false);
-  //   if ('name' in event.target) {
-  //     let closed = false;
-  //     if (event.target.name === 'accept') {
-  //       closed = true;
-  //     }
-  //     setClosed(closed);
-  //   }
-  // };
+  const [isTenantPopupVisible, setTenantPopupVisible] = useState(false);
+  const [isBldgPopupVisible, setBldgPopupVisible] = useState(false);
 
-  // const [initialRender, setInitialRender] = useState(true);
+  const handleTenantDeleteClick = () => {
+    setTenantPopupVisible(false);
+  };
 
-  const [isClicked, setClicked] = useState(false);
-
-  const handleDeleteClick = () => {
-    setClicked(false);
+  const handleBldgDeleteClick = () => {
+    setBldgPopupVisible(false);
   };
 
   const handleBack = () => {
@@ -130,12 +119,8 @@ const AddLease = () => {
   const {
     formUserID,
     formEmail,
-    formTenant,
     formUnit,
-    formBldgID,
     formMonthlyRent,
-    formLeaseCommencement,
-    formLeaseExpiry 
   } = formState;
 
   return (
@@ -185,7 +170,7 @@ const AddLease = () => {
               <div className='flex flex-center'>
               <SearchTenantField type={'text'} layout={''} error={errors.formTenant}/>
               <div>
-              <AddTenantButton type='submit' label={'+ Create New Tenant'} handleClick={() => setClicked(true)}></AddTenantButton>
+              <AddTenantButton type='submit' label={'+ Create New Tenant'} handleClick={() => setTenantPopupVisible(true)}></AddTenantButton>
               </div>
               </div>
     
@@ -207,7 +192,7 @@ const AddLease = () => {
               <SearchBldgField type={'text'} layout={''} error={errors.formBldgID}
               />
               <div>
-              <AddBldgButton type='submit' label={'+ Add Building'} handleClick={''}></AddBldgButton>
+              <AddBldgButton type='submit' label={'+ Add Building'} handleClick={() => setBldgPopupVisible(true)}></AddBldgButton>
               </div>
               </div>
 
@@ -238,10 +223,13 @@ const AddLease = () => {
       </div>
     </div>
     <div className="absolute top-4 right-64">
-        {isClicked && (
-          <TenantDetails
-            handleDelClick={handleDeleteClick}
-          />
+        {isTenantPopupVisible && (
+          <TenantDetails handleDelClick={handleTenantDeleteClick} />
+        )}
+      </div>
+      <div className="absolute top-4 right-64">
+        {isBldgPopupVisible && (
+          <BuildingDetailsForm handleDelClick={handleBldgDeleteClick} />
         )}
       </div>
     </>

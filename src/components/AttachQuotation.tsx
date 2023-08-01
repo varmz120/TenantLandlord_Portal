@@ -1,6 +1,5 @@
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC } from 'react'
 import uploadIcons from '../images/upload_icon.svg'
-import { createRef } from 'react'
 
 interface InputProps {
   label: string
@@ -28,7 +27,7 @@ const UploadField: FC<InputProps> = ({
     <span className="flex  items-center">
     <label htmlFor="dropzone-file" className="mt-2 py-2 w-1/3 rounded cursor-pointer bg-disabledField">
         <div className="flex flex-col items-center">
-          <img src={uploadIcons} className='ml-24'/>
+          <img src={uploadIcons} className='ml-24' alt="Upload Icon"/>
         </div>
         <input disabled={disabled} id="dropzone-file" name={name} type="file" className="hidden overflow-hidden z-1 " multiple onChange={onChange}/>
     </label><p className="pt-2 pl-2 font-light text-sm ">

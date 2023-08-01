@@ -32,7 +32,7 @@ const Navbar = () => {
     <nav className="max-w-screen-3xl -border-gray-200 bg-[#31556F]">
       <div className="flex flex-wrap items-center justify-between ">
         <a
-          href="#"
+          href="/LandlordDashboard"
           className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
         >
@@ -64,7 +64,7 @@ const Navbar = () => {
           <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
             <a
-                href="#"
+                href="/LandlordAddService"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 onClick={addServiceOnClick}
@@ -72,7 +72,7 @@ const Navbar = () => {
                 Add Service
               </a>
               <a
-                href="#"
+                href="/LandlordAddLease"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 onClick={addLeaseOnClick}
@@ -80,7 +80,7 @@ const Navbar = () => {
                 Add Lease
               </a>
               <a
-                href="#"
+                href="/LandlordDashboard"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 // aria-current="page"
@@ -93,7 +93,7 @@ const Navbar = () => {
             // className="flex items-center content-center justify-center ml-0"
             >
               <a
-                href="#"
+                href="/notification"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
               >
@@ -102,7 +102,7 @@ const Navbar = () => {
             </li>
             <li className="flex items-center mx-3 mr-5">
               <a
-                href="#"
+                href="/"
                 className="block rounded flex border-solid border-1 px-2 py-1 
 									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
                 onMouseDown={handleUsernameActive}
@@ -112,7 +112,7 @@ const Navbar = () => {
                 <img
                   src={usernameIsActive ? userIconDark : userIcon}
                   className="h-5 mx-3 ml-4"
-                  alt="?"
+                  alt="user"
                 ></img>
                 <div className="mr-4">Username</div>
               </a>

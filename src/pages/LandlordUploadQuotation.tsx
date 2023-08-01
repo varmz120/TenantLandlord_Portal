@@ -3,9 +3,9 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png'
-import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
+import React, {ChangeEvent, FormEvent, useState} from 'react'
 import SubmitButton from '../components/SubmitButton';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function UploadQuote() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function UploadQuote() {
     formAttachments: [],
     //isSubmitted: false
   });
-  const [isSubmit, setSubmit] = useState(false);
+  const [, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
