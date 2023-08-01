@@ -88,7 +88,7 @@ function App() {
 /* Functions for Login */
 function TenantLoginPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <TenantLogin />
@@ -99,7 +99,7 @@ function TenantLoginPage() {
 
 function PasswordResetPage1() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <PasswordResetOne />
@@ -110,7 +110,7 @@ function PasswordResetPage1() {
 
 function Reset2FAPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <Tenant2FA />
@@ -121,7 +121,7 @@ function Reset2FAPage() {
 
 function PasswordResetPage2() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <PasswordResetTwo />
@@ -132,7 +132,7 @@ function PasswordResetPage2() {
 
 function PasswordResetSuccessfulPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <PasswordResetSuccessful />
@@ -143,7 +143,7 @@ function PasswordResetSuccessfulPage() {
 
 function PasswordResetUnsuccessfulPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <PasswordResetUnsuccessful />
@@ -154,7 +154,7 @@ function PasswordResetUnsuccessfulPage() {
 
 function DashboardPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <TenantDashboard />
@@ -165,7 +165,7 @@ function DashboardPage() {
 
 function RequestTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <RequestTicket />
@@ -176,7 +176,7 @@ function RequestTicketPage() {
 
 function ViewTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <ViewTicket />
@@ -187,7 +187,7 @@ function ViewTicketPage() {
 
 function ViewQuotePage() {
   return (
-    <div className="App h-full bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <ViewQuote />
@@ -198,7 +198,7 @@ function ViewQuotePage() {
 
 function RateTicketPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <RateTicket />
@@ -209,7 +209,7 @@ function RateTicketPage() {
 
 function LandingPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
         <Navbar />
         <Landing />
@@ -231,7 +231,7 @@ function NotificationPage() {
 
 function AdminAccManagePage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
       <AdminAccManage />
     </div>
@@ -240,7 +240,7 @@ function AdminAccManagePage() {
 
 function AdminHomePage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
       <AdminHome />
     </div>
@@ -249,7 +249,7 @@ function AdminHomePage() {
 
 function AccountsPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
       <ViewAllAccounts />
     </div>
@@ -258,7 +258,7 @@ function AccountsPage() {
 
 function BuildingsPage() {
   return (
-    <div className="App h-screen bg-content">
+    <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
       <Buildings />
     </div>
