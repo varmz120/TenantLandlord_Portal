@@ -163,7 +163,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
         </div>
         <div className="flex items-center">
           <a /* Filter Icon Button */
-            href="/#"
+            href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             onClick={toggleRowVisibility}
@@ -172,7 +172,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Delete Button */
-            href="/#"
+            href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
             onClick={() => {
@@ -184,7 +184,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
             <img src={trashBinIcon} className="mx-auto scale-150" alt="?"></img>
           </a>
           <a /* Add Service Provider Icon Button */
-            href="/#"
+            href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
             style={{ width: '57px', height: '57px' }}

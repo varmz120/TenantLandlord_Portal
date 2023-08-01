@@ -1,8 +1,9 @@
+
 export interface IUser {
   id: string | null;
   email: string | null;
-  userType: number | null;
-  authToken?: string | null;
+  typ: number | null;
+  notifications?: [] | null;
 }
 
 export interface IAuthContextType {

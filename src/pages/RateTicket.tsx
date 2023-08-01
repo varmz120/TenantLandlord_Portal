@@ -169,7 +169,7 @@ function RateTicket() {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 && formState ? (
+          {user?.typ === 0 && formState ? (
             <React.Fragment>
               {isSubmit ? (
                 <div className="h-full w-full flex flex-col items-center justify-center">
@@ -192,9 +192,12 @@ function RateTicket() {
                 // ACTUAL PAGE
                 <div className="flex flex-col font-3xl" id="viewTicket">
                   <BackButton
-                        type="button"
-                        label={'ticket details'}
-                        handleClick={() => navigate('/viewDetails', { state: { formState, isSubmit: true } })} layout={''}                  />
+                    type="button"
+                    label={'ticket details'}
+                    handleClick={() =>
+                      navigate('/viewDetails', { state: { formState, isSubmit: true } })
+                    }
+                  />
                   <div className="flex justify-center">
                     <p className="text-headerText pb-5 text-2xl font-medium">
                       Service Ticket #00{ticket_ID} : {location} Unit {unit}

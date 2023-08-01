@@ -137,7 +137,7 @@ function RequestTicket() {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 ? (
+          {user?.typ === 0 ? (
             <React.Fragment>
               {isSubmit ? (
                 <div className="h-full w-full flex flex-col items-center justify-center">

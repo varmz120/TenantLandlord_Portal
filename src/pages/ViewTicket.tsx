@@ -59,7 +59,7 @@ function ViewTicket() {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.userType === 0 && formState ? (
+          {user?.typ === 0 && formState ? (
             <div className="flex flex-col font-3xl" id="viewTicket">
               <BackButton
                 type="button"

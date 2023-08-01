@@ -23,8 +23,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       ...user,
       id: user_details?.id,
       email: user_details?.email,
-      userType: user_details?.userType,
-      authToken: user_details?.authToken,
+      typ: user_details?.typ,
     });
     localStorage.setItem('user', JSON.stringify(user_details));
   };

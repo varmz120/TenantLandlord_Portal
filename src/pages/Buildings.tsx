@@ -14,7 +14,7 @@ const Buildings = () => {
     setClicked(false);
   };
   const handleBack = () => {
-    navigate('/');
+    navigate('/adminDashboard');
   };
   return (
     <>
