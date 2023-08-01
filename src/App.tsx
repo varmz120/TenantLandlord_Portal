@@ -16,6 +16,8 @@ import Tenant2FA from './pages/Tenant2FA.tsx';
 import PasswordResetTwo from './pages/PasswordResetTwo.tsx';
 import PasswordResetSuccessful from './pages/PasswordResetSuccessful.tsx';
 import PasswordResetUnsuccessful from './pages/PasswordResetUnsuccessful.tsx';
+import PasswordResetRequestSuccess from './pages/PasswordResetRequestedSuccessfully.tsx';
+import PasswordResetRequestFailed from './pages/PasswordResetRequestedFailed.tsx';
 
 // Error Pages
 import ErrorPage404 from './pages/404.tsx';
@@ -48,13 +50,15 @@ function App() {
     <AuthContextProvider>
       <Routes>
         {/*Routing for login pages */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
-        <Route path="/reset2FA" element={<Reset2FAPage />} />
+        <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
         <Route path="/reset2" element={<PasswordResetPage2 />} />
         <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
         <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
+        <Route path="/resetrequestsuccess" element={<PasswordResetRequestSuccessPage />} />
+        <Route path="/resetrequestfailure" element={<PasswordResetRequestFailedPage />} />
         {/*Routing for tenant */}
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/tenantDashboard" element={<DashboardPage />} />
@@ -108,7 +112,7 @@ function PasswordResetPage1() {
   );
 }
 
-function Reset2FAPage() {
+function Tenant2FAPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
@@ -151,6 +155,29 @@ function PasswordResetUnsuccessfulPage() {
     </div>
   );
 }
+
+function PasswordResetRequestSuccessPage() {
+  return (
+    <div className="App h-screen overflow-y-auto bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetRequestSuccess />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function PasswordResetRequestFailedPage() {
+  return (
+    <div className="App h-screen overflow-y-auto bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetRequestFailed />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
 
 function DashboardPage() {
   return (
