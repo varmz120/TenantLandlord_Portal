@@ -85,6 +85,9 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
   };
 
   //Component for filter buttons
@@ -248,7 +251,12 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                 <td className="px-2 py-2">{row.Name}</td>
                 <td className="px-2 py-2">{row.Address}</td>
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
-                  <div className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer">
+                  <div
+                    className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
+                    onClick={() => {
+                      deleteRow([row.ID]);
+                    }}
+                  >
                     <img className="mr-2" alt="delete icon" src={deleteIcon} />
                     <p>Delete</p>
                   </div>
