@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import {client} from '../client';
+// import {client} from '../client';
+
 const TenantLogin = () => {
   //creating variable for navigation
   const navigate = useNavigate();
