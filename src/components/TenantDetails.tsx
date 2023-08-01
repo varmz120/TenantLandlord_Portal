@@ -1,7 +1,5 @@
-import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { MouseEvent, FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
-import ActionButton from '../components/ActionButton';
 import SubmitButton from './SubmitButton';
 import DeleteIcon from '../images/delete.svg';
 
@@ -11,27 +9,10 @@ interface Props {
 const handleSubmit = (event: FormEvent<HTMLFormElement>) => {};
 
 const TenantDetails = ({ handleDelClick }: Props) => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [firstView, setFirstView] = useState(true);
-  const [isClosed, setClosed] = useState(false);
+  const [, setName] = useState('');
+  const [, setAddress] = useState('');
+  const [, setPostalCode] = useState('');
 
-  const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
-  const [errors, setErrors] = useState<string | any>({});
-
-  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    setFirstView(false);
-    if ('name' in event.target) {
-      let closed = false;
-      if (event.target.name === 'accept') {
-        closed = true;
-      }
-      setClosed(closed);
-    }
-  };
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setName(newValue);
@@ -55,7 +36,7 @@ const TenantDetails = ({ handleDelClick }: Props) => {
             <form className="space-y-4 mx-auto ">
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">Tenant Details</p>
-                <a href="#" onClick={handleDelClick}>
+                <a href="#/" onClick={handleDelClick}>
                   <img src={DeleteIcon} alt="" className="w-4" />
                 </a>
               </div>
