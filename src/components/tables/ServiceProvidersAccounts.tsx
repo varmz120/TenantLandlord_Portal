@@ -88,6 +88,9 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
   };
 
   //Component for filter buttons
