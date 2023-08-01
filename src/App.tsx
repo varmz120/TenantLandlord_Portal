@@ -41,13 +41,14 @@ import LandlordUploadQuotation from './pages/LandlordUploadQuotation.tsx';
 import LandlordAddLease from './pages/LandlordAddLease.tsx';
 import LandlordAccountCreation from './pages/LandlordAccountCreation.tsx';
 import LandlordAddService from './pages/LandlordAddService.tsx';
+import TenantAddAcc from './pages/TenantAddAcc.tsx';
 
 function App() {
   return (
     <AuthContextProvider>
       <Routes>
         {/*Routing for login pages */}
-        <Route path="/" element={<TenantLoginPage />} />
+        <Route path="/" element={<LandingPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/reset2FA" element={<Reset2FAPage />} />
@@ -67,7 +68,6 @@ function App() {
         <Route path="/Buildings" element={<BuildingsPage />} />
         <Route path="/AccountManagement" element={<AdminAccManagePage />} />
         <Route path="/Buildings" element={<BuildingsPage />} />{' '}
-
         <Route path="/LandlordDashboard" element={<LandlordDashboardPage />} />
         <Route path="/LandlordViewTicket" element={<LandlordViewTicketPage />} />
         <Route path="/LandlordViewFeedback" element={<LandlordViewFeedbackPage />} />
@@ -75,7 +75,7 @@ function App() {
         <Route path="/LandlordAddLease" element={<LandlordAddLeasePage />} />
         <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
         <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
-
+        <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
         <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
         <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
@@ -266,44 +266,37 @@ function BuildingsPage() {
 }
 
 function LandlordDashboardPage() {
-  return (
-      <LandlordDashboard />
-  );
+  return <LandlordDashboard />;
 }
 
 function LandlordViewTicketPage() {
-  return (
-      <LandlordViewTicket />
-  );
+  return <LandlordViewTicket />;
 }
 
 function LandlordViewFeedbackPage() {
-  return (
-      <LandlordViewFeedback />
-  );
+  return <LandlordViewFeedback />;
 }
 
 function LandlordUploadQuotationPage() {
-  return (
-      <LandlordUploadQuotation />
-  );
+  return <LandlordUploadQuotation />;
 }
 
 function LandlordAddLeasePage() {
+  return <LandlordAddLease />;
+}
+function TenantAddAccPage() {
   return (
-      <LandlordAddLease />
+    <div className="App h-screen bg-content">
+      <TenantAddAcc />
+    </div>
   );
 }
 
 function LandlordAccountCreationPage() {
-  return (
-      <LandlordAccountCreation />
-  );
+  return <LandlordAccountCreation />;
 }
 
 function LandlordAddServicePage() {
-  return (
-      <LandlordAddService />
-  );
+  return <LandlordAddService />;
 }
 export default App;

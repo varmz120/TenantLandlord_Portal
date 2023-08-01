@@ -17,6 +17,9 @@ const ViewAllAccounts = () => {
   const handleAccClick = () => {
     setClicked(true);
   };
+  const handleTenClick = () => {
+    navigate('/TenantAddAcc');
+  };
   const handleDeleteClick = () => {
     setClicked(false);
   };
@@ -111,7 +114,7 @@ const ViewAllAccounts = () => {
       case 'Service Providers':
         return <ServiceProvidersAccounts clicked={isClicked} handleClick={handleAccClick} />;
       default:
-        return <TenantAccounts clicked={isClicked} handleClick={handleAccClick} />;
+        return <TenantAccounts clicked={isClicked} handleClick={handleTenClick} />;
     }
   };
 

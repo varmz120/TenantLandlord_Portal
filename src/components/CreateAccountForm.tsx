@@ -36,6 +36,10 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     if (!emailError) {
       setEmailError(email.trim() ? '' : 'Email is required');
     }
+    if (userType === 'Landlord' || userType === 'Service Provider') {
+      setBuildingIDError(buildingID == '' ? '' : 'Building ID is required');
+      console.log(buildingID);
+    }
 
     if (email.trim() && !buildingIDError && !emailError) {
       // All fields are filled and email format is valid, you can proceed with the form submission
