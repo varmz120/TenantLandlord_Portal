@@ -4,7 +4,11 @@
   "private": true,
   "dependencies": {
     "@feathersjs/authentication-client": "^5.0.8",
+    "@feathersjs/configuration": "^5.0.8",
+    "@feathersjs/koa": "^5.0.8",
+    "@feathersjs/mongodb": "^5.0.8",
     "@feathersjs/rest-client": "^5.0.8",
+    "@feathersjs/typebox": "^5.0.8",
     "@fontsource-variable/lexend": "^5.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -15,6 +19,7 @@
     "@types/react-dom": "^18.2.5",
     "axios": "^1.4.0",
     "history": "^5.3.0",
+    "mongodb": "^5.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
@@ -34,7 +39,9 @@
       "react-app",
       "react-app/jest"
     ],
-    "ignorePatterns":["src/esc-backend/**/*.ts"]
+    "ignorePatterns": [
+      "src/esc-backend/**/*.ts"
+    ]
   },
   "browserslist": {
     "production": [
@@ -60,5 +67,8 @@
     "hooks": {
       "pre-commit": "npm run prettier"
     }
+  },
+  "jest":{
+    "watchPathIgnorePatterns": ["<rootDir>/src/esc-backend/"]
   }
 }
