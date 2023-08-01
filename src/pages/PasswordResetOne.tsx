@@ -39,8 +39,8 @@ const PasswordResetOne = () => {
           <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
           <p className="text-3xl text-start mt-10 mr-1 mb-3 text-headerText">Password Reset</p>
           <p className="text-xs text-start mt-1 mb-3">
-            Please enter your email address registered with your account. You will receive an email with instruction on
-            how to reset your password.
+            Please enter your email address registered with your account. You will receive an email
+            with instruction on how to reset your password.
           </p>
 
           <input
@@ -52,7 +52,10 @@ const PasswordResetOne = () => {
             placeholder="Email address"
           />
 
-          <button type="submit" className="bg-[#335B77] rounded-lg mt-24 h-12 text-2xl font-bold text-white p-1">
+          <button
+            type="submit"
+            className="bg-[#335B77] rounded-lg mt-24 h-12 text-2xl font-bold text-white p-1"
+          >
             Request Password Reset
           </button>
 

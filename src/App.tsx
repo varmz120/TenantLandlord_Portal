@@ -27,7 +27,6 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 
-
 import '@fontsource-variable/lexend';
 import AdminAccManage from './pages/AdminAccManage';
 import AdminHome from './pages/AdminHome';
@@ -38,19 +37,16 @@ function App() {
   return (
     <AuthContextProvider>
       <Routes>
-          {/*Routing for login pages */}
-          <Route path="/" element={<TenantLoginPage />} />
-
-          {/*Routing for password reset */}
-          <Route path = "/reset1" element = {<PasswordResetPage1/>}/>
-          <Route path = "/reset2FA" element = {<Reset2FAPage/>}/>
-          <Route path = "/reset2" element = {<PasswordResetPage2/>}/>
-          <Route path = "/resetsuccessful" element = {<PasswordResetSuccessfulPage/>}/>
-          <Route path = "/resetunsuccessful" element = {<PasswordResetUnsuccessfulPage/>}/>
-
-
+        {/*Routing for login pages */}
+        <Route path="/" element={<TenantLoginPage />} />
+        {/*Routing for password reset */}
+        <Route path="/reset1" element={<PasswordResetPage1 />} />
+        <Route path="/reset2FA" element={<Reset2FAPage />} />
+        <Route path="/reset2" element={<PasswordResetPage2 />} />
+        <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
+        <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
         {/*Routing for tenant */}
-        <Route path="/landing" element={<LandingPage   />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/tenantDashboard" element={<DashboardPage />} />
         <Route path="/newRequest" element={<RequestTicketPage />} />
         <Route path="/viewDetails" element={<ViewTicketPage />} />
@@ -83,56 +79,56 @@ function TenantLoginPage() {
   );
 }
 
-function PasswordResetPage1(){
+function PasswordResetPage1() {
   return (
     <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
-        <PasswordResetOne/>
+        <PasswordResetOne />
       </ErrorBoundary>
     </div>
   );
 }
 
-function Reset2FAPage(){
+function Reset2FAPage() {
   return (
     <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
-        <Tenant2FA/>
+        <Tenant2FA />
       </ErrorBoundary>
     </div>
   );
 }
 
-function PasswordResetPage2(){
-  return (
-      <div className="App h-screen bg-content">
-        <ErrorBoundary>
-          <Navbar />
-          <PasswordResetTwo/>
-        </ErrorBoundary>
-      </div>
-    );
-}
-
-function PasswordResetSuccessfulPage(){
+function PasswordResetPage2() {
   return (
     <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
-        <PasswordResetSuccessful/>
+        <PasswordResetTwo />
       </ErrorBoundary>
     </div>
   );
 }
 
-function PasswordResetUnsuccessfulPage(){
+function PasswordResetSuccessfulPage() {
   return (
     <div className="App h-screen bg-content">
       <ErrorBoundary>
         <Navbar />
-        <PasswordResetUnsuccessful/>
+        <PasswordResetSuccessful />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+function PasswordResetUnsuccessfulPage() {
+  return (
+    <div className="App h-screen bg-content">
+      <ErrorBoundary>
+        <Navbar />
+        <PasswordResetUnsuccessful />
       </ErrorBoundary>
     </div>
   );

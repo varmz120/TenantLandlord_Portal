@@ -281,7 +281,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
                     onClick={() => handleModifyAccount(row.Email)}
                   >
-                    <img className="mr-2" alt='pencil icon' src={pencilEditIcon} />
+                    <img className="mr-2" alt="pencil icon" src={pencilEditIcon} />
                     <p>Modify Account</p>
                   </div>
                 </td>
