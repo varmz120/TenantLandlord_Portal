@@ -3,10 +3,10 @@ import userEvent from '@testing-library/user-event';
 
 import App from './App';
 import { act } from 'react-dom/test-utils';
-import { MemoryRouter} from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { link } from 'fs';
 
-// References: 
+// References:
 // https://blog.logrocket.com/testing-react-router-usenavigate-hook-react-testing-library/
 // https://testing-library.com/docs/example-react-router/
 // https://jestjs.io/docs/timer-mocks
@@ -14,7 +14,7 @@ import { link } from 'fs';
 // SIMPLE APP TEST
 // Render login page from /
 test('not logged in: renders login page', () => {
-  let test_path = "/"
+  let test_path = '/';
   render(
     <MemoryRouter initialEntries={[test_path]}>
       <App />
@@ -22,11 +22,11 @@ test('not logged in: renders login page', () => {
   );
 
   const titleElement = screen.getByText(/Anacle/);
-  const usernameInput = screen.getByPlaceholderText("Username");
-  const passwordInput = screen.getByPlaceholderText("Password");
-  const loginButton = screen.getByRole("button", {name: "Login"});
+  const usernameInput = screen.getByPlaceholderText('Username');
+  const passwordInput = screen.getByPlaceholderText('Password');
+  const loginButton = screen.getByRole('button', { name: 'Login' });
   const subtitleElement = screen.getByText(/Forgot your login details?/);
-  const linkElement = screen.getByRole("button", {name: "Click here"});
+  const linkElement = screen.getByRole('button', { name: 'Click here' });
 
   expect(titleElement).toBeInTheDocument();
   expect(usernameInput).toBeInTheDocument();
@@ -77,7 +77,7 @@ test('not logged in: renders login page', () => {
 
 //   const successMsg = screen.getByText(/Successfully logged in!/);
 //   expect(successMsg).toBeInTheDocument();
-  
+
 //   expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
 //   act(()=> {
 //     jest.advanceTimersByTime(1000);
@@ -85,7 +85,7 @@ test('not logged in: renders login page', () => {
 //   // await Promise.resolve();
 
 //   const tableElement = screen.getByRole("table");
-//   const buttonElement = screen.getByRole("button", {name: "New Request"}); 
+//   const buttonElement = screen.getByRole("button", {name: "New Request"});
 //   const logoutButton = screen.getByText(/Log Out/);
 //   expect(tableElement).toBeInTheDocument();
 //   expect(buttonElement).toBeInTheDocument();
@@ -116,7 +116,7 @@ test('not logged in: renders login page', () => {
 
 //   const successMsg = screen.getByText(/Successfully logged in!/);
 //   expect(successMsg).toBeInTheDocument();
-  
+
 //   expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
 //   act(()=> {
 //     jest.advanceTimersByTime(1000);
@@ -167,9 +167,9 @@ test('not logged in: renders login page', () => {
 // });
 
 // WORKFLOW TESTS
-// Normal flow: Login -> Raise request -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket 
+// Normal flow: Login -> Raise request -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket
 // Alternate flow #1: Login -> Raise request -> View Details -> Reject Quote -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket
-// Alternate flow #2: Login -> Raise request -> View Details -> Reject Quote -> View Details -> Accept Quote -> Rate Ticket -> Reopen Ticket 
+// Alternate flow #2: Login -> Raise request -> View Details -> Reject Quote -> View Details -> Accept Quote -> Rate Ticket -> Reopen Ticket
 // -> View Details -> Accept Quote -> View Details -> Rate Ticket -> Close Ticket
 
 // INPUT VALIDATION TESTS

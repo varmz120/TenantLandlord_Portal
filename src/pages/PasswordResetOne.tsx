@@ -15,12 +15,11 @@ const PasswordResetOne = () => {
 
   // Event handler for clicking password reset button
   const handlePasswordReset = () => {
-
     // TODO: Send email to backend to send email to user with reset link
     if (email === 'test') {
-    navigate('/resetrequestsuccess');
+      navigate('/resetrequestsuccess');
     } else {
-    navigate('/resetrequestfailure');
+      navigate('/resetrequestfailure');
     }
   };
 

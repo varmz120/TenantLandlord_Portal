@@ -39,8 +39,8 @@ function RequestTicket() {
   var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
 
   const date = new Date();
-  let currentDay= String(date.getDate()).padStart(2, '0');
-  let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+  let currentDay = String(date.getDate()).padStart(2, '0');
+  let currentMonth = String(date.getMonth() + 1).padStart(2, '0');
   let currentYear = date.getFullYear() % 100;
   let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
 
@@ -115,12 +115,12 @@ function RequestTicket() {
     }
     setErrors({ ...errors });
 
-    if (formDescription !== "") {
+    if (formDescription !== '') {
       setFormState({
         ...formState,
-        formDescription: currentDate.concat(" : ",formDescription!),
-      })
-    };
+        formDescription: currentDate.concat(' : ', formDescription!),
+      });
+    }
 
     if (Object.keys(errors).length > 0) {
     } else {
@@ -167,14 +167,12 @@ function RequestTicket() {
                   })}
                 </div>
               ) : ( */}
-                <div className='flex flex-row'>
-                  <BackButton
-                    type="button"
-                    label={'all tickets'}
-                    handleClick={() =>
-                    navigate('/tenantDashboard')
-                    }
-                  />
+              <div className="flex flex-row">
+                <BackButton
+                  type="button"
+                  label={'all tickets'}
+                  handleClick={() => navigate('/tenantDashboard')}
+                />
                 <div className="flex flex-col w-4/5 items-center" id="requestTicket">
                   <div className="flex bg-content px-10 my-3">
                     <p className="text-sm flex flex-col text-black font-base py-1">
@@ -281,7 +279,7 @@ function RequestTicket() {
                     </form>
                   </div>
                 </div>
-                </div>
+              </div>
               {/* )} */}
             </React.Fragment>
           ) : (
