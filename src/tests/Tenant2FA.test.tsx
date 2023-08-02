@@ -20,6 +20,7 @@ describe('Tenant2FA', () => {
     mockNavigate.mockReset();
 
     // Render Tenant2FA within the AuthContext with a user type of 0 (tenant)
+    // eslint-disable-next-line
     render(
       <AuthContext.Provider value={{ user: { typ: 0 }, setUser, logout }}>
         <Tenant2FA />
@@ -69,6 +70,8 @@ describe('Tenant2FA', () => {
     fireEvent.click(submitButton);
 
     // Check that useNavigate was called with the correct path
-    expect(mockNavigate).toHaveBeenCalledWith('/Success', { state: { redirect: '/tenantDashboard' } });
+    expect(mockNavigate).toHaveBeenCalledWith('/Success', {
+      state: { redirect: '/tenantDashboard' },
+    });
   });
 });
