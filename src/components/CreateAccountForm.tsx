@@ -37,7 +37,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
       setEmailError(email.trim() ? '' : 'Email is required');
     }
     if (userType === 'Landlord' || userType === 'Service Provider') {
-      setBuildingIDError(buildingID == '' ? '' : 'Building ID is required');
+      setBuildingIDError(buildingID === '' ? '' : 'Building ID is required');
       console.log(buildingID);
     }
 

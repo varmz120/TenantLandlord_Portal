@@ -50,6 +50,10 @@ import LandlordAccountCreation from './pages/LandlordAccountCreation.tsx';
 import LandlordAddService from './pages/LandlordAddService.tsx';
 import TenantAddAcc from './pages/TenantAddAcc.tsx';
 
+//Service Provider Pages
+import ServProvDashboard from './pages/ServProvDashboard.tsx';
+import ServProvViewTicket from './pages/ServProvViewTicket.tsx'
+
 function App() {
   return (
     <AuthContextProvider>
@@ -85,6 +89,8 @@ function App() {
         <Route path="/LandlordAddLease" element={<LandlordAddLeasePage />} />
         <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
         <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
+        <Route path="/ServProvDashboard" element={<ServProvDashboardPage />} />
+        <Route path="/ServProvViewTicket" element={<ServProvViewTicketPage />} />
         <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
         {/*Routing for errors */}
         <Route path="/*" element={<ErrorPage404 />} />
@@ -343,6 +349,15 @@ function SuccessRedirectPage() {
       </ErrorBoundary>
     </div>
   );
+}
+
+
+function ServProvDashboardPage() {
+  return <ServProvDashboard />;
+}
+
+function ServProvViewTicketPage() {
+  return <ServProvViewTicket />;
 }
 
 export default App;
