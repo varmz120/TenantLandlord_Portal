@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import {client} from '../client';
+import { client } from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
@@ -13,6 +13,7 @@ const TenantLogin = () => {
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
   const handleUsernameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,14 +27,14 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = async () => {
-    // TODO: Auth here.
-    await client.get2FA({
-      strategy: 'local',
-       _id: user?.id,
-       email: user?.email,
-     })
-    
-    // cast as number 
+    // // TODO: Auth here.
+    // await client.get2FA({
+    //   strategy: 'local',
+    //    _id: user?.id,
+    //    email: user?.email,
+    //  })
+
+    // cast as number
     login({
       id: '1',
       email: '',
@@ -47,20 +48,11 @@ const TenantLogin = () => {
   };
 
   useEffect(() => {
+    // Assume username and password are correct
     if (user !== null) {
-      if (user.typ === 0) {
-        setTimeout(() => {
-          navigate('/tenantDashboard');
-        }, 1000);
-      } else if (user.typ === 3) {
-        setTimeout(() => {
-          navigate('/adminDashboard');
-        }, 1000);
-      } else {
-        setTimeout(() => {
-          navigate('/tenantDashboard');
-        }, 1000);
-      }
+      setTimeout(() => {
+        navigate('/Tenant2FA');
+      }, 1000);
     }
   }, [user, navigate]);
 
@@ -77,7 +69,7 @@ const TenantLogin = () => {
             handleLoginClick();
           }}
         >
-          <p className="text-5xl my-3">Tenant Portal</p>
+          <p className="text-5xl my-3">Anacle</p>
           <p className="text-3xl text-start mt-10 mb-3" data-testid="login">
             Login
           </p>

@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const homeOnClick = () => {
     navigate('/');
-  }
+  };
 
   const addServiceOnClick = () => {
     navigate('/LandlordAddService');
@@ -25,8 +25,7 @@ const Navbar = () => {
 
   const addLeaseOnClick = () => {
     navigate('/LandlordAddLease');
-  }
-
+  };
 
   return (
     <nav className="max-w-screen-3xl -border-gray-200 bg-[#31556F]">
@@ -63,7 +62,7 @@ const Navbar = () => {
         <div className="h-full hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
-            <a
+              <a
                 href="/LandlordAddService"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
