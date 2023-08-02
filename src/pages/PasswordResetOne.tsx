@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 const PasswordResetOne = () => {
   //creating variable for navigation
   const navigate = useNavigate();
 
   // Creating state variables for email
-  const [email, setEmail] = useState('');
+  const [userID, setUserID] = useState('');
 
   // Event handler for change in email field
-  const handleEmailFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  const handleUserIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserID(event.target.value);
   };
 
   // Event handler for clicking password reset button
-  const handlePasswordReset = () => {
-    navigate('/reset2FA');
+  const handlePasswordReset = async () => {
+    try {
+      // If the user exists, create a password reset request using their _id
+      await client.service('reset-password').create({ user_id: userID });
+      navigate('/reset2');
+    } catch (error) {
+      console.error('Failed to send password reset email', error);
+    }
   };
 
   // Event handler for clicking on back button
@@ -39,17 +46,17 @@ const PasswordResetOne = () => {
           <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
           <p className="text-3xl text-start mt-10 mr-1 mb-3 text-headerText">Password Reset</p>
           <p className="text-xs text-start mt-1 mb-3">
-            Please enter your email address registered with your account. You will receive an email
-            with instruction on how to reset your password.
+            Please enter your user ID registered with your account. You will receive an email with
+            instruction on how to reset your password.
           </p>
 
           <input
             className={
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500'
             }
-            value={email}
-            onChange={handleEmailFieldChange}
-            placeholder="Email address"
+            value={userID}
+            onChange={handleUserIDChange}
+            placeholder="User ID"
           />
 
           <button
