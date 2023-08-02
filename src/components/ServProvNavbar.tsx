@@ -4,7 +4,7 @@ import userIcon from '../images/user_icon.svg';
 import userIconDark from '../images/user_icon_dark.svg';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const ServProvNavbar = () => {
   const navigate = useNavigate();
   const [usernameIsActive, setUsernameIsActive] = useState(false);
   const handleUsernameActive = () => {
@@ -17,18 +17,6 @@ const Navbar = () => {
 
   const homeOnClick = () => {
     navigate('/');
-  };
-
-  const addServiceOnClick = () => {
-    navigate('/LandlordAddService');
-  };
-
-  const addLeaseOnClick = () => {
-    navigate('/LandlordAddLease');
-  }
-
-  const createAccountOnClick = () => {
-    navigate('/LandlordAccountCreation');
   }
 
 
@@ -67,30 +55,6 @@ const Navbar = () => {
         <div className="h-full hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
-            <a
-                href="/LandlordAccountCreation"
-                className="h-full items-center flex text-white rounded md:bg-transparent p-4
-									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                onClick={createAccountOnClick}
-              >
-                Create Account
-              </a>
-            <a
-                href="/LandlordAddService"
-                className="h-full items-center flex text-white rounded md:bg-transparent p-4
-									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                onClick={addServiceOnClick}
-              >
-                Add Service
-              </a>
-              <a
-                href="/LandlordAddLease"
-                className="h-full items-center flex text-white rounded md:bg-transparent p-4
-									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                onClick={addLeaseOnClick}
-              >
-                Add Lease
-              </a>
               <a
                 href="/LandlordDashboard"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
@@ -136,4 +100,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default ServProvNavbar;
