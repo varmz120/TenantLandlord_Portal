@@ -44,8 +44,8 @@ const PasswordResetOne = () => {
       setPasswordsValid(false);
       return;
     }
-    console.log('here');
     try {
+      console.log('here', { user_id: userID, token: token, password: password1 });
       // If the user exists, create a password reset request using their _id
       await client
         .service('reset-password')
