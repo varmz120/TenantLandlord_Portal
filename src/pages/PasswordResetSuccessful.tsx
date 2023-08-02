@@ -1,38 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const PasswordResetSuccessful = () => {
   //creating variable for navigation
   const navigate = useNavigate();
 
-  // Event handler for clicking on back button
-  const handlePageBack = () => {
-    navigate('/');
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      navigate('/');
+    }, 3000);
+  });
 
   return (
-    //first div sets background
-    <div className="bg-content flex flex-col h-screen justify-center items-center">
-      {/*second div sets the card which houses the form */}
-      <div className="flex flex-col bg-form border-gray-700 rounded-lg shadow sm:p-5  h-128 w-128">
-        <div className="flex justify-center">
-          <p className="text-5xl mt-3 text-headerText text-center">Tenant Portal</p>
-        </div>
-        <div className="flex flex-col justify-center mt-20">
-          <p className="text-4xl text-headerText text-center">Password Reset</p>
-          <p className="text-4xl text-headerText text-center block">Successful</p>
-          <div className="mt-4">
-            <button
-              type="submit"
-              className="bg-[#335B77] rounded-lg h-12 w-[280px] text-2xl font-bold text-white p-1 mt-2 "
-              onClick={handlePageBack}
-            >
-              Back
-            </button>
+    <React.Fragment>
+      {
+        <div className="bg-content flex flex-col h-screen justify-center items-center">
+          <div className="relative flex bg-form border-gray-700 rounded-lg shadow p-5 h-64 w-80 md:h-128 md:w-128 justify-center items-top md:items-center">
+            <form className="md:space-y-10">
+              <p className="text-3xl md:text-3xl text-center font-bold h-24 md:h-5">
+                Password Reset Success
+              </p>
+              <p className="text-l text-center font-medium h-10 md:h-5">
+                You have successfully reset your password. Please login with your new password.
+              </p>
+            </form>
           </div>
         </div>
-      </div>
-    </div>
+      }
+    </React.Fragment>
   );
 };
 
