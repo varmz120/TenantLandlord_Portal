@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import App from './App';
+import App from '../App';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter} from 'react-router-dom';
 import { link } from 'fs';
@@ -11,8 +11,10 @@ import { link } from 'fs';
 // https://testing-library.com/docs/example-react-router/
 // https://jestjs.io/docs/timer-mocks
 
-// SIMPLE APP TEST
-// Render login page from /
+// ROUTING TESTS
+
+// SCENARIO 1: USER NOT LOGGED IN
+// #1A: Render login page from / (user not logged in)
 test('not logged in: renders login page', () => {
   let test_path = "/"
   render(
@@ -35,31 +37,36 @@ test('not logged in: renders login page', () => {
   expect(subtitleElement).toBeInTheDocument();
   expect(linkElement).toBeInTheDocument();
 });
-// // #2: Render 401 page navigating sensitive routes (user not logged in)
-// describe('not logged in: renders 401 page on all routes beyond /', () => {
-//     let test_paths = [
-//       '/tenantDashboard',
-//       '/viewDetails',
-//       '/viewQuote',
-//       '/feedbackSurvey'
-//     ];
+// #1B: Render 401 page navigating sensitive routes (user not logged in)
+// TODO: Add all other paths after they add in authentication checks....
+describe('not logged in: renders 401 page on all routes beyond /', () => {
+    let test_paths = [
+      '/tenantDashboard',
+      '/viewDetails',
+      '/viewQuote',
+      '/feedbackSurvey',
+      '/newRequest',
+      '/notification'
+    ];
 
-//     test_paths.forEach((path) => {
-//       it('renders 401 page at '.concat(path), () => {
-//         render(
-//           <MemoryRouter initialEntries={[path]}>
-//             <App/>
-//           </MemoryRouter>);
+    test_paths.forEach((path) => {
+      it('renders 401 page at '.concat(path), () => {
+        render(
+          <MemoryRouter initialEntries={[path]}>
+            <App/>
+          </MemoryRouter>);
 
-//       const errorMsg = screen.getByText(/401 - Unauthorised/);
-//       const errorDescription = screen.getByText(/Your authorisation failed. Please try again./)
-//       expect(errorMsg).toBeInTheDocument();
-//       expect(errorDescription).toBeInTheDocument();
-//       });
-//     });
-// });
-// // #3 : Render landing page redirecting to dashboard (tenant user logged in)
-// test('tenant logged in: renders landing page and redirects to tenant dashboard after timeout for 0.5s', async () => {
+      const errorMsg = screen.getByText(/401 - Unauthorised/);
+      const errorDescription = screen.getByText(/Your authorisation failed. Please try again./)
+      expect(errorMsg).toBeInTheDocument();
+      expect(errorDescription).toBeInTheDocument();
+      });
+    });
+});
+
+// SCENARIO 2: TENANT LOGGED IN
+// #2A : Render landing page redirecting to dashboard (tenant user logged in)
+// test('tenant logged in: renders login page and redirects to tenant dashboard after timeout for 0.5s', async () => {
 //   jest.useFakeTimers();
 //   jest.spyOn(global, 'setTimeout');
 //   let test_path = '/landing'
