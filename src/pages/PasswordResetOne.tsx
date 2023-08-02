@@ -19,9 +19,10 @@ const PasswordResetOne = () => {
     try {
       // If the user exists, create a password reset request using their _id
       await client.service('reset-password').create({ user_id: userID });
-      navigate('/reset2');
+      navigate('/resetrequestsuccess');
     } catch (error) {
       console.error('Failed to send password reset email', error);
+      navigate('/resetrequestfailure');
     }
   };
 
