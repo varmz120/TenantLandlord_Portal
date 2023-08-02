@@ -70,7 +70,7 @@ const TenantLogin = () => {
             handleLoginClick();
           }}
         >
-          <p className="text-5xl my-3">Tenant Portal</p>
+          <p className="text-5xl my-3">Anacle</p>
           <p className="text-3xl text-start mt-10 mb-3" data-testid="login">
             Login
           </p>

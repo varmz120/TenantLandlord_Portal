@@ -60,6 +60,7 @@ const AreaField: FC<InputProps> = ({
         placeholder={placeholder}
         onBlur={onChange}
         id={id}
+        suppressContentEditableWarning={true}
       >
         {value}
       </div>
