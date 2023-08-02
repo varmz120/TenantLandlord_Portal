@@ -20,6 +20,13 @@ function RateTicket() {
   var category = form ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
   var ticket_ID = form ? form.formID : ''; // Temporary -> for demo purposes w/o backend
   var status = form ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
+  var description = form ? form.formDescription : ''; // // Temporary -> for demo purposes w/o backend
+
+  const date = new Date();
+  let currentDay= String(date.getDate()).padStart(2, '0');
+  let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+  let currentYear = date.getFullYear() % 100;
+  let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
 
   // Context
   const { user } = useContext(AuthContext);
@@ -77,6 +84,7 @@ function RateTicket() {
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLDivElement>): void => {
+    event.stopPropagation();
     if ('textContent' in event.target) {
       setFormState({
         ...formState,
@@ -131,31 +139,28 @@ function RateTicket() {
     console.log(errors);
 
     if (Object.keys(errors).length > 0) {
-      console.log('Failed');
-      console.log(errors);
-      console.log(formState);
     } else {
       if (isClosed) {
         setFormState({
           ...formState,
           formStatus: 'Closed',
+          formDescription: description.concat("\n",currentDate," : ",formDescription!),
         });
       } else {
         setFormState({
           ...formState,
           formStatus: 'In Queue',
+          formDescription: description.concat("\n",currentDate," : ",formDescription!),
         });
       }
       setSubmit(true);
-      console.log('Success');
     }
   };
 
   useEffect(() => {
     if (isSubmit) {
-      setTimeout(() => {
-        navigate('/tenantDashboard', { state: { formState, isSubmit, isClosed } });
-      }, 5000);
+      let redirect = '/tenantDashboard';
+      navigate('/Success', { state: { redirect, formState, isSubmit, isClosed } });
     }
   }, [isSubmit, formState, isClosed, navigate]);
 
@@ -171,7 +176,7 @@ function RateTicket() {
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 && formState ? (
             <React.Fragment>
-              {isSubmit ? (
+              {/* {isSubmit ? (
                 <div className="h-full w-full flex flex-col items-center justify-center">
                   <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
                   <p>Remarks: {formDescription}</p>
@@ -188,8 +193,7 @@ function RateTicket() {
                     );
                   })}
                 </div>
-              ) : (
-                // ACTUAL PAGE
+              ) : ( */}
                 <div className="flex flex-col font-3xl" id="viewTicket">
                   <BackButton
                     type="button"
@@ -303,7 +307,7 @@ function RateTicket() {
                     </form>
                   </div>
                 </div>
-              )}
+              {/* )} */}
             </React.Fragment>
           ) : (
             // When user is logged in but NOT a tenant

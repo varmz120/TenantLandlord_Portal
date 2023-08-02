@@ -8,11 +8,10 @@ const Tenant2FA = () => {
   const navigate = useNavigate();
 
   // Context
-  const { user, login } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   // Creating state variables for username and password
   const [isSubmit, setSubmit] = useState(false);
-
 
   // Creating state variables for authentication
   const [auth, setAuth] = useState('');
@@ -33,17 +32,13 @@ const Tenant2FA = () => {
       if (auth !== null){
         if (user !== null) {
           if (user.typ === 0) {
-            setTimeout(() => {
-              navigate('/tenantDashboard');
-            }, 1000);
+            let redirect = "/tenantDashboard";
+            navigate('/Success', { state: { redirect } });
           } else if (user.typ === 3) {
-            setTimeout(() => {
-              navigate('/adminDashboard');
-            }, 1000);
+            let redirect = "/adminDashboard";
+            navigate('/Success', { state: { redirect } });
           } else {
-            setTimeout(() => {
-              navigate('/tenantDashboard');
-            }, 1000);
+            navigate('/401');
           }
         }
       }

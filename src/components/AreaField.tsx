@@ -26,10 +26,10 @@ const AreaField: FC<InputProps> = ({
   onChange,
 }) => {
   let editStatus = disabled === true ? false : true;
-  let pointerEventStatus =
-    disabled === true
-      ? ('none' as React.CSSProperties['pointerEvents'])
-      : ('auto' as React.CSSProperties['pointerEvents']);
+  // let pointerEventStatus =
+  //   disabled === true
+  //     ? ('none' as React.CSSProperties['pointerEvents'])
+  //     : ('auto' as React.CSSProperties['pointerEvents']);
   return (
     <div
       className={
@@ -46,7 +46,7 @@ const AreaField: FC<InputProps> = ({
         {label}
       </label>
       <div
-        style={{ pointerEvents: pointerEventStatus }}
+        // style={{ pointerEvents: pointerEventStatus }}
         className={
           'mt-2 flex-1 box-border h-24 overflow-auto max-w-sm font-light pl-2 pt-1 rounded focus:outline-none focus:border-sky-599 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 ' +
           (disabled === true

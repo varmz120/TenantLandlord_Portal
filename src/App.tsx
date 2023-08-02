@@ -1,15 +1,14 @@
 import './App.css';
 import '@fontsource-variable/lexend';
-import Navbar from './components/Navbar.tsx';
-import RequestTicket from './pages/RequestTicket.tsx';
-import ViewTicket from './pages/ViewTicket.tsx';
-import TenantDashboard from './pages/TenantDashboard.tsx';
-import ViewQuote from './pages/ViewQuote.tsx';
-import RateTicket from './pages/RateTicket.tsx';
-import Landing from './pages/Landing.tsx';
-import Notification from './pages/Notification.tsx';
 
-//Login pages
+// Routing library and auth context
+import { Routes, Route } from 'react-router-dom';
+import { AuthContextProvider } from './contexts/AuthContext.tsx';
+
+import Navbar from './components/Navbar.tsx';
+import SuccessRedirect from './pages/SuccessRedirect.tsx';
+
+// Login pages
 import TenantLogin from './pages/TenantLogin.tsx';
 import PasswordResetOne from './pages/PasswordResetOne.tsx';
 import Tenant2FA from './pages/Tenant2FA.tsx';
@@ -24,9 +23,6 @@ import ErrorPage404 from './pages/404.tsx';
 import ErrorPage401 from './pages/401.tsx';
 import ErrorPage403 from './pages/403.tsx';
 import ErrorPageRunTime from './pages/RuntimeError.tsx';
-
-import { Routes, Route } from 'react-router-dom';
-import { AuthContextProvider } from './contexts/AuthContext.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 
 import '@fontsource-variable/lexend';
@@ -35,7 +31,16 @@ import AdminHome from './pages/AdminHome';
 import Buildings from './pages/Buildings';
 import ViewAllAccounts from './pages/ViewAllAccounts';
 
-//Landlord-specific pages
+// Tenant-specific pages
+import RequestTicket from './pages/RequestTicket.tsx';
+import ViewTicket from './pages/ViewTicket.tsx';
+import TenantDashboard from './pages/TenantDashboard.tsx';
+import ViewQuote from './pages/ViewQuote.tsx';
+import RateTicket from './pages/RateTicket.tsx';
+import Landing from './pages/Landing.tsx';
+import Notification from './pages/Notification.tsx';
+
+// Landlord-specific pages
 import LandlordDashboard from './pages/LandlordDashboard.tsx';
 import LandlordViewTicket from './pages/LandlordViewTicket.tsx';
 import LandlordViewFeedback from './pages/LandlordViewFeedback.tsx';
@@ -49,7 +54,7 @@ function App() {
   return (
     <AuthContextProvider>
       <Routes>
-        {/*Routing for login pages */}
+        {/*Routing for app */}
         <Route path="/" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
@@ -67,6 +72,7 @@ function App() {
         <Route path="/viewQuote" element={<ViewQuotePage />} />
         <Route path="/feedbackSurvey" element={<RateTicketPage />} />
         <Route path="/notification" element={<NotificationPage />} />
+        {/*Routing for admin */}
         <Route path="/adminDashboard" element={<AdminHomePage />} />
         <Route path="/Accounts" element={<AccountsPage />} />
         <Route path="/Buildings" element={<BuildingsPage />} />
@@ -80,10 +86,13 @@ function App() {
         <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
         <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
         <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
+        {/*Routing for errors */}
         <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
         <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
         <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
+        {/*Routing for misc */}
+        <Route path="/Success" element={<SuccessRedirectPage />} />
       </Routes>
     </AuthContextProvider>
   );
@@ -326,4 +335,15 @@ function LandlordAccountCreationPage() {
 function LandlordAddServicePage() {
   return <LandlordAddService />;
 }
+
+function SuccessRedirectPage() {
+  return (
+    <div className="App h-screen overflow-y-auto bg-content">
+      <ErrorBoundary>
+        <SuccessRedirect />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
 export default App;
