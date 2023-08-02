@@ -175,18 +175,6 @@ const Dashboard = () => {
     setFilteredTableData(filtercopy);
   };
 
-
-  const handleCategorySelect = (category: string) => {
-    const updatedTableData = tableData.map((row) => {
-      if (checked.includes(row.ID)) {
-        return { ...row, Category: category };
-      }
-      return row;
-    });
-    setTableData(updatedTableData);
-    setFilteredTableData(updatedTableData);
-  };
-
   return (
     // Card component that will be used to display the data
     <div className="flex flex-col h-screen">

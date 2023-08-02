@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import {client} from '../client';
+// import {client} from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
@@ -13,7 +13,7 @@ const TenantLogin = () => {
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isSubmit, setSubmit] = useState(false);
+  // const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
   const handleUsernameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
