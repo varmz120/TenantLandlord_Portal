@@ -187,7 +187,6 @@ function PasswordResetRequestFailedPage() {
   );
 }
 
-
 function DashboardPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">

@@ -23,7 +23,9 @@ describe('PasswordResetSuccessful', () => {
     const passwordResetElement = screen.getByText(/Password Reset Success/i);
     expect(passwordResetElement).toBeInTheDocument();
 
-    const successfulElement = screen.getByText(/You have successfully reset your password. Please login with your new password./i);
+    const successfulElement = screen.getByText(
+      /You have successfully reset your password. Please login with your new password./i
+    );
     expect(successfulElement).toBeInTheDocument();
   });
 });

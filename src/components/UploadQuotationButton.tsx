@@ -5,10 +5,7 @@ interface InputProps {
   handleClick: any;
 }
 
-const UploadQuotationButton: FC<InputProps> = ({
-  type,
-  handleClick,
-}) => {
+const UploadQuotationButton: FC<InputProps> = ({ type, handleClick }) => {
   const [noNeedQuotation, setNoNeedQuotation] = useState(false);
 
   const handleCheckboxChange = () => {

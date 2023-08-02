@@ -69,7 +69,10 @@ const Dashboard = () => {
   // Implement Filter function for table
   const [filteredTableData, setFilteredTableData] = useState<TableDataItem[]>(tableData);
 
-  const applyFilters = (data: TableDataItem[], filters: Record<TableColumn, string>): TableDataItem[] => {
+  const applyFilters = (
+    data: TableDataItem[],
+    filters: Record<TableColumn, string>
+  ): TableDataItem[] => {
     return data.filter((row) => {
       for (const column of Object.keys(filters) as TableColumn[]) {
         const filterValue = filters[column].toLowerCase();
@@ -129,7 +132,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleCheck = (itemId: string, event:React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheck = (itemId: string, event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     if (checked.includes(itemId)) {
       setChecked((prevItems) => prevItems.filter((id) => id !== itemId));
@@ -383,7 +386,11 @@ const Dashboard = () => {
               </thead>
               <tbody className="">
                 {filteredTableData.map((row) => (
-                  <tr className="hover:bg-tableHover hover:shadow-lg" key={row.ID} onClick={handleRowClick}>
+                  <tr
+                    className="hover:bg-tableHover hover:shadow-lg"
+                    key={row.ID}
+                    onClick={handleRowClick}
+                  >
                     <td className="px-4 py-2">
                       <input
                         type="checkbox"

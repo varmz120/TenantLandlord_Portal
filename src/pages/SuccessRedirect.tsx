@@ -1,10 +1,9 @@
-import React, {useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 // After every form submit
 function SuccessRedirect() {
-
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
@@ -18,11 +17,11 @@ function SuccessRedirect() {
   // Redirect to provided link after 5 seconds or 401 error
   useEffect(() => {
     if (user !== null) {
-        setTimeout(() => {
-          navigate(redirectLink, { state: { formState, isSubmit, isClosed } });
-        }, 5000);
+      setTimeout(() => {
+        navigate(redirectLink, { state: { formState, isSubmit, isClosed } });
+      }, 5000);
     } else {
-        navigate('/401')
+      navigate('/401');
     }
   }, [user, navigate]);
 
@@ -30,7 +29,7 @@ function SuccessRedirect() {
     <React.Fragment>
       {
         <div className="h-full w-full flex items-center justify-center">
-            <p>Successful! Redirecting...</p>
+          <p>Successful! Redirecting...</p>
         </div>
       }
     </React.Fragment>
