@@ -6,9 +6,10 @@ const PasswordResetSuccessful = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      setTimeout(() => {
-        navigate('/');
-      }, 3000); })
+    setTimeout(() => {
+      navigate('/');
+    }, 3000);
+  });
 
   return (
     <React.Fragment>

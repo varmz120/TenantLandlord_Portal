@@ -38,6 +38,12 @@ function RequestTicket() {
   var userCtc = '+65 9874 2311';
   var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
 
+  const date = new Date();
+  let currentDay = String(date.getDate()).padStart(2, '0');
+  let currentMonth = String(date.getMonth() + 1).padStart(2, '0');
+  let currentYear = date.getFullYear() % 100;
+  let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
+
   // Handlers
   const handleValueChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
@@ -109,21 +115,23 @@ function RequestTicket() {
     }
     setErrors({ ...errors });
 
+    if (formDescription !== '') {
+      setFormState({
+        ...formState,
+        formDescription: currentDate.concat(' : ', formDescription!),
+      });
+    }
+
     if (Object.keys(errors).length > 0) {
-      console.log('Failed');
-      console.log(errors);
-      console.log(formState);
     } else {
       setSubmit(true);
-      console.log('Success');
     }
   };
 
   useEffect(() => {
     if (isSubmit) {
-      setTimeout(() => {
-        navigate('/tenantDashboard', { state: { formState, isSubmit } });
-      }, 5000);
+      let redirect = '/tenantDashboard';
+      navigate('/Success', { state: { redirect, formState, isSubmit } });
     }
   }, [isSubmit, formState, navigate]);
 
@@ -140,6 +148,7 @@ function RequestTicket() {
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 ? (
             <React.Fragment>
+              {/* FOR REFERENCE IF WANT TO TROUBLESHOOT ATTACHMENTS
               {isSubmit ? (
                 <div className="h-full w-full flex flex-col items-center justify-center">
                   <p>"{formTitle}" Ticket has been sent!</p>
@@ -157,16 +166,13 @@ function RequestTicket() {
                     );
                   })}
                 </div>
-              ) : (
-                // ACTUAL PAGE
-                <div className='flex flex-row'>
-                  <BackButton
-                    type="button"
-                    label={'all tickets'}
-                    handleClick={() =>
-                    navigate('/tenantDashboard')
-                    }
-                  />
+              ) : ( */}
+              <div className="flex flex-row">
+                <BackButton
+                  type="button"
+                  label={'all tickets'}
+                  handleClick={() => navigate('/tenantDashboard')}
+                />
                 <div className="flex flex-col w-4/5 items-center" id="requestTicket">
                   <div className="flex bg-content px-10 my-3">
                     <p className="text-sm flex flex-col text-black font-base py-1">
@@ -273,8 +279,8 @@ function RequestTicket() {
                     </form>
                   </div>
                 </div>
-                </div>
-              )}
+              </div>
+              {/* )} */}
             </React.Fragment>
           ) : (
             // When user is logged in but NOT a tenant

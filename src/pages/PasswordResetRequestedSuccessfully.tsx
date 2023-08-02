@@ -6,9 +6,10 @@ const PasswordResetRequestedSuccessfully = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      setTimeout(() => {
-        navigate('/');
-      }, 3000); })
+    setTimeout(() => {
+      navigate('/');
+    }, 3000);
+  });
 
   return (
     <React.Fragment>
@@ -20,7 +21,8 @@ const PasswordResetRequestedSuccessfully = () => {
                 Password Reset Requested
               </p>
               <p className="text-l text-center font-medium h-10 md:h-5">
-                If your account exist, your password request link has been sent to your email. Please check your email.
+                If your account exist, your password request link has been sent to your email.
+                Please check your email.
               </p>
             </form>
           </div>
@@ -31,4 +33,3 @@ const PasswordResetRequestedSuccessfully = () => {
 };
 
 export default PasswordResetRequestedSuccessfully;
-
