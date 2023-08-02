@@ -7,65 +7,56 @@ import SubmitButton from '../components/SubmitButton';
 
 const AccountCreation = () => {
   const navigate = useNavigate();
-  // const [firstView, setFirstView] = useState(true);
-  // const [isClosed, setClosed] = useState(false);
 
-  const [isSubmit, setSubmit] = useState(false);
-  const [errors, setErrors] = useState<string | any>({});
+  const [userID] = useState('');
 
-  const [formState, setFormState] = useState<string | any>({
-    formEmail: '',
-    formBldgID: '',
-  });
+  const [email, setEmail] = useState('');
+  const [buildingID, setBuildingID] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [buildingIDError, setBuildingIDError] = useState('');
+  
 
-  const handleValueChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
-  ): void => {
-    if ('value' in event.target) {
-      setFormState({
-        ...formState,
-        [event.target.name]: event.target.value,
-      });
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setEmail(newValue);
+
+    // Validate the email format
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    setEmailError(emailRegex.test(newValue) ? '' : 'Invalid email format');
+  };
+
+  const handleBuildingChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setBuildingID(newValue);
+    setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    // Validate the fields before submitting the form
+    if (!emailError) {
+      setEmailError(email.trim() ? '' : 'Email is required');
+    }
+    if (!buildingIDError) {
+      setBuildingIDError(buildingID === '' ? '' : 'Building ID is required');
+      console.log(buildingID);
+    }
+
+    if (email.trim() && !buildingIDError && !emailError) {
+      // All fields are filled and email format is valid, you can proceed with the form submission
+      console.log('Form submitted:', { email, buildingID });
+    } else {
+      console.log('Please fill in all required fields and correct the errors.');
     }
   };
+
 
   const handleBack = () => {
     navigate('/LandlordDashboard');
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!formState.formEmail) {
-      errors.formEmail = 'Enter a Email!';
-    } else {
-      delete errors.formEmail;
-    }
-    if (!formState.formBldgID) {
-      errors.formBldgID = 'Enter Building ID!';
-    } else {
-      delete errors.formBldgID;
-    }
-
-    setErrors({ ...errors });
-
-    if (Object.keys(errors).length > 0) {
-    } else {
-      setSubmit(true);
-      navigate('/LandlordDashboard');
-    }
-  };
-
-  useEffect(() => {
-    if (isSubmit) {
-      setTimeout(() => {
-        navigate('/', { state: { formState, isSubmit } });
-      }, 5000);
-    }
-  }, [isSubmit, formState, navigate]);
-
-  const { formEmail, formBldgID } = formState;
-
+  
   return (
     <>
       <div className="flex flex-col h-screen bg-[#ECEDED]">
@@ -86,30 +77,30 @@ const AccountCreation = () => {
                   type={'text'}
                   label="Email"
                   padding_right="85"
-                  value={formEmail}
+                  value={email}
                   name="formEmail"
                   placeholder={'enter email'}
-                  error={errors.formEmail}
+                  error={emailError}
                   disabled={false}
                   layout=""
                   classnames="w-3/5"
-                  onChange={handleValueChange}
+                  onChange={handleEmailChange}
                 />
                 <LineField
                   type={'text'}
                   label="Building ID"
                   padding_right="45"
-                  value={formBldgID}
+                  value={buildingID}
                   name="formBldgID"
                   placeholder={'enter building id'}
-                  error={errors.formBldgID}
+                  error={buildingIDError}
                   disabled={false}
                   layout=""
                   classnames="w-3/5"
-                  onChange={handleValueChange}
+                  onChange={handleBuildingChange}
                 />
                 <div className="flex justify-end">
-                  <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
+                  <SubmitButton type="submit" label={'Submit'} handleClick={() => {}} />
                 </div>
               </form>
             </div>
