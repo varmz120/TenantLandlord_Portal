@@ -63,7 +63,7 @@ function Landing() {
     <React.Fragment>
       {user ? (
         <div className="h-full w-full flex items-center justify-center">
-          <p>Successfully logged in!</p>
+          <p>Successful! Redirecting...</p>
         </div>
       ) : (
         <div className="h-full w-full flex flex-col items-center justify-center">
