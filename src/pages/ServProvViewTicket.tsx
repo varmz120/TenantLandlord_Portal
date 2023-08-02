@@ -3,7 +3,7 @@ import LineField from '../components/LineField';
 import Gallery from '../components/Gallery';
 import Status from '../components/Status';
 import BackButton from '../components/BackButton';
-import LandlordNavbar from '../components/LandlordNavbar';
+import ServProvNavbar from '../components/ServProvNavbar';
 import { useNavigate } from "react-router-dom";
 
 function ViewTicket() {
@@ -27,7 +27,7 @@ function ViewTicket() {
 
   return (
     <div className="flex flex-col h-screen bg-[#ECEDED]">
-    <LandlordNavbar />
+    <ServProvNavbar />
       <div className="flex flex-col font-3xl" id="viewTicket">
             <BackButton
               type="button"
