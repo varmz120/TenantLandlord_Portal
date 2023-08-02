@@ -1,6 +1,8 @@
 import './App.css';
 import '@fontsource-variable/lexend';
 
+import { client } from './client';
+
 // Routing library and auth context
 import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
@@ -55,7 +57,7 @@ function App() {
     <AuthContextProvider>
       <Routes>
         {/*Routing for app */}
-        <Route path="/" element={<TenantLoginPage />} />
+        <Route path="/" element={<LandingPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/Tenant2FA" element={<Tenant2FAPage />} />

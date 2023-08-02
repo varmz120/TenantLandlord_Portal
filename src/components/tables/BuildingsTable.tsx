@@ -3,6 +3,7 @@ import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import deleteIcon from '../../images/delete.svg';
+import { client } from '../../client';
 
 interface Props {
   clicked: boolean;
@@ -81,13 +82,23 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
     let filtercopy = [...filteredTableData];
     filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
     setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('building').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete building', error);
+      }
+    }
   };
 
   //Component for filter buttons

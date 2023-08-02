@@ -4,6 +4,7 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../../client';
 
 interface Props {
   clicked: boolean;
@@ -84,13 +85,23 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
     let filtercopy = [...filteredTableData];
     filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
     setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('users').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+    }
   };
 
   //Component for filter buttons
@@ -132,8 +143,8 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   //on modify account button click
-  const handleModifyAccount = (email: string, BuildingID: string) => {
-    navigate('/AccountManagement', { state: { email, BuildingID, userType } });
+  const handleModifyAccount = (email: string, BuildingID: string, rowId: string) => {
+    navigate('/AccountManagement', { state: { email, BuildingID, userType, rowId } });
   };
 
   useEffect(() => {
@@ -276,7 +287,7 @@ const ServiceProvidersAccounts = ({ clicked, handleClick }: Props) => {
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                    onClick={() => handleModifyAccount(row.Email, row.BuildingID)}
+                    onClick={() => handleModifyAccount(row.Email, row.BuildingID, row.ID)}
                   >
                     <img className="mr-2" alt="pencil icon" src={pencilEditIcon} />
                     <p>Modify Account</p>

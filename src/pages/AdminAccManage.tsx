@@ -4,12 +4,14 @@ import LineField from '../components/LineField';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 import deleteIcon from '../images/delete.svg';
 import pencilIcon from '../images/pencil_edit_icon.svg';
+import { client } from '../client';
 
 const AdminAccManage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [CannotEdit, setCannotEdit] = useState(true);
   const [email, setEmail] = useState(location.state.email);
+  const [Id, SetId] = useState(location.state.rowId);
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
   const [, setSubmit] = useState(false);
   const [userType] = useState(location.state.userType);
@@ -33,7 +35,7 @@ const AdminAccManage = () => {
     setCannotEdit(false);
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async () => {
     // Validate the fields before submitting the form
     if (!emailError) {
       setEmailError(email.trim() ? '' : 'Email is required');
@@ -43,6 +45,13 @@ const AdminAccManage = () => {
       // All fields are filled and email format is valid, you can proceed with the form submission
       setSubmit(true);
       setCannotEdit(true);
+
+      try {
+        await client.service('users').patch(Id, { email: email });
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+
       console.log('Form submitted:', { email, BuildingID });
     } else {
       console.log('Please fill in all required fields and correct the errors.');

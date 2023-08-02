@@ -4,13 +4,15 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../../client';
 
 interface Props {
   clicked: boolean;
   handleClick: () => void;
+  data: { ID: string; Email: string }[];
 }
 
-const AdminAccounts = ({ clicked, handleClick }: Props) => {
+const AdminAccounts = ({ clicked, handleClick, data }: Props) => {
   const navigate = useNavigate();
   const userType = 'Admin';
 
@@ -28,7 +30,7 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
   });
 
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState(tableData);
+  const [filteredTableData, setFilteredTableData] = useState(data);
 
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
@@ -36,7 +38,7 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
       [column]: value,
     }));
 
-    const filteredData = tableData.filter((row) => {
+    const filteredData = data.filter((row) => {
       const rowValue = row[column].toString().toLowerCase();
       const searchValue = value.toLowerCase();
       return rowValue.includes(searchValue);
@@ -52,7 +54,7 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
       Email: '',
     });
 
-    setFilteredTableData(tableData);
+    setFilteredTableData(data);
   };
 
   //Implement Hidden Filter Row function for table
@@ -83,13 +85,23 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
     let filtercopy = [...filteredTableData];
     filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
     setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('users').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+    }
   };
 
   //Component for filter buttons
@@ -103,13 +115,13 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
       { ID: '56', Email: 'abigail@example.com' },
       { ID: '57', Email: 'logan@example.com' },
     ];
-    setTableData(adminData);
-    setFilteredTableData(adminData);
+    setTableData(data);
+    setFilteredTableData(data);
   };
 
   //on modify account button click
-  const handleModifyAccount = (email: string) => {
-    navigate('/AccountManagement', { state: { email, userType } });
+  const handleModifyAccount = (email: string, rowId: string) => {
+    navigate('/AccountManagement', { state: { email, userType, rowId } });
   };
 
   useEffect(() => {
@@ -240,7 +252,7 @@ const AdminAccounts = ({ clicked, handleClick }: Props) => {
                   <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                     <div
                       className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                      onClick={() => handleModifyAccount(row.Email)}
+                      onClick={() => handleModifyAccount(row.Email, row.ID)}
                     >
                       <img className="mr-2" alt="pencil icon" src={pencilEditIcon} />
                       <p>Modify Account</p>

@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import SubmitButton from './SubmitButton';
+import { client } from '../client';
 
 interface Props {
   userType: string;
@@ -10,6 +11,7 @@ interface Props {
 
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
   const [email, setEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [buildingID, setBuildingID] = useState('');
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
@@ -28,8 +30,12 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     setBuildingID(newValue);
     setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
   };
+  const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setUserId(newValue);
+  };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Validate the fields before submitting the form
@@ -44,6 +50,45 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     if (email.trim() && !buildingIDError && !emailError) {
       // All fields are filled and email format is valid, you can proceed with the form submission
       console.log('Form submitted:', { email, buildingID });
+      if (userType === 'Landlord') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 2,
+            email: email,
+            buildingId: buildingID,
+          });
+        } catch (error) {
+          console.error('Failed to create account', error);
+        }
+      }
+
+      if (userType === 'Service Provider') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 1,
+            email: email,
+            buildingId: buildingID,
+          });
+        } catch (error) {
+          console.error('Failed to create account', error);
+        }
+      }
+
+      if (userType === 'Admin') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 3,
+            email: email,
+            buildingId: buildingID,
+          });
+        } catch (error) {
+          console.error('Failed to create account', error);
+        }
+      }
+
       handleDelClick();
     } else {
       console.log('Please fill in all required fields and correct the errors.');
@@ -67,11 +112,25 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
 
               <LineField
                 type={'text'}
+                label="UserId"
+                padding_right="65.5"
+                value={userId}
+                name="category"
+                placeholder={''}
+                error=""
+                disabled={false}
+                layout="vertical"
+                classnames=""
+                onChange={handleUserChange}
+              />
+
+              <LineField
+                type={'text'}
                 label="Email"
                 padding_right="65.5"
                 value={email}
                 name="category"
-                placeholder={'some email'}
+                placeholder={''}
                 error={emailError}
                 disabled={false}
                 layout="vertical"

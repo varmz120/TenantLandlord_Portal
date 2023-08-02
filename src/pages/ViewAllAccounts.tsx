@@ -6,6 +6,7 @@ import LandlordAccounts from '../components/tables/LandlordAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
 import TenantAccounts from '../components/tables/TenantAccounts';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
+import { client } from '../client';
 const ViewAllAccounts = () => {
   const navigate = useNavigate();
   const [initialRender, setInitialRender] = useState(true);
@@ -13,6 +14,21 @@ const ViewAllAccounts = () => {
 
   //Component for filter buttons
   const [filterButtonActive, setFilterButtonActive] = useState('');
+  const getAdminData = async () => {
+    try {
+      const response = await client.service('users').find({ query: { _id: 1 } });
+      const adminUsers = response.data;
+      console.log('the admin users are :' + adminUsers);
+
+      return adminUsers;
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching users:', error);
+      return null;
+    }
+  };
+
+  const [adminData, setAdminData] = useState([{ ID: '', Email: '' }]);
 
   const handleAccClick = () => {
     setClicked(true);
@@ -108,7 +124,7 @@ const ViewAllAccounts = () => {
   const DataTable: React.FC<DataTableProps> = ({ userType }) => {
     switch (userType) {
       case 'Admins':
-        return <AdminAccounts clicked={isClicked} handleClick={handleAccClick} />;
+        return <AdminAccounts clicked={isClicked} handleClick={handleAccClick} data={adminData} />;
       case 'Landlords':
         return <LandlordAccounts clicked={isClicked} handleClick={handleAccClick} />;
       case 'Service Providers':
@@ -119,6 +135,11 @@ const ViewAllAccounts = () => {
   };
 
   useEffect(() => {
+    // const fetchAdminData = async () => {
+    //   const data = await getAdminData();
+    //   setAdminData(data);
+    // };
+    // fetchAdminData();
     if (initialRender) {
       handleToggle('tenants');
       handleClick('tenants');
