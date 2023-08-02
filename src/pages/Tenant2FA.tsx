@@ -8,7 +8,7 @@ const Tenant2FA = () => {
   const navigate = useNavigate();
 
   // Context
-  const { user } = useContext(AuthContext);
+  const { user, } = useContext(AuthContext);
 
   // Creating state variables for username and password
   const [isSubmit, setSubmit] = useState(false);
