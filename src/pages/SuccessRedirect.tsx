@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 // After every form submit
@@ -23,7 +23,7 @@ function SuccessRedirect() {
     } else {
       navigate('/401');
     }
-  }, [user, navigate]);
+  }, [user, navigate, formState, isSubmit, isClosed, redirectLink]);
 
   return (
     <React.Fragment>
