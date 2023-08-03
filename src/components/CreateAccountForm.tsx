@@ -3,18 +3,26 @@ import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import SubmitButton from './SubmitButton';
 import { client } from '../client';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   userType: string;
   handleDelClick: () => void;
+  
 }
 
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
+  type FeathersError = {
+    code?: number;
+    message?: string;
+  };
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [buildingID, setBuildingID] = useState('');
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
+  const [userIDError, setUserIDError] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -31,6 +39,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
   };
   const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setUserIDError("");
     const newValue = event.target.value;
     setUserId(newValue);
   };
@@ -38,16 +47,20 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    let errored = false;
     // Validate the fields before submitting the form
     if (!emailError) {
       setEmailError(email.trim() ? '' : 'Email is required');
+      errored ||= email.trim() === '';
     }
     if (userType === 'Landlord' || userType === 'Service Provider') {
-      setBuildingIDError(buildingID == '' ? '' : 'Building ID is required');
-      console.log(buildingID);
+      console.log("come on why is not working")
+      setBuildingIDError(buildingID!== '' ? "" : 'Building ID is required');
+      errored ||= buildingID === '';
+      console.log(buildingIDError);
     }
 
-    if (email.trim() && !buildingIDError && !emailError) {
+    if (!errored) {
       // All fields are filled and email format is valid, you can proceed with the form submission
       console.log('Form submitted:', { email, buildingID });
       if (userType === 'Landlord') {
@@ -58,8 +71,16 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             email: email,
             buildingId: buildingID,
           });
+          handleDelClick();
+          
         } catch (error) {
           console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
         }
       }
 
@@ -71,8 +92,16 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             email: email,
             buildingId: buildingID,
           });
+          handleDelClick();
+          
         } catch (error) {
           console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
         }
       }
 
@@ -84,12 +113,21 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             email: email,
             buildingId: buildingID,
           });
+          handleDelClick();
+          
         } catch (error) {
           console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+          
         }
       }
 
-      handleDelClick();
+      
     } else {
       console.log('Please fill in all required fields and correct the errors.');
     }
@@ -117,7 +155,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                 value={userId}
                 name="category"
                 placeholder={''}
-                error=""
+                error={userIDError}
                 disabled={false}
                 layout="vertical"
                 classnames=""

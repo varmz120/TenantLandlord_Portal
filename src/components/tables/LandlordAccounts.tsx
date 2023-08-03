@@ -9,9 +9,10 @@ import { client } from '../../client';
 interface Props {
   clicked: boolean;
   handleClick: () => void;
+  data: { ID: string; Email: string, BuildingID:string }[];
 }
 
-const LandlordAccounts = ({ clicked, handleClick }: Props) => {
+const LandlordAccounts = ({ clicked, handleClick ,data}: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
   const userType = 'Landlord';
 
@@ -29,7 +30,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
   });
 
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState(tableData);
+  const [filteredTableData, setFilteredTableData] = useState(data);
 
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
@@ -54,7 +55,7 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
       BuildingID: '',
     });
 
-    setFilteredTableData(tableData);
+    setFilteredTableData(data);
   };
 
   //Implement Hidden Filter Row function for table
@@ -120,8 +121,8 @@ const LandlordAccounts = ({ clicked, handleClick }: Props) => {
       { ID: '25', Email: 'alexander@example.com', BuildingID: 'HIJ567' },
       { ID: '26', Email: 'olivia@example.com', BuildingID: 'KLM890' },
     ];
-    setTableData(landlordData);
-    setFilteredTableData(landlordData);
+    setTableData(data);
+    setFilteredTableData(data);
   };
 
   //on modify account button click

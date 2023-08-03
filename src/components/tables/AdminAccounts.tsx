@@ -9,7 +9,7 @@ import { client } from '../../client';
 interface Props {
   clicked: boolean;
   handleClick: () => void;
-  data: { ID: string; Email: string }[];
+  data: { ID: string, Email: string }[];
 }
 
 const AdminAccounts = ({ clicked, handleClick, data }: Props) => {

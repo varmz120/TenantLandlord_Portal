@@ -12,11 +12,17 @@ interface Props {
 }
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
+  type FeathersError = {
+    code?: number;
+    message?: string;
+  };
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const handleMultiSelectChange = (selectedOptions: string[]) => {
     setSelectedOptions(selectedOptions);
   };
+  const [IDError, setIDError] = useState('');
+
   const [name, setName] = useState('');
   const [Id, setId] = useState('');
   const [address, setAddress] = useState('');
@@ -49,7 +55,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
     setNameError(name.trim() ? '' : 'Name is required');
     setAddressError(address.trim() ? '' : 'Address is required');
 
-    if (name.trim() && address.trim()) {
+    if (name.trim() && address.trim()&&!IDError) {
       // All fields are filled and postal code is valid, you can proceed with the form submission
       console.log('Form submitted:', { name, address });
       try {
@@ -61,6 +67,12 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
         });
       } catch (error) {
         console.error('Failed to create account', error);
+        const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setIDError('ID already exists');
+          } else {
+            setIDError('');
+          }
       }
 
       handleDelClick();
@@ -90,7 +102,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 value={Id}
                 name=""
                 placeholder={''}
-                error=""
+                error={IDError}
                 disabled={false}
                 layout="vertical"
                 classnames=""

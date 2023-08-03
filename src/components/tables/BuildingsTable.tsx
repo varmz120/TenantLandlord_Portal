@@ -8,9 +8,10 @@ import { client } from '../../client';
 interface Props {
   clicked: boolean;
   handleClick: () => void;
+  data: { ID: string, Name: string, Address:string }[];
 }
 
-const BuildingsTable = ({ clicked, handleClick }: Props) => {
+const BuildingsTable = ({ clicked, handleClick,data }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Name: '', Address: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
@@ -26,7 +27,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   });
 
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState(tableData);
+  const [filteredTableData, setFilteredTableData] = useState(data);
 
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
@@ -34,7 +35,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       [column]: value,
     }));
 
-    const filteredData = tableData.filter((row) => {
+    const filteredData = data.filter((row) => {
       const rowValue = row[column].toString().toLowerCase();
       const searchValue = value.toLowerCase();
       return rowValue.includes(searchValue);
@@ -51,7 +52,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       Address: '',
     });
 
-    setFilteredTableData(tableData);
+    setFilteredTableData(data);
   };
 
   //Implement Hidden Filter Row function for table
@@ -119,8 +120,8 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       { ID: '25', Name: 'alexander@example.com', Address: 'HIJ567' },
       { ID: '26', Name: 'olivia@example.com', Address: 'KLM890' },
     ];
-    setTableData(landlordData);
-    setFilteredTableData(landlordData);
+    setTableData(data);
+    setFilteredTableData(data);
   };
 
   //on modify account button click
