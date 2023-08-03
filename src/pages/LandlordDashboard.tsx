@@ -4,9 +4,77 @@ import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
 import LandlordNavbar from '../components/LandlordNavbar';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 // making a dashboard component
 const Dashboard = () => {
+
+  const handleCategorySelect = async (rowId: string[], category: string) => {
+      const updatedTableData = tableData.map((row) => {
+        if (checked.includes(row.ID)) {
+          return { ...row, Category: category };
+        }
+        return row;
+      });
+      setTableData(updatedTableData);
+      setFilteredTableData(updatedTableData);
+    for (var Id of rowId) {
+    for (var personnelId of category) {
+      const ticketId = parseInt(Id, 10);
+      const perAssg = {ticketId, personnelId}
+      console.log('the assigned personnel is ' + personnelId);
+      try {
+        await client.service('ticket').assignPersonnel(perAssg);
+      } catch (error) {
+        console.error('Failed to assign personnel', error);
+      }
+    }
+    }
+  };
+
+  // Function for delete row
+  // const deleteRow = (rowId: string[]) => {
+  //   let copy = [...tableData];
+  //   copy = copy.filter((row) => !rowId.includes(row.ID));
+  //   setTableData(copy);
+  //   let filtercopy = [...filteredTableData];
+  //   filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+  //   setFilteredTableData(filtercopy);
+  // };
+
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
+    let copy = [...tableData];
+    copy = copy.filter((row) => !rowId.includes(row.ID));
+    setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('ticket').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete ticket', error);
+      }
+    }
+  };
+
+  const [ticket_ID, setTicketID] = useState(0);
+
+  const getTicketData = async () => {
+    try {
+      const response = await client.service('ticket').find({query: {_id: ticket_ID}});
+      const tickets = response.data;
+      console.log('tickets are:' + tickets)
+      return tickets;
+    } catch (error) {
+      console.error('Failed to get ticket data', error);
+      return null;
+    }
+  };
+
   // useStates
   const navigate = useNavigate();
   const [userIsActive, setUserIsActive] = useState(false);
@@ -23,38 +91,40 @@ const Dashboard = () => {
     ID: string;
     Item: string;
     Category: string;
+    Landlord: string;
     Date: string;
     Status: string;
   }
 
   const [tableData, setTableData] = useState<TableDataItem[]>([
-    { ID: '1', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '2', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '3', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '4', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '5', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '6', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '7', Item: 'Leaking Pipe', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '8', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '9', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '10', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '11', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '12', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '13', Item: 'Leaking Pipe', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '14', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '15', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '16', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '17', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
+    { ID: '1', Item: 'Fix Floor', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '2', Item: 'Fix Floor', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '3', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '4', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '5', Item: 'Fix Floor', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '6', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '7', Item: 'Leaking Pipe', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '8', Item: 'Fix Floor', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '9', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '10', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '11', Item: 'Fix Floor', Category: 'Doe',  Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '12', Item: 'Pest Control', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '13', Item: 'Leaking Pipe', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '14', Item: 'John', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '15', Item: 'John', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '16', Item: 'John', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
+    { ID: '17', Item: 'John', Category: 'Doe', Landlord: 'Mr Smoy', Date: '06/06', Status: ' ' },
   ]);
 
   // Define a type for the column names
-  type TableColumn = 'ID' | 'Item' | 'Category' | 'Date' | 'Status';
+  type TableColumn = 'ID' | 'Item' | 'Category' | 'Landlord' | 'Date' | 'Status';
 
   // Update the state and event handler with the TableColumn type
   const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
     ID: '',
     Item: '',
     Category: '',
+    Landlord: '',
     Date: '',
     Status: '',
   });
@@ -106,6 +176,7 @@ const Dashboard = () => {
       ID: '',
       Item: '',
       Category: '',
+      Landlord: '',
       Date: '',
       Status: '',
     });
@@ -141,43 +212,49 @@ const Dashboard = () => {
     }
   };
 
-  // Status Drop Down Update Function
-  const statusOptions = [
-    { value: '', label: 'No Status' },
-    { value: 'Completed', label: 'Completed' },
-    { value: 'Pending Tenant Approval', label: 'Pending Tenant Approval' },
-    { value: 'Work in Progress', label: 'Work in Progress' },
-    { value: 'Open', label: 'Open' },
-  ];
+  // // Status Drop Down Update Function
+  // const statusOptions = [
+  //   { value: '', label: 'No Status' },
+  //   { value: 'Completed', label: 'Completed' },
+  //   { value: 'Pending Tenant Approval', label: 'Pending Tenant Approval' },
+  //   { value: 'Work in Progress', label: 'Work in Progress' },
+  //   { value: 'Open', label: 'Open' },
+  // ];
 
-  // Function to update the status of the row for dropdown selection
-  const handleStatusUpdate = (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.stopPropagation();
-    const updateTableData = tableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    setTableData(updateTableData);
-    const updateFilteredTableData = filteredTableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    setFilteredTableData(updateFilteredTableData);
-  };
+  // // Function to update the status of the row for dropdown selection
+  // const handleStatusUpdate = async (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   e.stopPropagation();
+  //   const ticketId = parseInt(itemId, 10);
+  //   const updateTableData = tableData.map((row) => {
+  //     if (row.ID === itemId) {
+  //       return { ...row, Status: e.target.value };
+  //     }
+  //     return row;
+  //   });
+  //   setTableData(updateTableData);
+  //   const updateFilteredTableData = filteredTableData.map((row) => {
+  //     if (row.ID === itemId) {
+  //       return { ...row, Status: e.target.value };
+  //     }
+  //     return row;
+  //   });
+  //   setFilteredTableData(updateFilteredTableData);
+  //   try {
+  //     await client.service('ticket').registerWorkFinished({ticketId})
+  //   } catch (error) {
+  //     console.error('Failed to change ticket status',error);
+  //   }
+  // };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
-    let copy = [...tableData];
-    copy = copy.filter((row) => !rowId.includes(row.ID));
-    setTableData(copy);
-    let filtercopy = [...filteredTableData];
-    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
-    setFilteredTableData(filtercopy);
-  };
+  // const deleteRow = (rowId: string[]) => {
+  //   let copy = [...tableData];
+  //   copy = copy.filter((row) => !rowId.includes(row.ID));
+  //   setTableData(copy);
+  //   let filtercopy = [...filteredTableData];
+  //   filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+  //   setFilteredTableData(filtercopy);
+  // };
 
   // Implement Assign Landlord function
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -186,16 +263,16 @@ const Dashboard = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleCategorySelect = (category: string) => {
-    const updatedTableData = tableData.map((row) => {
-      if (checked.includes(row.ID)) {
-        return { ...row, Category: category };
-      }
-      return row;
-    });
-    setTableData(updatedTableData);
-    setFilteredTableData(updatedTableData);
-  };
+  // const handleCategorySelect = (category: string) => {
+  //   const updatedTableData = tableData.map((row) => {
+  //     if (checked.includes(row.ID)) {
+  //       return { ...row, Category: category };
+  //     }
+  //     return row;
+  //   });
+  //   setTableData(updatedTableData);
+  //   setFilteredTableData(updatedTableData);
+  // };
 
   const categoryOptions = [
     { value: '', label: 'Selected Category' },
@@ -283,7 +360,7 @@ const Dashboard = () => {
                       <button
                         key={option.value}
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleCategorySelect(option.value)}
+                        onClick={() => handleCategorySelect(checked, option.value)}
                       >
                         {option.label}
                       </button>
@@ -343,12 +420,23 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
-                    Personnel Assigned
+                    Category
                     <input
                       type="text"
                       value={searchInputs.Category}
                       onChange={(e) => handleSearchInputChange('Category', e.target.value)}
                       placeholder="Search Category"
+                      style={{ color: 'gray' }}
+                    />
+                  </th>
+
+                  <th className="border px-4 py-2 bg-[gray] text-white">
+                    Personnel Assigned
+                    <input
+                      type="text"
+                      value={searchInputs.Landlord}
+                      onChange={(e) => handleSearchInputChange('Landlord', e.target.value)}
+                      placeholder="Search Landlord"
                       style={{ color: 'gray' }}
                     />
                   </th>
@@ -379,6 +467,7 @@ const Dashboard = () => {
                   <th className="border px-4 py-2 bg-[#3180BA] text-white"></th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Task/Description</th>
+                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Category</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Personnel Assigned</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Date</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Status</th>
@@ -399,14 +488,15 @@ const Dashboard = () => {
                         onClick={(event) => event.stopPropagation()}
                       />
                     </td>
-                    <td className="px-4 py-2">{row.ID}</td>
-                    <td className="px-4 py-2">{row.Item}</td>
-                    <td className="px-4 py-2">{row.Category}</td>
-                    <td className="px-4 py-2">{row.Date}</td>
-                    <td className="px-4 py-2">
-                      <select
+                    <td className="px-4 py-2 text-center">{row.ID}</td>
+                    <td className="px-4 py-2 text-center">{row.Item}</td>
+                    <td className="px-4 py-2 text-center">{row.Category}</td>
+                    <td className="px-4 py-2 text-center">{row.Landlord}</td>
+                    <td className="px-4 py-2 text-center">{row.Date}</td>
+                    <td className="px-4 py-2 text-center">
+                      {/* <select
                         value={row.Status}
-                        onChange={(e) => handleStatusUpdate(row.ID, e)}
+                        // onChange={(e) => handleStatusUpdate(row.ID, e)}
                         onClick={(event) => event.stopPropagation()}
                         className="block appearance-none w-full bg-white border border-gray-300 
                                                     hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
@@ -416,7 +506,7 @@ const Dashboard = () => {
                             {option.label}
                           </option>
                         ))}
-                      </select>
+                      </select> */}
                     </td>
                   </tr>
                 ))}

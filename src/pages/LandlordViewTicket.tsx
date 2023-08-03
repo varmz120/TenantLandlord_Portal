@@ -4,11 +4,16 @@ import Gallery from '../components/Gallery';
 import Status from '../components/Status';
 import BackButton from '../components/BackButton';
 import LandlordNavbar from '../components/LandlordNavbar';
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, MouseEvent  } from 'react';
+import ActionRequired from '../components/ActionRequired';
+import ActionButton from '../components/ActionButton';
 
 function ViewTicket() {
   const navigate = useNavigate();
+  const locate = useLocation();
+
+  const formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
 
   //console.log(locate.state);
 
@@ -28,15 +33,24 @@ function ViewTicket() {
     navigate('/LandlordUploadQuotation');
   };
 
+  const handleCloseTicket = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
+    event.preventDefault();
+
+    formState.formStatus = 'Closed';
+    navigate('/tenantDashboard', {
+      state: { formState, isSubmit: true, isClosed: true },
+    });
+  };
+
   // Mock static values
   var ticket_id = '007';
   var building = 'SunPlaza';
   var unit = '01-42';
-  //var isSubmit = locate.state? locate.state.isSubmit : false;
+  var isSubmit = locate.state? locate.state.isSubmit : false;
   var title = 'Ticket Details';
   var category = 'Pest Control';
   var description = 'Too many ants in the pantry! Please send help!';
-  //var isClosed = locate.state? locate.state.isClosed : false;
+  var isClosed = locate.state? locate.state.isClosed : false;
 
   return (
     <div className="flex flex-col h-screen bg-[#ECEDED]">
@@ -82,6 +96,60 @@ function ViewTicket() {
               <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div className="grid grid-cols-2 pt-1">
                 <Status label={'Status'} value={'Opened'} padding_right={'0'} />
+                <div className="flex flex-col pt-1">
+                {isClosed ? (
+                          <ActionRequired
+                            label={'Action Required'}
+                            padding_right={'32'}
+                            alert={false}
+                          />
+                        ) : (
+                          <ActionRequired
+                            label={'Action Required'}
+                            padding_right={'32'}
+                            alert={true}
+                          />
+                        )}
+                        <div className="flex flex-col gap-y-4">
+                          {isClosed ? null : isSubmit ? (
+                            <ActionButton
+                              value={'Rate Ticket'}
+                              padding_right={'30'}
+                              type=""
+                              firstViewState={false}
+                              toggle={false}
+                              onClick={() =>
+                                navigate('/feedbackSurvey', {
+                                  state: { formState, isSubmit: false },
+                                })
+                              }
+                            />
+                          ) : (
+                            <React.Fragment>
+                              <ActionButton
+                                value={'Give Quote'}
+                                padding_right={'30'}
+                                type=""
+                                firstViewState={false}
+                                toggle={false}
+                                onClick={() =>
+                                  navigate('/viewQuote', {
+                                    state: { formState, isSubmit: true },
+                                  })
+                                }
+                              />
+                              <ActionButton
+                                value={'Reject Ticket'}
+                                padding_right={'30'}
+                                type=""
+                                firstViewState={false}
+                                toggle={false}
+                                onClick={handleCloseTicket}
+                              />
+                            </React.Fragment>
+                          )}
+                    </div>
+                </div>
               </div>
             </form>
           </div>
