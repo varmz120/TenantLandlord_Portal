@@ -172,8 +172,8 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
   };
 
   //on modify account button click
-  const handleModifyAccount = (email: string) => {
-    navigate('/AccountManagement', { state: { email, userType } });
+  const handleModifyAccount = (email: string,leaseID:string,rowId:string) => {
+    navigate('/AccountManagement', { state: { email, userType,leaseID,rowId } });
   };
 
   useEffect(() => {
@@ -316,7 +316,7 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                    onClick={() => handleModifyAccount(row.Email)}
+                    onClick={() => handleModifyAccount(row.Email,row.LeaseID,row.ID)}
                   >
                     <img className="mr-2" alt="pencil icon" src={pencilEditIcon} />
                     <p>Modify Account</p>

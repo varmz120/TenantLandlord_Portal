@@ -293,7 +293,7 @@ const ViewAllAccounts = () => {
 
   return (
     <>
-      <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
+      <div className={`h-screen bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
         <a href="#/">
           <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
             <img src={BackArrowIcon} alt="back arrow"></img>
@@ -303,7 +303,7 @@ const ViewAllAccounts = () => {
         <div className="h-auto w-full flex flex-col justify-center items-center">
           <div className="w-auto md:w-4/5">
             <div className="flex-grow flex flex-col justify-center items-center">
-              <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
+              
                 <div className="text-left text-3xl w-full mb-4">
                   <p>Accounts</p>
                 </div>
@@ -313,8 +313,11 @@ const ViewAllAccounts = () => {
                   {filterButton('service-providers', 'Service Providers')}
                   {filterButton('admins', 'Admins')}
                 </div>
-                <DataTable userType={userType} />
-              </div>
+                <div className="container mx-auto max-h-[600px] overflow-y-auto" style={{ maxWidth: '1329px' }}>
+                  <DataTable userType={userType} />
+                </div>          
+                
+              
             </div>
           </div>
         </div>
@@ -324,7 +327,6 @@ const ViewAllAccounts = () => {
           <CreateAccountForm
             userType={userType.substring(0, userType.length - 1)}
             handleDelClick={handleDeleteClick}
-            
           />
         )}
       </div>

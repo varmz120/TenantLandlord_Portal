@@ -84,7 +84,7 @@ const Buildings = () => {
   };
   return (
     <>
-      <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
+      <div className={`h-screen bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
         <a href="#/">
           <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
             <img src={BackArrowIcon} alt="back arrow"></img>
@@ -98,8 +98,11 @@ const Buildings = () => {
                 <div className="text-left text-3xl w-full mb-4">
                   <p>Buildings</p>
                 </div>
+                <div className="container mx-auto max-h-[600px] overflow-y-auto" style={{ maxWidth: '1329px' }}>
+                  <Buildingtable />
+                </div>
 
-                <Buildingtable />
+                
               </div>
             </div>
           </div>
