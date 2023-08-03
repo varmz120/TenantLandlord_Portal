@@ -44,7 +44,7 @@ const Tenant2FA = () => {
       <div className="relative flex bg-form border-gray-700 rounded-lg shadow sm:p-5  h-128 w-128 justify-center items-start">
         {/*two factor authentication form below */}
         <form className="flex flex-col justify-start w-full p-4">
-          <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
+          <p className="text-5xl my-3 text-headerText">Anacle</p>
           <p className="text-3xl text-start mt-10 mr-1 text-headerText">Two-Factor</p>
           <p className="text-3xl text-start mb-1 text-headerText block">Authentication</p>
 
