@@ -11,10 +11,17 @@ interface Props {
   data: { ID: string, Name: string, Address:string }[];
 }
 
-const BuildingsTable = ({ clicked, handleClick,data }: Props) => {
+const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Name: '', Address: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
+
+  interface TableDataItem {
+    ID: string;
+    Name: string;
+    Address: string;
+    
+  }
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Name' | 'Address';
@@ -29,16 +36,32 @@ const BuildingsTable = ({ clicked, handleClick,data }: Props) => {
   // Implement Filter function for table
   const [filteredTableData, setFilteredTableData] = useState(data);
 
+  const applyFilters = (
+    data: TableDataItem[],
+    filters: Record<TableColumn, string>
+  ): TableDataItem[] => {
+    return data.filter((row) => {
+      for (const column of Object.keys(filters) as TableColumn[]) {
+        const filterValue = filters[column].toLowerCase();
+        const rowValue = row[column].toString().toLowerCase();
+        if (filterValue && !rowValue.includes(filterValue)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
+
+
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
       ...prevState,
       [column]: value,
     }));
 
-    const filteredData = data.filter((row) => {
-      const rowValue = row[column].toString().toLowerCase();
-      const searchValue = value.toLowerCase();
-      return rowValue.includes(searchValue);
+    const filteredData = applyFilters(data, {
+      ...searchInputs,
+      [column]: value,
     });
 
     setFilteredTableData(filteredData);
@@ -122,6 +145,7 @@ const BuildingsTable = ({ clicked, handleClick,data }: Props) => {
     ];
     setTableData(data);
     setFilteredTableData(data);
+    
   };
 
   //on modify account button click
@@ -234,7 +258,7 @@ const BuildingsTable = ({ clicked, handleClick,data }: Props) => {
                   type="text"
                   value={searchInputs.Address}
                   onChange={(e) => handleSearchInputChange('Address', e.target.value)}
-                  placeholder="Search Building ID"
+                  placeholder="Search Address"
                   style={{ color: 'gray' }}
                 />
               </th>
