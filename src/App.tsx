@@ -2,7 +2,7 @@ import './App.css';
 import '@fontsource-variable/lexend';
 
 // Routing library and auth context
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, redirect, useNavigate, Navigate } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 
 import Navbar from './components/Navbar.tsx';
@@ -53,13 +53,33 @@ import TenantAddAcc from './pages/TenantAddAcc.tsx';
 //Service Provider Pages
 import ServProvDashboard from './pages/ServProvDashboard.tsx';
 import ServProvViewTicket from './pages/ServProvViewTicket.tsx'
+import { useContext, useEffect, useState } from 'react';
+import { client } from './client';
+import { AuthContext } from './contexts/AuthContext';
 
 function App() {
+  const [isLoading, setLoading] = useState(true);
+  const { user, login } = useContext(AuthContext);
+
+  useEffect(() => {
+    client.reAuthenticate()
+      .then(({ user }) => {
+        login(user);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+
+  }, []);
+
   return (
-    <AuthContextProvider>
+    isLoading ? "Loading..." :
+
       <Routes>
         {/*Routing for login pages */}
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
@@ -100,7 +120,6 @@ function App() {
         {/*Routing for misc */}
         <Route path="/Success" element={<SuccessRedirectPage />} />
       </Routes>
-    </AuthContextProvider>
   );
 }
 
@@ -249,11 +268,51 @@ function RateTicketPage() {
 }
 
 function LandingPage() {
+  const { user } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    client.reAuthenticate()
+      .then(({ user }) => {
+        login(user);
+      })
+      .catch(() => redirect('/login'));
+  }, []);
+
+        if (user?.typ == 0) {
+          console.log('User is a tenant');
+          let redirect = '/tenantDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+        else if (user?.typ == 1) {
+          console.log('User is a landlord');
+          let redirect = '/ServProvDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+        else if (user?.typ == 2) {
+          console.log('User is a landlord');
+          let redirect = '/landlordDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+         else if (user?.typ == 3) {
+          console.log('User is a admin');
+          let redirect = '/adminDashboard';
+          navigate('/Success', { state: { redirect } });
+        } else {
+          navigate('/401');
+        }
+
+  const to = user === null ? '/login'
+          : user.typ === 0 ? '/tenantDashboard'
+          : user.typ === 1 ? '/ServProvDashboard'
+          : user.typ === 2 ? '/landlordDashboard'
+          : '/adminDashboard';
+
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
-        <Landing />
+        <Navigate to={to} />
       </ErrorBoundary>
     </div>
   );
