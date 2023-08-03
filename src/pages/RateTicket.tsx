@@ -5,6 +5,8 @@ import AreaField from '../components/AreaField';
 import TermsConditionsCheckbox from '../components/TermsConditionsCheckbox';
 import SubmitButton from '../components/SubmitButton';
 import UploadField from '../components/UploadField';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
 
 import React, { MouseEvent, ChangeEvent, FormEvent, useState, useEffect, useContext } from 'react';
 
@@ -15,12 +17,14 @@ function RateTicket() {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
-  var form = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var title = form ? form.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = form ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = form ? form.formID : ''; // Temporary -> for demo purposes w/o backend
-  var status = form ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
-  var description = form ? form.formDescription : ''; // // Temporary -> for demo purposes w/o backend
+  // var form = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
+  // var title = form ? form.formTitle : ''; // Temporary -> for demo purposes w/o backend
+  // var category = form ? form.formCategory : ''; // Temporary -> for demo purposes w/o backend
+  // var ticket_ID = form ? form.formID : ''; // Temporary -> for demo purposes w/o backend
+  // var status = form ? form.formStatus : ''; // // Temporary -> for demo purposes w/o backend
+  // var description = form ? form.formDescription : ''; // // Temporary -> for demo purposes w/o backend
+
+  const ticket: Ticket = locate.state;
 
   const date = new Date();
   let currentDay = String(date.getDate()).padStart(2, '0');
@@ -35,12 +39,14 @@ function RateTicket() {
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
   const [formState, setFormState] = useState<string | any>({
-    formTitle: title,
-    formCategory: category,
-    formID: ticket_ID,
-    formStatus: status,
-    formRating: 0,
-    formDescription: '',
+    formTitle: ticket.title,
+    formCategory: ticket.requestType,
+    formID: ticket._id,
+    formStatus: ticket,
+    formFeedback: {
+      rating: ticket.feedback?.rating ?? 0,
+      description: ticket.feedback?.description ?? '',
+    },
     formAcknowledgement: false,
     formAttachments: [],
   });
@@ -78,7 +84,7 @@ function RateTicket() {
     if ('id' in event.target) {
       setFormState({
         ...formState,
-        formRating: +(event.target.id as string),
+        formFeedback: +(event.target.id as string),
       });
     }
   };
@@ -114,14 +120,22 @@ function RateTicket() {
     }
   };
 
+  const updateRatingAndDescription = async () => {
+    console.log('updateRatingAndDescription: ', formState.formFeedback.rating);
+    await client.service('ticket').rateTicket({
+      ticketId: ticket._id,
+      feedback: formState.formFeedback,
+    });
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isClosed) {
-      if (!formState.formRating) {
-        errors.formRating = 'Enter a rating!';
+      if (!formState.formFeedback.rating) {
+        errors.formFeedback.rating = 'Enter a rating!';
       } else {
-        delete errors.formRating;
+        delete errors.formFeedback.rating;
       }
     } else {
       if (!formState.formDescription) {
@@ -144,13 +158,13 @@ function RateTicket() {
         setFormState({
           ...formState,
           formStatus: 'Closed',
-          formDescription: description.concat('\n', currentDate, ' : ', formDescription!),
+          formDescription: ticket.description.concat('\n', currentDate, ' : ', formDescription!),
         });
       } else {
         setFormState({
           ...formState,
           formStatus: 'In Queue',
-          formDescription: description.concat('\n', currentDate, ' : ', formDescription!),
+          formDescription: ticket.description.concat('\n', currentDate, ' : ', formDescription!),
         });
       }
       setSubmit(true);
@@ -158,13 +172,15 @@ function RateTicket() {
   };
 
   useEffect(() => {
+    console.log('useEffect: ', formState.formFeedback.rating);
     if (isSubmit) {
+      updateRatingAndDescription();
       let redirect = '/tenantDashboard';
       navigate('/Success', { state: { redirect, formState, isSubmit, isClosed } });
     }
   }, [isSubmit, formState, isClosed, navigate]);
 
-  const { formRating, formDescription, formAcknowledgement, formAttachments } = formState;
+  const { formFeedback, formDescription, formAcknowledgement, formAttachments } = formState;
 
   return (
     <React.Fragment>
@@ -204,12 +220,12 @@ function RateTicket() {
                 />
                 <div className="flex justify-center">
                   <p className="text-headerText pb-5 text-2xl font-medium">
-                    Service Ticket #00{ticket_ID} : {location} Unit {unit}
+                    Service Ticket #00{ticket._id} : {ticket.buildingId} Unit {ticket.leaseId}
                   </p>
                 </div>
                 <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                   <form className="space-y-4" onSubmit={handleSubmit}>
-                    <p className="text-lg text-left font-medium">{title}</p>
+                    <p className="text-lg text-left font-medium">{ticket.title}</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className="flex align-center text-left">
                       <p className="text-userNameText">
@@ -239,8 +255,8 @@ function RateTicket() {
                         <StarRating
                           label={'Rating'}
                           padding_right="24"
-                          rating={formRating}
-                          error={errors.formRating}
+                          rating={formFeedback.rating}
+                          error={errors.formFeedback.rating}
                           handleClick={handleRatingChange}
                         />
                         <AreaField
