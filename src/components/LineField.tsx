@@ -35,7 +35,7 @@ const LineField: FC<InputProps> = ({
     >
       <label
         style={{ paddingRight: padding_right + 'px' }}
-        className="pr-4 font-medium text-headerText"
+        className="mt-2 pr-4 font-medium text-headerText"
         htmlFor={label}
       >
         {label}

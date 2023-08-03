@@ -4,6 +4,7 @@ import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
 import LandlordNavbar from '../components/LandlordNavbar';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 // making a dashboard component
 const Dashboard = () => {
