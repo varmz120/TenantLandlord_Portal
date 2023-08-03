@@ -9,7 +9,7 @@ const Tenant2FA = () => {
   const navigate = useNavigate();
 
   // Context
-  const { user, temp_details, login, logout, tempLogin } = useContext(AuthContext);
+  const { temp_details, login, } = useContext(AuthContext);
 
   // Creating state variables for username and password
 
@@ -22,68 +22,21 @@ const Tenant2FA = () => {
   };
 
   // Event handler for clicking on the verify button
-  const handleVerifyClick = async (event: FormEvent<HTMLFormElement>) => {
-
+  const handleVerifyClick = async () => {
     console.log('user before update: ', temp_details);
-    // TODO: Auth here.
-    await client.get2FA({
+    const { user } = await client.authenticate({
       strategy: 'local',
       _id: temp_details!.id,
       password: temp_details!.password,
       code: parseInt(auth),
     });
-
-    let result = await client.service('users').get(String(temp_details?.id))
-    console.log(result._id);
-    console.log(result.typ);
+    console.log(user._id);
+    console.log(user.typ);
     
-    login({
-      id: String(result?._id),
-      password: String(temp_details?.password),
-      email: String(result?.email),
-      typ: Number(result?.typ),
-    });
+    login(user)
+    navigate('/');
   };
   
-  useEffect(() => {
-    if (auth !== null) {
-      if (user !== null) {
-    
-        console.log('User is not null');
-        console.log(user?.typ);
-        
-        if (user?.typ == 0) {
-          console.log('User is a tenant');
-          let redirect = '/tenantDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-        else if (user?.typ == 1) {
-          console.log('User is a landlord');
-          let redirect = '/ServProvDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-        else if (user?.typ == 2) {
-          console.log('User is a landlord');
-          let redirect = '/landlordDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-         else if (user?.typ == 3) {
-          console.log('User is a admin');
-          let redirect = '/adminDashboard';
-          navigate('/Success', { state: { redirect } });
-        } else {
-          navigate('/401');
-        }
-      }
-      else {
-        console.log('User is null');
-      }
-    } else {
-      console.log('Invalid authentication code');
-    }
-  }, [user, auth, navigate]);
-
-
   return (
     //first div sets background
     <div className="bg-content flex flex-col h-screen justify-center items-center">
