@@ -59,11 +59,11 @@ function App() {
     <AuthContextProvider>
       <Routes>
         {/*Routing for login pages */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
-        <Route path="/reset2" element={<PasswordResetPage2 />} />
+        <Route path="/reset-password" element={<PasswordResetPage2 />} />
         <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
         <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
         <Route path="/resetrequestsuccess" element={<PasswordResetRequestSuccessPage />} />
