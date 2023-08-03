@@ -44,7 +44,7 @@ const PasswordResetOne = () => {
             handlePasswordReset();
           }}
         >
-          <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
+          <p className="text-5xl my-3 text-headerText">Anacle</p>
           <p className="text-3xl text-start mt-10 mr-1 mb-3 text-headerText">Password Reset</p>
           <p className="text-xs text-start mt-1 mb-3">
             Please enter your user ID registered with your account. You will receive an email with
