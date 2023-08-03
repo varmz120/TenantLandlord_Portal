@@ -2,16 +2,16 @@ import React, { useContext, useEffect, useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import SubmitButton from '../components/SubmitButton';
+import { client } from '../client';
 
 const Tenant2FA = () => {
   // Navigation & routing
   const navigate = useNavigate();
 
   // Context
-  const { user, } = useContext(AuthContext);
+  const { temp_details, login, } = useContext(AuthContext);
 
   // Creating state variables for username and password
-  const [isSubmit, setSubmit] = useState(false);
 
   // Creating state variables for authentication
   const [auth, setAuth] = useState('');
@@ -22,31 +22,21 @@ const Tenant2FA = () => {
   };
 
   // Event handler for clicking on the verify button
-  const handleVerifyClick = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmit(true);
+  const handleVerifyClick = async () => {
+    console.log('user before update: ', temp_details);
+    const { user } = await client.authenticate({
+      strategy: 'local',
+      _id: temp_details!.id,
+      password: temp_details!.password,
+      code: parseInt(auth),
+    });
+    console.log(user._id);
+    console.log(user.typ);
+    
+    login(user)
+    navigate('/');
   };
-
-  useEffect(() => {
-    if (isSubmit) {
-      if (auth !== null) {
-        if (user !== null) {
-          if (user.typ === 0) {
-            let redirect = '/tenantDashboard';
-            navigate('/Success', { state: { redirect } });
-          } else if (user.typ === 3) {
-            let redirect = '/adminDashboard';
-            navigate('/Success', { state: { redirect } });
-          } else {
-            navigate('/401');
-          }
-        }
-      } else {
-        console.log('Invalid authentication code');
-      }
-    }
-  }, [user, navigate, isSubmit, auth]);
-
+  
   return (
     //first div sets background
     <div className="bg-content flex flex-col h-screen justify-center items-center">
@@ -54,7 +44,7 @@ const Tenant2FA = () => {
       <div className="relative flex bg-form border-gray-700 rounded-lg shadow sm:p-5  h-128 w-128 justify-center items-start">
         {/*two factor authentication form below */}
         <form className="flex flex-col justify-start w-full p-4">
-          <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
+          <p className="text-5xl my-3 text-headerText">Anacle</p>
           <p className="text-3xl text-start mt-10 mr-1 text-headerText">Two-Factor</p>
           <p className="text-3xl text-start mb-1 text-headerText block">Authentication</p>
 
