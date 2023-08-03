@@ -270,7 +270,7 @@ const ViewAllAccounts = () => {
       case 'Service Providers':
         return <ServiceProvidersAccounts clicked={isClicked} handleClick={handleAccClick} data={serviceProviderData}/>;
       default:
-        return <TenantAccounts clicked={isClicked} handleClick={handleTenClick} data={tenantData} />;
+        return <TenantAccounts clicked={isClicked} handleClick={handleAccClick} data={tenantData} />;
     }
   };
 
