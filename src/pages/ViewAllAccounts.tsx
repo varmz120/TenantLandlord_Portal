@@ -36,12 +36,13 @@ const ViewAllAccounts = () => {
   };
   const fetchAdminData = async () => {
     try {
-      const adminData = await getAdminData();
+      const adminDataFetched = await getAdminData();
 
-      console.log(adminData);
+      console.log(adminDataFetched);
 
-      if (adminData !== null) {
-        setAdminData(adminData);
+      if (adminDataFetched !== null) {
+        setAdminData(adminDataFetched);
+        console.log(adminDataFetched)
       } else {
         // Handle the case when adminData is null (error occurred)
         // You can set it to an empty array or handle it based on your use case.

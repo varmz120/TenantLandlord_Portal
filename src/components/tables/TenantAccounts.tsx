@@ -35,6 +35,13 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
   const userType = 'Tenant';
 
   const [initialRender, setInitialRender] = useState(true);
+  interface TableDataItem {
+    ID: string;
+    Email: string;
+    LeaseID: string;
+    
+    
+  }
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Email' | 'LeaseID';
@@ -49,16 +56,31 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
   // Implement Filter function for table
   const [filteredTableData, setFilteredTableData] = useState(data);
 
+  const applyFilters = (
+    data: TableDataItem[],
+    filters: Record<TableColumn, string>
+  ): TableDataItem[] => {
+    return data.filter((row) => {
+      for (const column of Object.keys(filters) as TableColumn[]) {
+        const filterValue = filters[column].toLowerCase();
+        const rowValue = row[column].toString().toLowerCase();
+        if (filterValue && !rowValue.includes(filterValue)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
+
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
       ...prevState,
       [column]: value,
     }));
 
-    const filteredData = data.filter((row) => {
-      const rowValue = row[column].toString().toLowerCase();
-      const searchValue = value.toLowerCase();
-      return rowValue.includes(searchValue);
+    const filteredData = applyFilters(data, {
+      ...searchInputs,
+      [column]: value,
     });
 
     setFilteredTableData(filteredData);
@@ -262,7 +284,7 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
                   type="text"
                   value={searchInputs.LeaseID}
                   onChange={(e) => handleSearchInputChange('LeaseID', e.target.value)}
-                  placeholder="Search Lease ID"
+                  placeholder="Search LeaseID"
                   style={{ color: 'gray' }}
                 />
               </th>
