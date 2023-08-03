@@ -56,7 +56,18 @@ const Tenant2FA = () => {
           console.log('User is a tenant');
           let redirect = '/tenantDashboard';
           navigate('/Success', { state: { redirect } });
-        } else if (user?.typ == 3) {
+        }
+        else if (user?.typ == 1) {
+          console.log('User is a landlord');
+          let redirect = '/ServProvDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+        else if (user?.typ == 2) {
+          console.log('User is a landlord');
+          let redirect = '/landlordDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+         else if (user?.typ == 3) {
           console.log('User is a admin');
           let redirect = '/adminDashboard';
           navigate('/Success', { state: { redirect } });
