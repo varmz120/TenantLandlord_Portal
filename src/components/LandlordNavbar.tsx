@@ -3,6 +3,7 @@ import homeImage from '../images/home.svg';
 import userIcon from '../images/user_icon.svg';
 import userIconDark from '../images/user_icon_dark.svg';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,6 +11,18 @@ const Navbar = () => {
   const handleUsernameActive = () => {
     setUsernameIsActive(true);
   };
+
+  // const AddService = async () => {
+  //   try {
+  //     await client.service('building').patch({});
+  //     console.log('tickets are:' + tickets)
+  //     return tickets;
+  //   } catch (error) {
+  //     console.error('Failed to get ticket data', error);
+  //     return null;
+  //   }
+  // };
+  // }
 
   const handleUsernameInactive = () => {
     setUsernameIsActive(false);
