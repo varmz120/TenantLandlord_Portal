@@ -3,12 +3,16 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { MouseEvent, ChangeEvent, FormEvent, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { client } from '../client';
+import { Ticket } from '../esc-backend/src/client';
 
 function UploadQuote() {
   const navigate = useNavigate();
+  const locate = useLocation()
+  const ticket: Ticket | undefined = locate.state
 
   const [formState, setFormState] = useState<string | any>({
     totalAmount: '',
@@ -93,6 +97,16 @@ function UploadQuote() {
   var date = '06/06/2023';
 
   const { totalAmount, formAttachments } = formState;
+
+  const handleGiveQuotation = (event: MouseEvent<HTMLButtonElement>): void => {
+    client.service('ticket').uploadQuotation({
+      ticketId: ticket?._id ?? 0,
+      uri: '',
+      amount: totalAmount,
+      remarks: ''
+    })
+    .then(() => navigate('/LandlordViewTicket', {state: ticket}));
+  };
 
   return (
     <div className="flex flex-col h-1000px bg-[#ECEDED]">
@@ -188,7 +202,7 @@ function UploadQuote() {
                   </label>
                 </div>
                 <div className="flex justify-end">
-                  <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
+                  <SubmitButton type="submit" label={'Submit'} handleClick={handleGiveQuotation} />
                 </div>
               </div>
             </div>
