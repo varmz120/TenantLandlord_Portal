@@ -79,25 +79,54 @@ function RateTicket() {
     }
   };
 
-  const handleRatingChange = (event: MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    if ('id' in event.target) {
-      setFormState({
-        ...formState,
-        formFeedback: +(event.target.id as string),
-      });
-    }
+  // const handleRatingChange = (event: MouseEvent<HTMLButtonElement>): void => {
+  //   event.stopPropagation();
+  //   if ('id' in event.target) {
+  //     setFormState({
+  //       ...formState,
+  //       formFeedback: +(event.target.id as string),
+  //     });
+  //   }
+  // };
+
+  const handleRatingChange = (rating: number) => {
+    // Create a new object with the updated rating value in formFeedback
+    const updatedFormFeedback = { ...formState.formFeedback, rating };
+
+    // Update the formState with the new formFeedback
+    setFormState({
+      ...formState,
+      formFeedback: updatedFormFeedback,
+    });
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLDivElement>): void => {
     event.stopPropagation();
-    if ('textContent' in event.target) {
+    const target = event.target;
+    if ('id' in target) {
       setFormState({
         ...formState,
-        [event.target.id]: event.target.textContent,
+        formFeedback: {
+          ...formState.formFeedback,
+          description: target.textContent,
+        },
       });
     }
+    console.log('formState: ', formState.formFeedback);
   };
+
+  // const handleTextChange = (event: ChangeEvent<HTMLDivElement>): void => {
+  //   event.stopPropagation();
+
+  //   // console.log('event.target.id: ', event.target.id);
+  //   // if ('textContent' in event.target) {
+  //   //   setFormState({
+  //   //     ...formState,
+  //   //     [event.target.id]: event.target.textContent,
+  //   //   });
+  //   //   console.log('formState: ', formState.formFeedback);
+  //   // }
+  // };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
@@ -121,10 +150,19 @@ function RateTicket() {
   };
 
   const updateRatingAndDescription = async () => {
-    console.log('updateRatingAndDescription: ', formState.formFeedback.rating);
+    console.log('updateRatingAndDescription: ', formState.formFeedback.rating, formState.formFeedback.description);
     await client.service('ticket').rateTicket({
       ticketId: ticket._id,
       feedback: formState.formFeedback,
+    });
+  };
+
+  const updateReOpenTicket = async () => {
+    console.log('updateReOpenTicket: ', formState.formDescription);
+    await client.service('ticket').reopenTicket({
+      ticketId: ticket._id,
+      // TODO : description: formState.formDescription,
+      // TODO : add attachments
     });
   };
 
@@ -150,35 +188,47 @@ function RateTicket() {
       delete errors.formAcknowledgement;
     }
     setErrors({ ...errors });
-    console.log(errors);
+    console.log('formState: ', formState.formFeedback);
 
-    if (Object.keys(errors).length > 0) {
-    } else {
+    if (errors.formFeedback.rating == 'Enter a rating!' || errors.formAcknowledgement == 'Please accept the T&C!' ) {
+    } 
+    else 
+    {
       if (isClosed) {
         setFormState({
           ...formState,
           formStatus: 'Closed',
           formDescription: ticket.description.concat('\n', currentDate, ' : ', formDescription!),
         });
+        updateRatingAndDescription();
       } else {
         setFormState({
           ...formState,
           formStatus: 'In Queue',
           formDescription: ticket.description.concat('\n', currentDate, ' : ', formDescription!),
         });
+        updateReOpenTicket();
       }
       setSubmit(true);
     }
   };
 
+  
+
   useEffect(() => {
     console.log('useEffect: ', formState.formFeedback.rating);
+    console.log('useEffect: ', formState.formFeedback.description);
     if (isSubmit) {
-      updateRatingAndDescription();
       let redirect = '/tenantDashboard';
       navigate('/Success', { state: { redirect, formState, isSubmit, isClosed } });
     }
   }, [isSubmit, formState, isClosed, navigate]);
+
+  useEffect(() => {
+    
+    setErrors({ formFeedback: { rating: '' }, formRemarks: '', formAcknowledgement: '' });
+
+  }, []);
 
   const { formFeedback, formDescription, formAcknowledgement, formAttachments } = formState;
 
@@ -263,7 +313,7 @@ function RateTicket() {
                           label={'Additional Remarks'}
                           classnames="w-4/5"
                           padding_right={'0'}
-                          value={formDescription}
+                          value={formFeedback.description}
                           id="formDescription"
                           disabled={false}
                           layout={'vertical'}

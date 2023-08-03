@@ -5,7 +5,9 @@ interface InputProps {
   padding_right: string;
   rating: number;
   error: string;
-  handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  // handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  
+  handleClick: (rating: number) => void;
 }
 
 // Source : https://dev.to/michaelburrows/create-a-custom-react-star-rating-component-5o6
@@ -27,7 +29,7 @@ const StarRating: FC<InputProps> = ({ label, padding_right, rating, error, handl
             type="button"
             key={index}
             className={index <= (hover || rating) ? 'text-starActive' : 'text-placeholderText'}
-            onClick={handleClick}
+            onClick={() => handleClick(index)}
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(rating)}
           >
