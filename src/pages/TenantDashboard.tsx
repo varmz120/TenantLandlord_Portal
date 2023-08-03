@@ -3,25 +3,24 @@ import filterIcon from '../images/filter_icon.svg';
 import filterDarkIcon from '../images/filter_icon_dark.svg';
 import ActionButton from '../components/ActionButton';
 
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import { client } from '../client';
+import { Ticket } from '../esc-backend/src/client';
+
+const statusMap = [
+  "Opened",
+  "Waiting for Quotation Approval",
+  "In Queue",
+  "In Progress",
+  "Pending Completion Approval",
+  "Rejected",
+  "Closed",
+];
 
 const TenantDashboard = () => {
   // Navigation & routing
   const navigate = useNavigate();
-  const locate = useLocation();
-  var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = formState ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_status = formState ? formState.formStatus : ''; //Temporary -> for demo purposes w/o backend
-  var isClosed = locate.state ? locate.state.isClosed : null; // Temporary -> for demo purposes w/o backend
-
-  const date = new Date();
-  let currentDay = String(date.getDate()).padStart(2, '0');
-  let currentMonth = String(date.getMonth() + 1).padStart(2, '0');
-  let currentYear = date.getFullYear() % 100;
-  let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
 
   // Context
   const { user } = useContext(AuthContext);
@@ -53,40 +52,16 @@ const TenantDashboard = () => {
   }
 
   // Mock static values
-  const [tableData, setTableData] = useState([
-    {
-      ID: 1,
-      Item: 'Fix Floor',
-      Category: 'Repair',
-      Date: ' 01/11/22 ',
-      Status: ' Closed ',
-      Landlord: ' Mr. Smoy ',
-    },
-    {
-      ID: 2,
-      Item: 'Fix Floor',
-      Category: 'Repair',
-      Date: ' 17/12/22 ',
-      Status: ' Closed ',
-      Landlord: ' Mr. Smoy ',
-    },
-    {
-      ID: 3,
-      Item: 'Pest Control',
-      Category: 'Cleanliness',
-      Date: ' 22/12/22 ',
-      Status: ' Closed ',
-      Landlord: ' Mrs. Lima ',
-    },
-    {
-      ID: 4,
-      Item: 'Pest Control',
-      Category: 'Cleanliness',
-      Date: ' 17/07/23 ',
-      Status: ' Closed ',
-      Landlord: ' Mrs. Lima ',
-    },
-  ]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+
+  const tableData = tickets.map(t => ({
+          ID: t._id,
+          Item: t.title,
+          Category: t.requestType,
+          Date: new Date(t.openedOn).toLocaleDateString(),
+          Status: statusMap[t.status],
+          Landlord: t.personnelAssigned ?? 'None',
+  }));
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Item' | 'Category' | 'Date' | 'Status' | 'Landlord';
@@ -161,34 +136,22 @@ const TenantDashboard = () => {
   };
 
   useEffect(() => {
-    if (formState) {
-      var newData = {
-        ID: ticket_ID,
-        Item: title,
-        Category: category,
-        Date: currentDate,
-        Status: ticket_status,
-        Landlord: ' Mr Smoy ',
-      };
-      setTableData((tableData) => [...tableData, newData]);
-    }
-  }, [isClosed, formState, category, ticket_ID, ticket_status, title, currentDate]);
+    client.service('ticket').find().then(tickets => {
+      setTickets(tickets.data);
+    });
+  }, []);
 
-  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
+  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>, index: number): void => {
     event.preventDefault();
 
-    if (ticket_status === 'Pending Approval') {
-      navigate('/viewDetails', { state: { formState, isSubmit: true, isClosed } });
-    } else {
-      navigate('/viewDetails', { state: { formState, isSubmit: false, isClosed } });
-    }
+    navigate('/viewDetails', { state: tickets[index] });
   };
 
   return (
     <React.Fragment>
       {/* // When user is not logged in */}
       {user === null ? (
-        <Navigate to="/401" replace={true} />
+        <Navigate to="/403" replace={true} />
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
@@ -312,8 +275,8 @@ const TenantDashboard = () => {
                           </tr>
                         </thead>
                       <tbody className="">
-                        {filteredTableData.map((row) => (
-                          <tr className="hover:bg-tableHover hover:shadow-lg" key={String(row.ID)} onClick={handleRowClick}>
+                        {filteredTableData.map((row, index) => (
+                          <tr className="hover:bg-tableHover hover:shadow-lg" key={String(row.ID)} onClick={e => handleRowClick(e, index)}>
                             <td className="px-4 py-2">{String(row.ID)}</td>
                             <td className="px-4 py-2">{row.Item}</td>
                             <td className="px-4 py-2">{row.Category}</td>

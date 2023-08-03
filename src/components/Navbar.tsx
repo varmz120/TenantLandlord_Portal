@@ -14,8 +14,7 @@ function Navbar() {
     if (user === null) {
       navigate('/', { replace: true });
     } else {
-      logout();
-      navigate('/', { replace: true });
+      logout()//.then(() => navigate('/', { replace: true }));
     }
   };
 
