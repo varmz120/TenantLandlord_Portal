@@ -1,6 +1,10 @@
 import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import Navbar from '../components/Navbar';
+import TenantNavbar from '../components/TenantNavbar';
+import ServProvNavbar from '../components/ServProvNavbar';
+import LandlordNavbar from '../components/LandlordNavbar';
 
 const NotificationComponent = () => {
   const { user } = useContext(AuthContext);
@@ -37,6 +41,8 @@ const NotificationComponent = () => {
     setFormattedNotifications(updatedNotifications);
   };
 
+
+
   return (
     <React.Fragment>
       {/* // When user is not logged in */}
@@ -46,6 +52,7 @@ const NotificationComponent = () => {
         <React.Fragment>
           {/* // When user is logged in */}
           {user?.typ !== null ? (
+            <div> {user?.typ === 2 ? (<LandlordNavbar></LandlordNavbar>) : (<Navbar></Navbar>)}
             <div className="flex justify-center items-center">
               <div className="container mx-auto mt-10 mb-10 h-156 w-656">
                 <div className="bg-white h-full overflow-y-auto rounded-lg drop-shadow-2xl">
@@ -76,6 +83,7 @@ const NotificationComponent = () => {
                     </tbody>
                   </table>
                 </div>
+              </div>
               </div>
             </div>
           ) : (

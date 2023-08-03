@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 
 import Navbar from './components/Navbar.tsx';
+import TenantNavbar from './components/TenantNavbar.tsx';
 import SuccessRedirect from './pages/SuccessRedirect.tsx';
 
 // Login pages
@@ -59,7 +60,7 @@ function App() {
     <AuthContextProvider>
       <Routes>
         {/*Routing for login pages */}
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
@@ -109,7 +110,6 @@ function TenantLoginPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <TenantLogin />
       </ErrorBoundary>
     </div>
@@ -120,7 +120,6 @@ function PasswordResetPage1() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetOne />
       </ErrorBoundary>
     </div>
@@ -131,7 +130,6 @@ function Tenant2FAPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <Tenant2FA />
       </ErrorBoundary>
     </div>
@@ -142,7 +140,6 @@ function PasswordResetPage2() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetTwo />
       </ErrorBoundary>
     </div>
@@ -153,7 +150,6 @@ function PasswordResetSuccessfulPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetSuccessful />
       </ErrorBoundary>
     </div>
@@ -164,7 +160,6 @@ function PasswordResetUnsuccessfulPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetUnsuccessful />
       </ErrorBoundary>
     </div>
@@ -175,7 +170,6 @@ function PasswordResetRequestSuccessPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetRequestSuccess />
       </ErrorBoundary>
     </div>
@@ -186,7 +180,6 @@ function PasswordResetRequestFailedPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetRequestFailed />
       </ErrorBoundary>
     </div>
@@ -208,7 +201,7 @@ function RequestTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <RequestTicket />
       </ErrorBoundary>
     </div>
@@ -219,7 +212,7 @@ function ViewTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <ViewTicket />
       </ErrorBoundary>
     </div>
@@ -230,7 +223,7 @@ function ViewQuotePage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <ViewQuote />
       </ErrorBoundary>
     </div>
@@ -241,7 +234,7 @@ function RateTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <RateTicket />
       </ErrorBoundary>
     </div>
@@ -263,7 +256,6 @@ function NotificationPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <Notification />
       </ErrorBoundary>
     </div>
