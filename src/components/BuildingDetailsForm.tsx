@@ -3,6 +3,8 @@ import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import AreaField from './AreaField';
 import SubmitButton from './SubmitButton';
+import MultiSelectField from './MultiSelectProps';
+
 import { client } from '../client';
 
 interface Props {
@@ -10,12 +12,19 @@ interface Props {
 }
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const handleMultiSelectChange = (selectedOptions: string[]) => {
+    setSelectedOptions(selectedOptions);
+  };
   const [name, setName] = useState('');
   const [Id, setId] = useState('');
   const [address, setAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [nameError, setNameError] = useState('');
   const [addressError, setAddressError] = useState('');
+
+  const requestTypeOptions = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control', 'Other'];
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -48,7 +57,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
           _id: Id,
           name: name,
           address: address,
-          requestTypes: [''],
+          requestTypes: selectedOptions,
         });
       } catch (error) {
         console.error('Failed to create account', error);
@@ -111,6 +120,13 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 error={addressError}
                 placeholder="Please include any additional remarks here."
                 onChange={handleAddressChange}
+              />
+              <MultiSelectField
+                label="Request Types"
+                padding_right="10"
+                options={requestTypeOptions}
+                selectedOptions={selectedOptions}
+                onChange={handleMultiSelectChange}
               />
 
               <div className="flex justify-end">
