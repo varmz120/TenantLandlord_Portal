@@ -9,24 +9,34 @@ import inQueueTicket from '../images/ticket_queue_icon.svg';
 
 interface InputProps {
   label: string;
-  value: string;
+  value: number;
   padding_right: string | number;
 }
+const statusMap = [
+  "Opened",
+  "Waiting for Quotation Approval",
+  "In Queue",
+  "In Progress",
+  "Pending Completion Approval",
+  "Rejected",
+  "Closed",
+];
 
 const Status: FC<InputProps> = ({
   label,
   value, // TODO: Pass in from MongoDB ticket status string
   padding_right,
 }) => {
-  const statuses: { [key: string]: string } = {
-    Opened: openTicket,
-    'In Queue': inQueueTicket,
-    'In Progress': inProgressTicket,
-    'Pending Quote': pendingQuote,
-    'Pending Approval': pendingApprove,
-    Closed: closeTicket,
-    Rejected: rejectTicket,
-  };
+  const statuses  = [
+    openTicket,
+    pendingQuote,
+    inQueueTicket,
+    inProgressTicket,
+    pendingApprove,
+    rejectTicket,
+    closeTicket,
+  ];
+
   return (
     <div className="flex flex-col align-center text-left input-wrapper">
       <label
@@ -36,7 +46,7 @@ const Status: FC<InputProps> = ({
       >
         {label}
       </label>
-      <img className="my-6 max-w-[250px]" alt={value} src={statuses[value]} />
+      <img className="my-6 max-w-[250px]" alt={statusMap[value]} src={statuses[value]} />
     </div>
   );
 };
