@@ -1,13 +1,17 @@
-import { FC, SetStateAction } from 'react';
+import { FC, SetStateAction, useEffect } from 'react';
 import { useState } from 'react';
 
 interface InputProps {
   type: 'text';
   layout: string;
   error: string;
+  data: { value: string; label: string }[];
 }
 
-const SearchField: FC<InputProps> = ({ type, layout, error }) => {
+const SearchField: FC<InputProps> = ({ data, layout, error }) => {
+  const [options, setListData] = useState([
+    {value: '', label: ''}
+  ]);
   const [value, setValue] = useState('');
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
@@ -18,27 +22,16 @@ const SearchField: FC<InputProps> = ({ type, layout, error }) => {
 
   const onSearch = (searchTerm: SetStateAction<string>) => {
     setValue(searchTerm);
-    //console.log('search', searchTerm);
     setIsOptionSelected(true);
   };
 
-  const options = [
-    { value: 'Bob', label: 'Bob' },
-    { value: 'Mary', label: 'Mary' },
-    { value: 'Joseph', label: 'Joseph' },
-    { value: 'Sarah', label: 'Sarah' },
-    { value: 'Michael', label: 'Michael' },
-    { value: 'Moana', label: 'Moana' },
-    { value: 'Henry', label: 'Henry' },
-    { value: 'Jake', label: 'Jake' },
-    { value: 'Jane', label: 'Jane' },
-    { value: 'Bernice', label: 'Bernice' },
-    { value: 'John', label: 'John' },
-    { value: 'Abraham', label: 'Abraham' },
-    { value: 'Elisa', label: 'Elisa' },
-    { value: 'Elysia', label: 'Elysia' },
-    { value: 'Alice', label: 'Alice' },
-  ];
+  const loadData = () => {
+    setListData(data);
+  };
+
+  useEffect(() => {
+    loadData();
+  })
 
   return (
     <div

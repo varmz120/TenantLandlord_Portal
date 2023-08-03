@@ -1,13 +1,17 @@
-import { FC, SetStateAction } from 'react';
+import { FC, SetStateAction, useEffect } from 'react';
 import { useState } from 'react';
 
 interface InputProps {
   type: 'text';
   layout: string;
   error: string;
+  data: { value: string; label: string }[];
 }
 
-const SearchBldgField: FC<InputProps> = ({ type, layout, error }) => {
+const SearchBldgField: FC<InputProps> = ({ layout, error, data}) => {
+  const [options, setListData] = useState([
+    {value: '', label: ''}
+  ]);
   const [value, setValue] = useState('');
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
@@ -18,21 +22,16 @@ const SearchBldgField: FC<InputProps> = ({ type, layout, error }) => {
 
   const onSearch = (searchTerm: SetStateAction<string>) => {
     setValue(searchTerm);
-    //console.log('search', searchTerm);
     setIsOptionSelected(true);
   };
 
-  const options = [
-    { value: 'B-001', label: 'B-001' },
-    { value: 'B-002', label: 'B-002' },
-    { value: 'B-003', label: 'B-003' },
-    { value: 'B-004', label: 'B-004' },
-    { value: 'B-005', label: 'B-005' },
-    { value: 'B-006', label: 'B-006' },
-    { value: 'B-007', label: 'B-007' },
-    { value: 'B-009', label: 'B-009' },
-    { value: 'B-010', label: 'B-010' },
-  ];
+  const loadData = () => {
+    setListData(data);
+  };
+
+  useEffect(() => {
+    loadData();
+  })
 
   return (
     <div
