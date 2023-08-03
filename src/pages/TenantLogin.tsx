@@ -1,24 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-// import {client} from '../client';
+import {client} from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
   const navigate = useNavigate();
 
   // Context
-  const { user, login } = useContext(AuthContext);
+  const { user, temp_details, login, tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('jone');
   // const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
-  const handleUsernameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
+  const handleUsernameFieldChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);  };
 
   // Event handler for change in password field
   const handlePasswordFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,34 +26,29 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = async () => {
-    // // TODO: Auth here.
-    // await client.get2FA({
-    //   strategy: 'local',
-    //    _id: user?.id,
-    //    email: user?.email,
-    //  })
 
-    // cast as number
-    login({
-      id: '1',
-      email: '',
-      typ: Number(username), // Tenant
-    });
+    // // TODO: Auth here.
+    try {
+      await client.get2FA({
+        strategy: 'local',
+        _id: username,
+        password: password,
+      })
+    } catch (error) {
+
+      tempLogin({
+        id: username,
+        password: password,
+      })
+      
+      navigate('/Tenant2FA');
+    };
   };
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
     navigate('/reset1');
   };
-
-  useEffect(() => {
-    // Assume username and password are correct
-    if (user !== null) {
-      setTimeout(() => {
-        navigate('/Tenant2FA');
-      }, 1000);
-    }
-  }, [user, navigate]);
 
   return (
     //first div sets background
@@ -92,7 +86,6 @@ const TenantLogin = () => {
           <button
             type="submit"
             className="bg-[#335B77] rounded-lg mt-24 text-2xl font-bold text-white p-1"
-            onClick={handleLoginClick}
           >
             Login
           </button>
