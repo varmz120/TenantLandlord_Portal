@@ -16,9 +16,9 @@ const ViewAllAccounts = () => {
   const [filterButtonActive, setFilterButtonActive] = useState('');
   const getAdminData = async () => {
     try {
-      const response = await client.service('users').find({ query: { _id: 1 } });
-      const adminUsers = response.data;
-      console.log('the admin users are :' + adminUsers);
+      const adminData = await client.service('users').find({ query: { typ: 1 } });
+      const adminUsers=adminData.data;
+      console.log(adminUsers);
 
       return adminUsers;
     } catch (error) {
@@ -136,10 +136,13 @@ const ViewAllAccounts = () => {
 
   useEffect(() => {
     // const fetchAdminData = async () => {
-    //   const data = await getAdminData();
+    //   const adminData = await getAdminData();
+      
     //   setAdminData(data);
     // };
-    // fetchAdminData();
+    fetchAdminData();
+    
+    console.log("the retrived users are"+x);
     if (initialRender) {
       handleToggle('tenants');
       handleClick('tenants');
