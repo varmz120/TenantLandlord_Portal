@@ -5,17 +5,21 @@ import Status from '../components/Status';
 import BackButton from '../components/BackButton';
 import LandlordNavbar from '../components/LandlordNavbar';
 import { useNavigate, useLocation } from 'react-router-dom';
-import React, { useState, MouseEvent  } from 'react';
+import React, { useState, MouseEvent, useContext  } from 'react';
 import ActionRequired from '../components/ActionRequired';
 import ActionButton from '../components/ActionButton';
+import { AuthContext } from '../contexts/AuthContext';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
 
 function ViewTicket() {
   const navigate = useNavigate();
   const locate = useLocation();
+  const ticket: Ticket | undefined = locate.state;
 
   const formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
 
-  //console.log(locate.state);
+  const {user} = useContext(AuthContext);
 
   const [, setUserIsActive] = useState(false);
   const handleUserActive = () => {
@@ -29,9 +33,13 @@ function ViewTicket() {
     navigate('/LandlordDashboard');
   };
 
-  const handleQuotationClick = () => {
-    navigate('/LandlordUploadQuotation');
+  const handleQuotationClick = (): void => {
+    navigate('/LandlordUploadQuotation', {state: ticket});
   };
+
+  const handleUnassignClick = () => {
+    client.service('ticket').unassignPersonnel({ticketId: ticket?._id ?? 0})
+  }
 
   const handleCloseTicket = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
     event.preventDefault();
@@ -43,7 +51,7 @@ function ViewTicket() {
   };
 
   // Mock static values
-  var ticket_id = '007';
+  var ticket_id = '7';
   var building = 'SunPlaza';
   var unit = '01-42';
   var isSubmit = locate.state? locate.state.isSubmit : false;
@@ -95,7 +103,7 @@ function ViewTicket() {
               <Gallery label={'Attachments'} value="" padding_right={'0'} />
               <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div className="grid grid-cols-2 pt-1">
-                <Status label={'Status'} value={'Opened'} padding_right={'0'} />
+                <Status label={'Status'} value={0} padding_right={'0'} />
                 <div className="flex flex-col pt-1">
                 {isClosed ? (
                           <ActionRequired
@@ -111,21 +119,9 @@ function ViewTicket() {
                           />
                         )}
                         <div className="flex flex-col gap-y-4">
-                          {isClosed ? null : isSubmit ? (
-                            <ActionButton
-                              value={'Rate Ticket'}
-                              padding_right={'30'}
-                              type=""
-                              firstViewState={false}
-                              toggle={false}
-                              onClick={() =>
-                                navigate('/feedbackSurvey', {
-                                  state: { formState, isSubmit: false },
-                                })
-                              }
-                            />
-                          ) : (
-                            <React.Fragment>
+                        <React.Fragment>
+                          {
+                            ticket?.status === 2 ? (
                               <ActionButton
                                 value={'Give Quote'}
                                 padding_right={'30'}
@@ -133,11 +129,15 @@ function ViewTicket() {
                                 firstViewState={false}
                                 toggle={false}
                                 onClick={() =>
-                                  navigate('/viewQuote', {
+                                  navigate('/LandlordUploadQuotation', {
                                     state: { formState, isSubmit: true },
                                   })
                                 }
                               />
+                              ) : null
+                              }
+                          {
+                            ticket?.status === 0 ? (
                               <ActionButton
                                 value={'Reject Ticket'}
                                 padding_right={'30'}
@@ -146,8 +146,9 @@ function ViewTicket() {
                                 toggle={false}
                                 onClick={handleCloseTicket}
                               />
+                              ) : null
+                          }
                             </React.Fragment>
-                          )}
                     </div>
                 </div>
               </div>
@@ -185,17 +186,17 @@ function ViewTicket() {
               />
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div className="flex justify-end" style={{ paddingTop: '380px' }}>
-                <a /* Give Quotation Button */
-                  href="/LandlordUploadQuotation"
+                <a /* Unassign Personnel Button */
+                  href="/#"
                   className="block rounded flex border-solid border-1 px-2 py-1 mr-4
                                           flex justify-center items-center text-[white] bg-[#31556F] active:text-[white] active:bg-[#193446]"
                   onMouseDown={handleUserActive}
                   onMouseUp={handleUserInactive}
                   onMouseLeave={handleUserInactive}
-                  onClick={handleQuotationClick}
+                  onClick={handleUnassignClick}
                   style={{ width: '200px', height: '60px' }}
                 >
-                  <div className="mx-auto">Give/View Quotation</div>
+                  <div className="mx-auto">Unassign Service</div>
                 </a>
               </div>
             </div>

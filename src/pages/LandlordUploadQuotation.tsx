@@ -3,9 +3,10 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 function UploadQuote() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function UploadQuote() {
     formAttachments: [],
     //isSubmitted: false
   });
-  const [, setSubmit] = useState(false);
+  const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
@@ -66,8 +67,10 @@ function UploadQuote() {
 
     if (!noQuotationNeeded && !formState.totalAmount) {
       errors.formTotalAmount = 'Enter a Amount!';
+      errors.formAttachments = 'Attach Quotation File!'
     } else {
       delete errors.formTotalAmount;
+      delete errors.formAttachments;
       navigate('/LandlordViewTicket');
     }
 
@@ -78,15 +81,33 @@ function UploadQuote() {
       console.log(errors);
       console.log(formState);
     } else {
-      setSubmit(true);
+      const form = new FormData();
+      form.set('amount', formState.totalAmount)
+      form.set('ticketId', '888')
+      form.set('remarks', 'test remark')
+      form.set('uri', 'wegfgeik')
+      for (const attachment of formAttachments) {
+        form.append('attachments', attachment);
+      }
+      client.service('ticket').uploadQuotation(form as any, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        setSubmit(true);
       console.log('Success');
-
-      // Will redirect to home/dashboard after 5 seconds
-      // setTimeout(()=> {
-      //     navigate('/ViewTicket', {state: {formState, isSubmit }});
-      //     }, 5000);
+      });
     }
   };
+
+   // Will redirect to home/dashboard after 5 seconds
+   useEffect(() => {
+    if (isSubmit) {
+      let redirect = '/LandlordDashboard';
+    navigate('/Success', {state: {redirect, formState, isSubmit }});
+    }
+  }, [isSubmit, formState, navigate]);
 
   // Mock static values
   var quotationby = 'Tom';
