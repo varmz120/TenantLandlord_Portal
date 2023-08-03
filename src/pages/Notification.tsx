@@ -2,9 +2,8 @@ import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
-import TenantNavbar from '../components/TenantNavbar';
-import ServProvNavbar from '../components/ServProvNavbar';
 import LandlordNavbar from '../components/LandlordNavbar';
+import { client } from '../client';
 
 const NotificationComponent = () => {
   const { user } = useContext(AuthContext);
@@ -22,26 +21,40 @@ const NotificationComponent = () => {
     return `${seconds} seconds ago`;
   };
 
-  const initialFormattedNotifications = user?.notifications?.map((notification) => ({
-    Notification_details: notification.text,
-    Time_elapsed: timeElapsed(notification.timestamp),
-    Seen: false,
-    Background: '#EDFDFF',
-  })) || [];
-
-  const [formattedNotifications, setFormattedNotifications] = useState(initialFormattedNotifications);
+  const [formattedNotifications, setFormattedNotifications] = useState([
+    {
+      Notification_details: '',
+      Time_elapsed: '',
+      Seen: false,
+      Background: '#EDFDFF',
+    },
+  ]);
 
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>, index: number): void => {
     event.preventDefault();
 
-    // Update the "Seen" property for the clicked item
-    const updatedNotifications = [...formattedNotifications];
-    updatedNotifications[index].Seen = true;
-    updatedNotifications[index].Background = '#FFFFFF';
-    setFormattedNotifications(updatedNotifications);
   };
 
-
+  useEffect(() => {
+    if (user) {
+      const fetchNotifications = async () => {
+        try {
+          const response = await client.service('users').get(user._id);
+          const notifications = response.notifications || [];
+          const formattedNotifications = notifications.map((notification) => ({
+            Notification_details: notification.text,
+            Time_elapsed: timeElapsed(notification.timestamp),
+            Seen: false,
+            Background: '#EDFDFF',
+          }));
+          setFormattedNotifications(formattedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+      fetchNotifications();
+    }
+  }, [user]);
 
   return (
     <React.Fragment>
