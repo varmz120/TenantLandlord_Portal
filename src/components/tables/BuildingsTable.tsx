@@ -81,7 +81,8 @@ const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
   //Implement Hidden Filter Row function for table
   const [isRowVisible, setIsRowVisible] = useState(false);
 
-  const toggleRowVisibility = () => {
+  const toggleRowVisibility = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
     setIsRowVisible(!isRowVisible);
   };
 
@@ -176,7 +177,7 @@ const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
             href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
-            onClick={toggleRowVisibility}
+            onClick={(e) => toggleRowVisibility(e)}
             style={{ width: '57px', height: '57px' }}
           >
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>

@@ -20,9 +20,11 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [buildingID, setBuildingID] = useState('');
+  const [leaseID, setLeaseID] = useState('');
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
   const [userIDError, setUserIDError] = useState('');
+  const [leaseIDError, setLeaseIDError] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -43,6 +45,12 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     const newValue = event.target.value;
     setUserId(newValue);
   };
+  const handleLeaseIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    
+    const newValue = event.target.value;
+    setLeaseID(newValue);
+  };
+  
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -126,6 +134,28 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
           
         }
       }
+      if (userType === 'Tenant') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 0,
+            email: email,
+            leaseId: leaseID,
+            
+          });
+          handleDelClick();
+          
+        } catch (error) {
+          console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+          
+        }
+      }
 
       
     } else {
@@ -188,6 +218,21 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                   layout="vertical"
                   classnames=""
                   onChange={handleBuildingChange}
+                />
+              ) : null}
+              {userType === 'Tenant'  ? (
+                <LineField
+                  type="text"
+                  label="LeaseID"
+                  padding_right="20"
+                  value={leaseID}
+                  name="leaseID"
+                  placeholder=""
+                  error={leaseIDError}
+                  disabled={false}
+                  layout="vertical"
+                  classnames=""
+                  onChange={handleLeaseIdChange}
                 />
               ) : null}
 
