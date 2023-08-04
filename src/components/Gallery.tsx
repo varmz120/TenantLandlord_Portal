@@ -46,7 +46,7 @@ const Gallery: FC<InputProps> = ({
       </label>
       <div className="max-w-[320px] h-[210px] w-3/5 w-min-[120] h-min-[100] ml-5 relative group">
         <div
-          style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+          style={{ backgroundImage: `url(http://localhost:3030/${slides[currentIndex].url})` }}
           className="w-full h-full rounded-2xl bg-center bg-cover duration-500"
         ></div>
         <button

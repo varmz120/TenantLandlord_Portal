@@ -39,6 +39,36 @@ function ViewQuote() {
       .then(() => navigate('/viewDetails', { state: ticket }));
   };
 
+  const handleDownloadClick = async (event: MouseEvent<HTMLButtonElement>): Promise<void> => {
+    try {
+      // Get the PDF URL from the server using the ticket ID
+      const pdfUrlResponse = ticket?.quotation?.uri
+      const pdfUrl = `http://localhost:3030/${pdfUrlResponse}`
+  
+      // Fetch the PDF file as a blob
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+  
+      // Create a URL for the blob object
+      const blobUrl = URL.createObjectURL(blob);
+  
+      // Create an anchor element to trigger the download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = `quotation_${ticket?._id}.pdf`; // Customize the filename here
+      downloadLink.target = '_blank';
+  
+      // Append the anchor to the document and trigger the download
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+  
+      // Clean up by removing the anchor element
+      document.body.removeChild(downloadLink);
+    } catch (error) {
+      console.error('Error while downloading the PDF:', error);
+    }
+  };
+
   return (
     <React.Fragment>
       {/* // When user is not logged in */}
@@ -144,7 +174,7 @@ function ViewQuote() {
                       type="download"
                       firstViewState={false}
                       toggle={false}
-                      onClick={() => null}
+                      onClick={handleDownloadClick}
                     />
                   </div>
                 </div>
