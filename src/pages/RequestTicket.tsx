@@ -21,6 +21,10 @@ function RequestTicket() {
 
   // UseStates & Backend Data
   const [isSubmit, setSubmit] = useState(false);
+  const [Id, setId] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
   const [formState, setFormState] = useState({
@@ -64,6 +68,22 @@ function RequestTicket() {
       });
     }
   };
+  const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setId(newValue);
+  };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setName(newValue);
+  };
+  const handleContactChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setContact(newValue);
+  };
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setEmail(newValue);
+  };
 
   const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('checked' in event.target) {
@@ -85,6 +105,7 @@ function RequestTicket() {
           data.push(event.target.files[i]);
           names.push(event.target.files[i].name);
         }
+        console.log(data);
         const updatedAttachments = formState['formAttachments'].concat(data);
         setFormState({
           ...formState,
@@ -95,7 +116,7 @@ function RequestTicket() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!formState.formTitle) {
@@ -260,6 +281,19 @@ function RequestTicket() {
                         layout={'vertical'}
                         onChange={handleValueChange}
                       />
+                      <LineField
+                        type={'text'}
+                        label="LeaseId"
+                        classnames="w-3/4"
+                        padding_right="0"
+                        value={Id}
+                        name="formTitle"
+                        placeholder={'Please type in a title'}
+                        error={errors.formTitle}
+                        disabled={false}
+                        layout={'vertical'}
+                        onChange={handleIdChange}
+                      />
                       <DropdownField
                         type={'text'}
                         label="Category"
@@ -282,7 +316,7 @@ function RequestTicket() {
                         disabled={false}
                         layout={'vertical'}
                         error={''}
-                        placeholder="Please inclue any additional remarks here."
+                        placeholder="Please include any additional remarks here."
                         onChange={handleTextChange}
                       />
                       <UploadField

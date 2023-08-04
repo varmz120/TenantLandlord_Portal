@@ -3,16 +3,33 @@ import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import AreaField from './AreaField';
 import SubmitButton from './SubmitButton';
+import MultiSelectField from './MultiSelectProps';
+
+import { client } from '../client';
 
 interface Props {
   handleDelClick: () => void;
 }
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
+  type FeathersError = {
+    code?: number;
+    message?: string;
+  };
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const handleMultiSelectChange = (selectedOptions: string[]) => {
+    setSelectedOptions(selectedOptions);
+  };
+  const [IDError, setIDError] = useState('');
+
   const [name, setName] = useState('');
+  const [Id, setId] = useState('');
   const [address, setAddress] = useState('');
   const [nameError, setNameError] = useState('');
   const [addressError, setAddressError] = useState('');
+
+  const requestTypeOptions = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control', 'Other'];
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -26,16 +43,37 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
     setAddressError(newValue.trim() ? '' : 'Address is required');
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setId(newValue);
+  };
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Validate the fields before submitting the form
+    // Validate the fields before submitting the for
     setNameError(name.trim() ? '' : 'Name is required');
     setAddressError(address.trim() ? '' : 'Address is required');
 
-    if (name.trim() && address.trim()) {
+    if (name.trim() && address.trim()&&!IDError) {
       // All fields are filled and postal code is valid, you can proceed with the form submission
       console.log('Form submitted:', { name, address });
+      try {
+        await client.service('building').create({
+          _id: Id,
+          name: name,
+          address: address,
+          requestTypes: selectedOptions,
+        });
+      } catch (error) {
+        console.error('Failed to create account', error);
+        const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setIDError('ID already exists');
+          } else {
+            setIDError('');
+          }
+      }
+
       handleDelClick();
     } else {
       console.log('Please fill in all required fields and correct the errors.');
@@ -56,6 +94,19 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
               </div>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <p className="text-lg text-left font-medium">Account Details</p>
+              <LineField
+                type={'text'}
+                label="Id"
+                padding_right="66.5"
+                value={Id}
+                name=""
+                placeholder={''}
+                error={IDError}
+                disabled={false}
+                layout="vertical"
+                classnames=""
+                onChange={handleIdChange}
+              />
               <LineField
                 type={'text'}
                 label="Name"
@@ -80,6 +131,13 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 error={addressError}
                 placeholder="Please include any additional remarks here."
                 onChange={handleAddressChange}
+              />
+              <MultiSelectField
+                label="Request Types"
+                padding_right="10"
+                options={requestTypeOptions}
+                selectedOptions={selectedOptions}
+                onChange={handleMultiSelectChange}
               />
 
               <div className="flex justify-end">
