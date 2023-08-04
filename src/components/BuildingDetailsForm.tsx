@@ -1,14 +1,15 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
-import DeleteIcon from '../images/delete.svg';
 import AreaField from './AreaField';
 import SubmitButton from './SubmitButton';
 import MultiSelectField from './MultiSelectProps';
 
 import { client } from '../client';
 
+import { client } from '../client';
+
 interface Props {
-  handleDelClick: () => void;
+  handleDelete: () => void;
 }
 
 const BuildingDetailsForm = ({ handleDelClick }: Props) => {
@@ -88,9 +89,12 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
             <form className="space-y-4 mx-auto " onSubmit={handleSubmit}>
               <div className="flex flex-row">
                 <p className="text-lg text-left font-medium pr-64">Building Details</p>
-                <a href="#/" onClick={handleDelClick}>
-                  <img src={DeleteIcon} alt="" className="w-4" />
-                </a>
+                <button type="button" value="close" onClick={handleDelete} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span className="sr-only">Close modal</span>
+            </button>
               </div>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <p className="text-lg text-left font-medium">Account Details</p>
@@ -117,12 +121,12 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
                 error={nameError}
                 disabled={false}
                 layout="vertical"
-                classnames=""
+                classnames="w-3/5"
                 onChange={handleNameChange}
               />
               <AreaField
                 label={'Address'}
-                classnames="w-4/5"
+                classnames="w-5/7"
                 padding_right={'51.25'}
                 value={address}
                 id="description"
@@ -141,7 +145,7 @@ const BuildingDetailsForm = ({ handleDelClick }: Props) => {
               />
 
               <div className="flex justify-end">
-                <SubmitButton type="submit" label="Submit" handleClick={() => {}} />
+                <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
               </div>
             </form>
           </div>
