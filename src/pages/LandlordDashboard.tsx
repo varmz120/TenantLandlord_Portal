@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, useEffect } from 'react';
+import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
@@ -21,7 +21,7 @@ const statusMap = [
 
 // making a dashboard component
 const Dashboard = () => {
-
+  const { user } = useContext(AuthContext);
   const [userIsActive, setUserIsActive] = useState(false);
   const [isRowVisible, setIsRowVisible] = useState(false);
   const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
@@ -31,7 +31,7 @@ const Dashboard = () => {
     Date: '',
     Status: '',
   });
-  
+
   const deleteRow = async (rowId: string[]) => {
     //delete this after the backend retrieving to table works
     // let copy = [...tableData];
@@ -44,7 +44,7 @@ const Dashboard = () => {
     const ticketsToDelete = tickets.filter((ticket) => rowId.includes(ticket._id.toString()));
     for (const ticket of ticketsToDelete) {
       try {
-        await client.service('ticket').remove(ticket._id)
+        await client.service('ticket').remove(ticket._id);
         // await client.service('ticket').remove(ticket.title);
         console.log(`Ticket with ID ${ticket.userId.toString()} deleted successfully!`);
       } catch (error) {
@@ -79,7 +79,7 @@ const Dashboard = () => {
     Date: string;
     Status: string;
   }
-
+  const [categoryOptions, setCategoryOptions] = useState<Array<{ value: string }>>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const tableData = tickets.map((t) => ({
     ID: t._id.toString(),
@@ -100,7 +100,6 @@ const Dashboard = () => {
     navigate('/LandlordViewTicket', { state: tickets[index] });
   };
 
-  
   // Implement Filter function for table
 
   const applyFilters = (
@@ -171,16 +170,6 @@ const Dashboard = () => {
     }
   };
 
-  // Status Drop Down Update Function
-  const statusOptions = [
-    { value: '', label: 'No Status' },
-    { value: 'Completed', label: 'Completed' },
-    { value: 'Pending Tenant Approval', label: 'Pending Tenant Approval' },
-    { value: 'Work in Progress', label: 'Work in Progress' },
-    { value: 'Open', label: 'Open' },
-  ];
-
-  
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -241,13 +230,20 @@ const Dashboard = () => {
     }
   };
 
-  const categoryOptions = [
-    { value: 'None', label: 'Selected Category' },
-    { value: 'Pest Exterminators', label: 'Pest Exterminators' },
-    { value: 'Plumbing', label: 'Plumbing' },
-    { value: 'Electrical', label: 'Electrical' },
-    { value: 'General Maintenance', label: 'General Maintenance' },
-  ];
+  async function fetchCategoryOptions() {
+    // Get the building id of the currently logged-in user
+    const building_id = user?.buildingId;
+
+    // Fetch the users with the same building id
+    const allusers = await client.service('users').find();
+    const usersWithSameBuildingId = allusers.data.filter(
+      (users) => users.buildingId == building_id && users.typ == 1
+    );
+    console.log('fetchcat:', usersWithSameBuildingId);
+    return usersWithSameBuildingId;
+
+    // Do whatever you want with these users...
+  }
 
   useEffect(() => {
     client
@@ -264,12 +260,10 @@ const Dashboard = () => {
         }));
         setFilteredTableData(tableData);
       });
+    fetchCategoryOptions().then((serviceProviders) => {
+      setCategoryOptions(serviceProviders.map((user) => ({ value: user._id })));
+    });
   }, []);
-
-  // useEffect(() => {
-  //   console.log('updated');
-  //   console.log(updatedTicketIds);
-  // }, [updatedTicketIds]);
 
   useEffect(() => {
     let tableData = tickets.map((t) => ({
@@ -370,7 +364,7 @@ const Dashboard = () => {
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
                         onClick={() => handleCategorySelect(option.value)}
                       >
-                        {option.label}
+                        {option.value}
                       </button>
                     ))}
                   </div>
@@ -474,7 +468,7 @@ const Dashboard = () => {
                   <tr
                     className="hover:bg-tableHover hover:shadow-lg"
                     key={row.ID}
-                    onClick={(e) =>  handleRowClick(e, i)}
+                    onClick={(e) => handleRowClick(e, i)}
                   >
                     <td className="px-4 py-2">
                       <input
