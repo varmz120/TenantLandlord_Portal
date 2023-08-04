@@ -2,17 +2,29 @@ import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import SubmitButton from './SubmitButton';
+import { client } from '../client';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   userType: string;
   handleDelClick: () => void;
+  
 }
 
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
+  type FeathersError = {
+    code?: number;
+    message?: string;
+  };
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [buildingID, setBuildingID] = useState('');
+  const [leaseID, setLeaseID] = useState('');
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
+  const [userIDError, setUserIDError] = useState('');
+  const [leaseIDError, setLeaseIDError] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -28,23 +40,124 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     setBuildingID(newValue);
     setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
   };
+  const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setUserIDError("");
+    const newValue = event.target.value;
+    setUserId(newValue);
+  };
+  const handleLeaseIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    
+    const newValue = event.target.value;
+    setLeaseID(newValue);
+  };
+  
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    let errored = false;
     // Validate the fields before submitting the form
     if (!emailError) {
       setEmailError(email.trim() ? '' : 'Email is required');
+      errored ||= email.trim() === '';
     }
     if (userType === 'Landlord' || userType === 'Service Provider') {
-      setBuildingIDError(buildingID === '' ? '' : 'Building ID is required');
-      console.log(buildingID);
+      console.log("come on why is not working")
+      setBuildingIDError(buildingID!== '' ? "" : 'Building ID is required');
+      errored ||= buildingID === '';
+      console.log(buildingIDError);
     }
 
-    if (email.trim() && !buildingIDError && !emailError) {
+    if (!errored) {
       // All fields are filled and email format is valid, you can proceed with the form submission
       console.log('Form submitted:', { email, buildingID });
-      handleDelClick();
+      if (userType === 'Landlord') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 2,
+            email: email,
+            buildingId: buildingID,
+          });
+          handleDelClick();
+          
+        } catch (error) {
+          console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+        }
+      }
+
+      if (userType === 'Service Provider') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 1,
+            email: email,
+            buildingId: buildingID,
+          });
+          handleDelClick();
+          
+        } catch (error) {
+          console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+        }
+      }
+
+      if (userType === 'Admin') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 3,
+            email: email,
+            buildingId: buildingID,
+          });
+          handleDelClick();
+          
+        } catch (error) {
+          console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+          
+        }
+      }
+      if (userType === 'Tenant') {
+        try {
+          await client.service('users').create({
+            _id: userId,
+            typ: 0,
+            email: email,
+            leaseId: leaseID,
+            
+          });
+          handleDelClick();
+          
+        } catch (error) {
+          console.error('Failed to create account', error);
+          const feathersError = error as FeathersError;
+          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+            setUserIDError('ID already exists');
+          } else {
+            setUserIDError('');
+          }
+          
+        }
+      }
+
+      
     } else {
       console.log('Please fill in all required fields and correct the errors.');
     }
@@ -67,11 +180,25 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
 
               <LineField
                 type={'text'}
+                label="UserId"
+                padding_right="65.5"
+                value={userId}
+                name="category"
+                placeholder={''}
+                error={userIDError}
+                disabled={false}
+                layout="vertical"
+                classnames=""
+                onChange={handleUserChange}
+              />
+
+              <LineField
+                type={'text'}
                 label="Email"
                 padding_right="65.5"
                 value={email}
                 name="category"
-                placeholder={'some email'}
+                placeholder={''}
                 error={emailError}
                 disabled={false}
                 layout="vertical"
@@ -91,6 +218,21 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                   layout="vertical"
                   classnames=""
                   onChange={handleBuildingChange}
+                />
+              ) : null}
+              {userType === 'Tenant'  ? (
+                <LineField
+                  type="text"
+                  label="LeaseID"
+                  padding_right="20"
+                  value={leaseID}
+                  name="leaseID"
+                  placeholder=""
+                  error={leaseIDError}
+                  disabled={false}
+                  layout="vertical"
+                  classnames=""
+                  onChange={handleLeaseIdChange}
                 />
               ) : null}
 
