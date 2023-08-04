@@ -1,13 +1,15 @@
-import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import SubmitButton from '../components/SubmitButton';
+import { AuthContext } from '../contexts/AuthContext';
+import { client } from '../client';
 
 const AddService = () => {
   const navigate = useNavigate();
-
+  const { user } = useContext(AuthContext);
   const [isSubmit, setSubmit] = useState(false);
   const [errors, setErrors] = useState<string | any>({});
 
@@ -16,13 +18,15 @@ const AddService = () => {
     //isSubmitted: false
   });
 
+  // const [serviceName, setServiceName] = useState("");
+
   const { nameService } = formState;
 
   const handleBack = () => {
     navigate('/LandlordDashboard');
   };
 
-  const handleValueChange = (
+  const handleNameChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
   ): void => {
     if ('value' in event.target) {
@@ -49,6 +53,23 @@ const AddService = () => {
       setSubmit(true);
       navigate('/LandlordDashboard');
     }
+
+    client
+      .service('building')
+      .get(user?.buildingId ?? '')
+      .then((building) => {
+        // Add the new request type to the existing array
+        building.requestTypes.push(formState.nameService);
+
+        // Patch the building with the updated requestTypes array
+        return client.service('building').patch(user?.buildingId ?? '', building);
+      })
+      .then((updatedBuilding) => {
+        console.log('Updated building:', updatedBuilding);
+      })
+      .catch((err) => {
+        console.error('Error updating building:', err);
+      });
   };
 
   useEffect(() => {
@@ -81,13 +102,14 @@ const AddService = () => {
                   padding_right="45"
                   value={nameService}
                   name="nameService"
-                  placeholder={'enter service provider'}
+                  placeholder={'Enter new service'}
                   error={errors.nameService}
                   disabled={false}
                   layout=""
                   classnames="w-3/5"
-                  onChange={handleValueChange}
+                  onChange={handleNameChange}
                 />
+
                 <div className="flex justify-end">
                   <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
                 </div>
