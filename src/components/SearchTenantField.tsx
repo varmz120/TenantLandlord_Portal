@@ -1,4 +1,4 @@
-import { FC, SetStateAction, useEffect } from 'react';
+import { FC, SetStateAction, useEffect, MouseEvent } from 'react';
 import { useState } from 'react';
 
 interface InputProps {
@@ -6,9 +6,11 @@ interface InputProps {
   layout: string;
   error: string;
   data: { value: string; label: string }[];
+  onClick: (event: MouseEvent<HTMLInputElement>) => void;
+  onBlur: (event: MouseEvent<HTMLInputElement>) => void;
 }
 
-const SearchField: FC<InputProps> = ({ data, layout, error }) => {
+const SearchField: FC<InputProps> = ({ onClick, onBlur, data, layout, error }) => {
   const [options, setListData] = useState([
     {value: '', label: ''}
   ]);
@@ -31,7 +33,7 @@ const SearchField: FC<InputProps> = ({ data, layout, error }) => {
 
   useEffect(() => {
     loadData();
-  })
+  }, [loadData])
 
   return (
     <div
@@ -48,9 +50,13 @@ const SearchField: FC<InputProps> = ({ data, layout, error }) => {
             className="border border-gray rounded-lg"
             type="text"
             value={value}
+            name="formTenantID"
             onChange={onChange}
+            onClick={onClick}
+            onMouseDown={onBlur}
           />
         </div>
+        {!isOptionSelected ?
         <div className="dropdown">
           {options
             .filter((options) => {
@@ -66,11 +72,13 @@ const SearchField: FC<InputProps> = ({ data, layout, error }) => {
                 onClick={() => onSearch(options.label)}
                 className="dropdown-row"
                 key={options.label}
+                id="formTenantID"
               >
                 {options.label}
               </div>
             ))}
         </div>
+        : null}
       </div>
       {error && !isOptionSelected && <p className="error text-red-500">{error}</p>}
     </div>
