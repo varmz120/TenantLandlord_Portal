@@ -186,25 +186,6 @@ function RequestTicket() {
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 ? (
             <React.Fragment>
-              {/* FOR REFERENCE IF WANT TO TROUBLESHOOT ATTACHMENTS
-              {isSubmit ? (
-                <div className="h-full w-full flex flex-col items-center justify-center">
-                  <p>"{formTitle}" Ticket has been sent!</p>
-                  <p>Category: {formCategory}</p>
-                  <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
-                  {formDescription ? <p>Description: {formDescription}</p> : null}
-                  {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
-                  {formAttachments?.map((file: string) => {
-                    return (
-                      <iframe
-                        src={file}
-                        title="Attachments"
-                        className="flex align-center items-center mx-auto wx-full text-center"
-                      />
-                    );
-                  })}
-                </div>
-              ) : ( */}
               <div className="flex flex-row">
                 <BackButton
                   type="button"
@@ -321,6 +302,7 @@ function RequestTicket() {
                       />
                       <UploadField
                         label="Add Attachments"
+                        layout=""
                         name="formAttachments"
                         padding_right="0"
                         filenames={filenames}
