@@ -150,7 +150,7 @@ function UploadQuote() {
         <div className="flex-grow flex flex-col justify-center items-center bg-[#ECEDED]">
           <p className="text-headerText pb-5 text-2xl font-medium">New Quotation</p>
         </div>
-        <div className="flex mx-auto my-auto w-4/5 bg-white border-gray-200 rounded-lg shadow sm:p-7">
+        <div className="flex mx-auto my-auto w-2/4 bg-white border-gray-200 rounded-lg shadow sm:p-7">
           <div className="grid grid-cols-2 w-fit">
             <form onSubmit={handleSubmit} className="space-y-5">
               <p className="text-lg text-center font-medium h-5">New Request Form</p>
