@@ -27,18 +27,20 @@ const TenantLogin = () => {
   // Event handler for clicking login button
   const handleLoginClick = async () => {
     
+    try{
     await client.get2FA({
       strategy: 'local',
       _id: username,
       password: password,
     });
-    console.log('Here')
+    console.log('Here')}
+    catch{
     tempLogin({
       id: username,
       password: password,
     });
     navigate('/Tenant2FA');
-  }
+  };}
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
