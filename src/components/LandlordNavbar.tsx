@@ -15,6 +15,18 @@ const Navbar = () => {
     setUsernameIsActive(true);
   };
 
+  // const AddService = async () => {
+  //   try {
+  //     await client.service('building').patch({});
+  //     console.log('tickets are:' + tickets)
+  //     return tickets;
+  //   } catch (error) {
+  //     console.error('Failed to get ticket data', error);
+  //     return null;
+  //   }
+  // };
+  // }
+
   const handleUsernameInactive = () => {
     setUsernameIsActive(false);
   };
