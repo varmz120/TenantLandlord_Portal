@@ -74,5 +74,6 @@
     "watchPathIgnorePatterns": [
       "<rootDir>/src/esc-backend/"
     ]
-  }
+  },
+  "type": "module"
 }

@@ -39,7 +39,7 @@ const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
   // tenantForm.set('leases', JSON.stringify([]));
 
   const tenantData = {
-    _id: "testMOOT",
+    _id: "testNEW",
     name: name,
     address: address.concat(' ', postalCode),
     leases: []

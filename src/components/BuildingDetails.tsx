@@ -43,7 +43,7 @@ const BuildingDetailsForm = ({ handleDelete }: Props) => {
       // buildingForm.set('requestTypes', []);
 
       const buildingData = {
-        _id: "testMOOT",
+        _id: "testNEW",
         name: name,
         address: address,
         requestTypes: []
