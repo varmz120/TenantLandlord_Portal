@@ -79,8 +79,6 @@ function App() {
     isLoading ? "Loading..." :
 
       <Routes>
-        {/*Routing for app */}
-        <Route path="/" element={<LandingPage />} />
         {/*Routing for login pages */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<TenantLoginPage />} />
@@ -264,7 +262,7 @@ function RateTicketPage() {
 }
 
 function LandingPage() {
-  const { user } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
