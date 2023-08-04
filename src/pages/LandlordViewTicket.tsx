@@ -12,6 +12,7 @@ import ActionButton from '../components/ActionButton';
 import { AuthContext } from '../contexts/AuthContext';
 import { Ticket } from '../esc-backend/src/client';
 import { client } from '../client';
+import ActionUnassignButton from '../components/ActionUnassignButtonp';
 
 export enum TicketStatus {
   Opened,
@@ -111,6 +112,13 @@ function ViewTicket() {
       });
   };
 
+  const handleViewFeedback = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
+    event.preventDefault();
+
+    navigate('/LandlordViewFeedback', { state: ticket });
+  }
+    // TODO: get contact details from assignedPerson
+
   useEffect(() => {
     if (openPopUp) {
       setTimeout(() => {
@@ -163,14 +171,25 @@ function ViewTicket() {
               <div className="grid grid-cols-2 pt-1">
                 <Status label={'Status'} value={ticket.status} padding_right={'0'} />
                 <div className="flex flex-col pt-1">
-                  {ticket.status === TicketStatus.Closed ||
-                  ticket.status === TicketStatus.PendingCompletionApproval ||
+                  {ticket.status === TicketStatus.PendingCompletionApproval ||
                   ticket.status === TicketStatus.WaitingForQuotApproval ? (
                     <ActionRequired label={'Action Required'} padding_right={'32'} alert={false} />
                   ) : (
                     <ActionRequired label={'Action Required'} padding_right={'32'} alert={true} />
                   )}
                   <div className="flex flex-col gap-y-4">
+                    {ticket.status === TicketStatus.Closed ? (
+                        <>
+                          <ActionButton
+                            value={"View Feedback"} // View Feedback
+                            padding_right={'30'}
+                            type=""
+                            firstViewState={false}
+                            toggle={false}
+                            onClick={handleViewFeedback}
+                          />
+                        </>
+                      ) : null}
                     {ticket.status === TicketStatus.Opened ? (
                       <>
                         <ActionButton
@@ -270,12 +289,11 @@ function ViewTicket() {
               )}
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div>
-                <ActionButton /* Unassign Personnel Button */
+                <ActionUnassignButton /* Unassign Personnel Button */
                   value={'Unassign Personnel'}
                   padding_right={'30'}
                   type="unassign"
-                  firstViewState={false}
-                  toggle={false}
+                  disabled={!(ticket.status === TicketStatus.InQueue)}
                   onClick={handleUnassignClick}
                 />
                 <ReactModal
