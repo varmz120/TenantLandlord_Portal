@@ -3,11 +3,12 @@ import LineField from '../components/LineField';
 import ActionRequired from '../components/ActionRequired';
 import BackButton from '../components/BackButton';
 import ActionButton from '../components/ActionButton';
-import ExampleQuote from '../images/example_quote.png';
 
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import React, { MouseEvent, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
 
 // TODO: Pass in Blob URIs here from MongoDB and test here
 // const getPdfUrl = async (path: string) => {
@@ -23,27 +24,49 @@ function ViewQuote() {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
-  var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var isSubmit = locate.state ? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
-  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
+  const ticket: Ticket | undefined = locate.state;
 
   // Context
   const { user } = useContext(AuthContext);
 
-  // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
-  // Mock static Values
-  var location = 'SunPlaza';
-  var landlord = 'Mr Soy';
-  var unit = '01-42';
-  var amount = '250.00';
-  var description = 'Lorem ipsum blablabla Lorem ipsum blablabla Lorem ipsum blablabla';
-
-  // Handlers - None
-  // TODO: Download quote handler here
   const handleAcceptClick = (event: MouseEvent<HTMLButtonElement>): void => {
-    formState.formStatus = 'Pending Approval';
-    navigate('/viewDetails', { state: { formState, isSubmit: true } });
+    client.service('ticket').approveQuotation({ ticketId: ticket?._id ?? 0 })
+      .then(() => navigate('/viewDetails', { state: ticket }));
+  };
+
+  const handleRejectClick = (event: MouseEvent<HTMLButtonElement>): void => {
+    client.service('ticket').rejectQuotation({ ticketId: ticket?._id ?? 0 })
+      .then(() => navigate('/viewDetails', { state: ticket }));
+  };
+
+  const handleDownloadClick = async (event: MouseEvent<HTMLButtonElement>): Promise<void> => {
+    try {
+      // Get the PDF URL from the server using the ticket ID
+      const pdfUrlResponse = ticket?.quotation?.uri
+      const pdfUrl = `http://localhost:3030/${pdfUrlResponse}`
+  
+      // Fetch the PDF file as a blob
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+  
+      // Create a URL for the blob object
+      const blobUrl = URL.createObjectURL(blob);
+  
+      // Create an anchor element to trigger the download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = `quotation_${ticket?._id}.pdf`; // Customize the filename here
+      downloadLink.target = '_blank';
+  
+      // Append the anchor to the document and trigger the download
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+  
+      // Clean up by removing the anchor element
+      document.body.removeChild(downloadLink);
+    } catch (error) {
+      console.error('Error while downloading the PDF:', error);
+    }
   };
 
   return (
@@ -54,30 +77,28 @@ function ViewQuote() {
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.typ === 0 && formState ? (
+          {user?.typ === 0 && ticket && ticket.quotation ? (
             <div className="flex flex-col font-3xl" id="viewTicket">
               <BackButton
                 type="button"
                 label={'ticket details'}
-                handleClick={() =>
-                  navigate('/viewDetails', { state: { formState, isSubmit: !isSubmit } })
-                }
+                handleClick={() => navigate('/viewDetails', { state: ticket })}
               />
               <div className="flex justify-center">
                 <p className="text-headerText pb-5 text-2xl font-medium">
-                  Quotation for #00{ticket_ID} : {location} Unit {unit}
+                  Quotation for #{ticket._id}
                 </p>
               </div>
               <div className="flex mx-auto my-auto max-w-content bg-form border-gray-200 rounded-lg shadow sm:p-7">
                 <div className="grid grid-cols-2">
                   <form className="space-y-5">
-                    <p className="text-lg text-left font-medium">{title}</p>
+                    <p className="text-lg text-left font-medium">{ticket.title}</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <LineField
                       type={'text'}
                       label="Uploaded by"
                       padding_right="106"
-                      value={landlord}
+                      value={ticket.quotation.uploadedBy}
                       name="landlord"
                       placeholder={''}
                       error={''}
@@ -90,7 +111,7 @@ function ViewQuote() {
                       type={'text'}
                       label="Total Amount (SGD)"
                       padding_right="50"
-                      value={amount}
+                      value={ticket.quotation.amount}
                       name="amount"
                       placeholder={''}
                       error={''}
@@ -103,7 +124,7 @@ function ViewQuote() {
                       label={'Description'}
                       classnames="w-4/5"
                       padding_right={'115'}
-                      value={description}
+                      value={ticket.quotation.remarks}
                       id="description"
                       disabled={true}
                       layout=""
@@ -112,7 +133,7 @@ function ViewQuote() {
                       onChange={() => null}
                     />
                     <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                    {isSubmit ? (
+                    {ticket.status === 1 ? (
                       <React.Fragment>
                         <ActionRequired
                           label={'Action Required'}
@@ -134,11 +155,7 @@ function ViewQuote() {
                             type="reject"
                             firstViewState={false}
                             toggle={false}
-                            onClick={() =>
-                              navigate('/viewDetails', {
-                                state: { formState, isSubmit: false },
-                              })
-                            }
+                            onClick={handleRejectClick}
                           />
                         </div>
                       </React.Fragment>
@@ -150,22 +167,14 @@ function ViewQuote() {
                     <p className="text-lg text-left font-medium text-headerText text-center">
                       Document View
                     </p>
-                    <img
-                      src={ExampleQuote}
-                      className="flex mx-auto mt-3 h-4/5 w-2/3"
-                      alt="Quote PDF"
-                    />
-                    {/*
-                      <iframe src='..//..//public//Example_Quote.pdf' title='alert' className='flex mx-auto h-4/5 w-2/3'/>
-                       <iframe srcDoc={'<html><body><p>Quote will be displayed here in iframe.</p></body></html>'} className='flex mx-auto h-1/4 w-2/3 mb-1'/> 
-                       TODO: Add download button capability*/}
+                    <iframe src={`http://localhost:3030/${ticket.quotation.uri}`} title='alert' className='flex mx-auto h-4/5 w-2/3'/>
                     <ActionButton
                       value={'Download Quote'}
                       padding_right={'0'}
                       type="download"
                       firstViewState={false}
                       toggle={false}
-                      onClick={() => null}
+                      onClick={handleDownloadClick}
                     />
                   </div>
                 </div>

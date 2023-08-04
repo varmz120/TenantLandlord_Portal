@@ -1,16 +1,68 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState, MouseEvent, useEffect } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../images/add_service_provider_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
 import LandlordNavbar from '../components/LandlordNavbar';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 import { client } from '../client';
+import { Ticket } from '../esc-backend/src/client';
+// import { ticket } from '../esc-backend/lib/services/ticket/ticket';
+
+const statusMap = [
+  'Opened',
+  'Waiting for Quotation Approval',
+  'In Queue',
+  'In Progress',
+  'Pending Completion Approval',
+  'Rejected',
+  'Closed',
+];
 
 // making a dashboard component
 const Dashboard = () => {
+
+  const [userIsActive, setUserIsActive] = useState(false);
+  const [isRowVisible, setIsRowVisible] = useState(false);
+  const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
+    ID: '',
+    Item: '',
+    Category: '',
+    Date: '',
+    Status: '',
+  });
+  
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
+    // let copy = [...tableData];
+    // copy = copy.filter((row) => !rowId.includes(row.ID));
+    // setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
+    console.log(rowId);
+    const ticketsToDelete = tickets.filter((ticket) => rowId.includes(ticket._id.toString()));
+    for (const ticket of ticketsToDelete) {
+      try {
+        await client.service('ticket').remove(ticket._id)
+        // await client.service('ticket').remove(ticket.title);
+        console.log(`Ticket with ID ${ticket.userId.toString()} deleted successfully!`);
+      } catch (error) {
+        console.error('Failed to delete tickets', error);
+      }
+    }
+  };
+
+  const [ticket_ID, setTicketID] = useState(0);
+
   // useStates
   const navigate = useNavigate();
-  const [userIsActive, setUserIsActive] = useState(false);
+  const [updatedTicketIds, setUpdatedTicketIds] = useState<string[]>([]);
+
+  // Check all checkbox function using indeterminate checkbox
+  const [checked, setChecked] = useState<string[]>([]);
+  // Implement Assign Landlord function
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleUserActive = () => {
     setUserIsActive(true);
@@ -28,38 +80,19 @@ const Dashboard = () => {
     Status: string;
   }
 
-  const [tableData, setTableData] = useState<TableDataItem[]>([
-    { ID: '1', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '2', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '3', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '4', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '5', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '6', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '7', Item: 'Leaking Pipe', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '8', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '9', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '10', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '11', Item: 'Fix Floor', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '12', Item: 'Pest Control', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '13', Item: 'Leaking Pipe', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '14', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '15', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '16', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-    { ID: '17', Item: 'John', Category: 'Doe', Date: '06/06', Status: ' ' },
-  ]);
-
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const tableData = tickets.map((t) => ({
+    ID: t._id.toString(),
+    Item: t.title,
+    Category: t.requestType,
+    Date: new Date(t.openedOn).toLocaleDateString(),
+    Status: statusMap[t.status],
+    // Landlord: t.personnelAssigned ?? 'None',
+  }));
   // Define a type for the column names
   type TableColumn = 'ID' | 'Item' | 'Category' | 'Date' | 'Status';
 
-  // Update the state and event handler with the TableColumn type
-  const [searchInputs, setSearchInputs] = useState<Record<TableColumn, string>>({
-    ID: '',
-    Item: '',
-    Category: '',
-    Date: '',
-    Status: '',
-  });
-
+  const [filteredTableData, setFilteredTableData] = useState<TableDataItem[]>(tableData);
   //Implement row click to View Specific Ticket
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
     event.preventDefault();
@@ -67,8 +100,8 @@ const Dashboard = () => {
     navigate('/LandlordViewTicket');
   };
 
+  
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState<TableDataItem[]>(tableData);
 
   const applyFilters = (
     data: TableDataItem[],
@@ -115,14 +148,10 @@ const Dashboard = () => {
   };
 
   //Implement Hidden Filter Row function for table
-  const [isRowVisible, setIsRowVisible] = useState(false);
 
   const toggleRowVisibility = () => {
     setIsRowVisible(!isRowVisible);
   };
-
-  // Check all checkbox function using indeterminate checkbox
-  const [checked, setChecked] = useState<string[]>([]);
 
   const handleCheckAll = () => {
     if (checked.length === tableData.length) {
@@ -151,60 +180,115 @@ const Dashboard = () => {
     { value: 'Open', label: 'Open' },
   ];
 
-  // Function to update the status of the row for dropdown selection
-  const handleStatusUpdate = (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.stopPropagation();
-    const updateTableData = tableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    setTableData(updateTableData);
-    const updateFilteredTableData = filteredTableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    setFilteredTableData(updateFilteredTableData);
-  };
-
-  // Function for delete row
-  const deleteRow = (rowId: string[]) => {
-    let copy = [...tableData];
-    copy = copy.filter((row) => !rowId.includes(row.ID));
-    setTableData(copy);
-    let filtercopy = [...filteredTableData];
-    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
-    setFilteredTableData(filtercopy);
-  };
-
-  // Implement Assign Landlord function
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleCategorySelect = (category: string) => {
-    const updatedTableData = tableData.map((row) => {
-      if (checked.includes(row.ID)) {
-        return { ...row, Category: category };
+    const updatedTickets = tickets.map((ticket) => {
+      if (checked.includes(ticket._id.toString()) && ticket.status < 3) {
+        // Update the personnelAssigned field for the selected tickets
+        return { ...ticket, personnelAssigned: category };
       }
-      return row;
+      return ticket;
     });
-    setTableData(updatedTableData);
-    setFilteredTableData(updatedTableData);
+
+    // Get the IDs of the updated tickets
+    const updatedTicketIds = updatedTickets
+      .filter((ticket, index) => ticket !== tickets[index]) // Compare with the original tickets to find changes
+      .map((ticket) => ticket._id.toString());
+
+    // Store the IDs of the updated tickets in state
+    setUpdatedTicketIds(updatedTicketIds);
+
+    // Update the tickets and filteredTableData state with the updated data
+    setTickets(updatedTickets);
+
+    const tableData = updatedTickets.map((t) => ({
+      ID: t._id.toString(),
+      Item: t.title,
+      Category: t.personnelAssigned ?? 'None',
+      Date: new Date(t.openedOn).toLocaleDateString(),
+      Status: statusMap[t.status],
+    }));
+
+    setFilteredTableData(tableData);
+  };
+
+  const updateTicket = async () => {
+    for (const updatedRowId of updatedTicketIds) {
+      try {
+        // Find the updated ticket by its ID from the tickets state array
+        const updatedTicket = tickets.find((ticket) => ticket._id.toString() === updatedRowId);
+        if (updatedTicket) {
+          // Get the personnel ID from the updated ticket
+          const personnelID = updatedTicket.personnelAssigned ?? 'None';
+
+          // Call the API to update the ticket using the assignPersonnel method
+          await client
+            .service('ticket')
+            .assignPersonnel({ ticketId: Number(updatedRowId), personnelId: personnelID });
+          console.log(`Ticket with ID ${updatedRowId} updated successfully!`);
+          // Perform any additional actions or update the local state as needed
+        } else {
+          console.error(`Ticket with ID ${updatedRowId} not found in the tickets array.`);
+        }
+      } catch (error) {
+        // Handle the error if needed
+        console.error(`Error updating the ticket with ID ${updatedRowId}:`, error);
+      }
+    }
   };
 
   const categoryOptions = [
-    { value: '', label: 'Selected Category' },
+    { value: 'None', label: 'Selected Category' },
     { value: 'Pest Exterminators', label: 'Pest Exterminators' },
     { value: 'Plumbing', label: 'Plumbing' },
     { value: 'Electrical', label: 'Electrical' },
     { value: 'General Maintenance', label: 'General Maintenance' },
   ];
+
+  useEffect(() => {
+    client
+      .service('ticket')
+      .find()
+      .then((tickets) => {
+        setTickets(tickets.data);
+        let tableData = tickets.data.map((t) => ({
+          ID: t._id.toString(),
+          Item: t.title,
+          Category: t.requestType,
+          Date: new Date(t.openedOn).toLocaleDateString(),
+          Status: statusMap[t.status],
+        }));
+        setFilteredTableData(tableData);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   console.log('updated');
+  //   console.log(updatedTicketIds);
+  // }, [updatedTicketIds]);
+
+  useEffect(() => {
+    let tableData = tickets.map((t) => ({
+      ID: t._id.toString(),
+      Item: t.title,
+      Category: t.personnelAssigned ?? 'None',
+      Date: new Date(t.openedOn).toLocaleDateString(),
+      Status: statusMap[t.status],
+    }));
+
+    setFilteredTableData(tableData);
+    updateTicket();
+  }, [tickets]);
+
+  // useEffect(() => {
+  //   console.log(filteredTableData);
+  //   // console.log(checked);
+  //   // console.log(tickets);
+  // }, [filteredTableData]);
 
   return (
     // Card component that will be used to display the data
@@ -251,7 +335,7 @@ const Dashboard = () => {
                 onMouseLeave={handleUserInactive}
                 onClick={() => {
                   deleteRow(checked);
-                  console.log(checked);
+                  // console.log(checked);
                 }}
                 style={{ width: '57px', height: '57px' }}
               >
@@ -344,7 +428,7 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
-                    Personnel Assigned
+                    Category
                     <input
                       type="text"
                       value={searchInputs.Category}
@@ -380,6 +464,7 @@ const Dashboard = () => {
                   <th className="border px-4 py-2 bg-[#3180BA] text-white"></th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Task/Description</th>
+                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Category</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Personnel Assigned</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Date</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Status</th>
@@ -404,21 +489,7 @@ const Dashboard = () => {
                     <td className="px-4 py-2">{row.Item}</td>
                     <td className="px-4 py-2">{row.Category}</td>
                     <td className="px-4 py-2">{row.Date}</td>
-                    <td className="px-4 py-2">
-                      <select
-                        value={row.Status}
-                        onChange={(e) => handleStatusUpdate(row.ID, e)}
-                        onClick={(event) => event.stopPropagation()}
-                        className="block appearance-none w-full bg-white border border-gray-300 
-                                                    hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                      >
-                        {statusOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
+                    <td className="px-4 py-2">{row.Status}</td>
                   </tr>
                 ))}
               </tbody>
