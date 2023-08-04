@@ -2,31 +2,25 @@ import { FC, useState } from 'react';
 
 interface InputProps {
   label: string;
-  value: string[] | number;
+  values: string[];
   padding_right: string | number;
 }
 
 const Gallery: FC<InputProps> = ({
   label,
-  value, // TODO: Pass in from MongoDB dictionary of URIs
+  values, // TODO: Pass in from MongoDB dictionary of URIs
   padding_right,
 }) => {
-  const slides = [
-    {
-      // loop through values list to populate the gallery
-    },
-  ];
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    const newIndex = isFirstSlide ? values.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentIndex === slides.length - 1;
+    const isLastSlide = currentIndex === values.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
@@ -34,6 +28,8 @@ const Gallery: FC<InputProps> = ({
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
   };
+
+  if (values.length === 0) return <div></div>;
 
   return (
     <div className="flex align-center text-left input-wrapper">
@@ -46,7 +42,7 @@ const Gallery: FC<InputProps> = ({
       </label>
       <div className="max-w-[320px] h-[210px] w-3/5 w-min-[120] h-min-[100] ml-5 relative group">
         <div
-          style={{ backgroundImage: `url(http://localhost:3030/${slides[currentIndex].url})` }}
+          style={{ backgroundImage: `url(http://localhost:3030/${values[currentIndex]})` }}
           className="w-full h-full rounded-2xl bg-center bg-cover duration-500"
         ></div>
         <button
@@ -100,7 +96,7 @@ const Gallery: FC<InputProps> = ({
           </span>
         </button>
         <div className="flex top-4 justify-center">
-          {slides.map((slide, slideIndex) => (
+          {values.map((_, slideIndex) => (
             <div
               key={slideIndex}
               onClick={() => goToSlide(slideIndex)}

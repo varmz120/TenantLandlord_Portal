@@ -35,6 +35,7 @@ const NotificationComponent = () => {
 
   };
 
+
   useEffect(() => {
     if (user) {
       const fetchNotifications = async () => {
@@ -53,6 +54,9 @@ const NotificationComponent = () => {
         }
       };
       fetchNotifications();
+      window.addEventListener("focus", fetchNotifications);
+
+      return () => window.removeEventListener('focus', fetchNotifications);
     }
   }, [user]);
 

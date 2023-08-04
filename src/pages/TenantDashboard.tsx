@@ -138,6 +138,14 @@ const TenantDashboard = () => {
   useEffect(() => {
     client.service('ticket').find().then(tickets => {
       setTickets(tickets.data);
+      setFilteredTableData(tickets.data.map(t => ({
+          ID: t._id,
+          Item: t.title,
+          Category: t.requestType,
+          Date: new Date(t.openedOn).toLocaleDateString(),
+          Status: statusMap[t.status],
+          Landlord: t.personnelAssigned,
+        })));
     });
   }, []);
 
@@ -280,9 +288,9 @@ const TenantDashboard = () => {
                             <td className="px-4 py-2">{String(row.ID)}</td>
                             <td className="px-4 py-2">{row.Item}</td>
                             <td className="px-4 py-2">{row.Category}</td>
+                            <td className="px-4 py-2">{row.Landlord}</td>
                             <td className="px-4 py-2">{row.Date}</td>
                             <td className="px-4 py-2">{row.Status}</td>
-                            <td className="px-4 py-2">{row.Landlord}</td>
                           </tr>
                         ))}
                       </tbody>

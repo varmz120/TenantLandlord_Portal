@@ -108,6 +108,7 @@ const PasswordResetOne = () => {
             value={password1}
             onChange={handlePassword1FieldChange}
             placeholder="Set new password"
+            type="password"
           />
 
           <input
@@ -117,6 +118,7 @@ const PasswordResetOne = () => {
             value={password2}
             onChange={handlePassword2FieldChange}
             placeholder="Confirm new password"
+            type="password"
           />
           {!passwordsMatch && <div className="flex text-red-500">Passwords do not match!</div>}
           {!passwordValid && <div className="flex text-red-500">Invalid password!</div>}

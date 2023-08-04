@@ -104,7 +104,7 @@ function ViewTicket() {
                     />
                     <Gallery
                      label={'Attachments'} 
-                     value={ticket.attachements}
+                     values={ticket.attachements}
                      padding_right={'0'} />
                     <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className="grid grid-cols-2 pt-1">

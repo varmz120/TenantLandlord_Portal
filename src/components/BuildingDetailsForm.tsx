@@ -6,8 +6,6 @@ import MultiSelectField from './MultiSelectProps';
 
 import { client } from '../client';
 
-import { client } from '../client';
-
 interface Props {
   handleDelete: () => void;
 }

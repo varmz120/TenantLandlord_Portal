@@ -31,12 +31,12 @@ function ViewQuote() {
 
   const handleAcceptClick = (event: MouseEvent<HTMLButtonElement>): void => {
     client.service('ticket').approveQuotation({ ticketId: ticket?._id ?? 0 })
-      .then(() => navigate('/viewDetails', { state: ticket }));
+      .then(t => navigate('/viewDetails', { state: t }));
   };
 
   const handleRejectClick = (event: MouseEvent<HTMLButtonElement>): void => {
     client.service('ticket').rejectQuotation({ ticketId: ticket?._id ?? 0 })
-      .then(() => navigate('/viewDetails', { state: ticket }));
+      .then(t => navigate('/viewDetails', { state: t }));
   };
 
   const handleDownloadClick = async (event: MouseEvent<HTMLButtonElement>): Promise<void> => {

@@ -11,8 +11,8 @@ const TenantLogin = () => {
   const { user, temp_details, login, tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('jone');
+  const [username, setUsername] = useState<any>();
+  const [password, setPassword] = useState<any>();
   // const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
@@ -27,21 +27,18 @@ const TenantLogin = () => {
   // Event handler for clicking login button
   const handleLoginClick = async () => {
     
-    try{
     await client.get2FA({
       strategy: 'local',
       _id: username,
       password: password,
     });
     console.log('Here')
-  }
-    catch (error) {
     tempLogin({
       id: username,
       password: password,
     });
-    navigate('/Tenant2FA');}
-  };
+    navigate('/Tenant2FA');
+  }
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
