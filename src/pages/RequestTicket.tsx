@@ -262,19 +262,6 @@ function RequestTicket() {
                         layout={'vertical'}
                         onChange={handleValueChange}
                       />
-                      <LineField
-                        type={'text'}
-                        label="LeaseId"
-                        classnames="w-3/4"
-                        padding_right="0"
-                        value={Id}
-                        name="formTitle"
-                        placeholder={'Please type in a title'}
-                        error={errors.formTitle}
-                        disabled={false}
-                        layout={'vertical'}
-                        onChange={handleIdChange}
-                      />
                       <DropdownField
                         type={'text'}
                         label="Category"

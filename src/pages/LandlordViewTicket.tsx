@@ -67,7 +67,7 @@ function ViewTicket() {
         <BackButton type="button" label={'all tickets'} handleClick={handleBack} />
         <div className="flex justify-center">
           <p className="text-headerText pb-5 text-2xl font-medium">
-            Service Ticket #{ticket_id} : {building} Unit {unit}
+            Service Ticket #{ticket_id}
           </p>
         </div>
         <div className="flex flex-row justify-center">
@@ -100,7 +100,7 @@ function ViewTicket() {
                 placeholder="Please include any additional remarks here."
                 onChange={() => null}
               />
-              <Gallery label={'Attachments'} value="" padding_right={'0'} />
+              <Gallery label={'Attachments'} values={ticket?.attachements} padding_right={'0'} />
               <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div className="grid grid-cols-2 pt-1">
                 <Status label={'Status'} value={0} padding_right={'0'} />

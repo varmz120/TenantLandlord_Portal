@@ -94,10 +94,10 @@ const Dashboard = () => {
 
   const [filteredTableData, setFilteredTableData] = useState<TableDataItem[]>(tableData);
   //Implement row click to View Specific Ticket
-  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>): void => {
+  const handleRowClick = (event: MouseEvent<HTMLTableRowElement>, index: number): void => {
     event.preventDefault();
 
-    navigate('/LandlordViewTicket');
+    navigate('/LandlordViewTicket', { state: tickets[index] });
   };
 
   
@@ -465,17 +465,16 @@ const Dashboard = () => {
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Task/Description</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Category</th>
-                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Personnel Assigned</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Date</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Status</th>
                 </tr>
               </thead>
               <tbody className="">
-                {filteredTableData.map((row) => (
+                {filteredTableData.map((row, i) => (
                   <tr
                     className="hover:bg-tableHover hover:shadow-lg"
                     key={row.ID}
-                    onClick={handleRowClick}
+                    onClick={(e) =>  handleRowClick(e, i)}
                   >
                     <td className="px-4 py-2">
                       <input

@@ -57,7 +57,6 @@ import TenantAddAcc from './pages/TenantAddAcc.tsx';
 import ServProvDashboard from './pages/ServProvDashboard.tsx';
 import ServProvViewTicket from './pages/ServProvViewTicket.tsx'
 import { useContext, useEffect, useState } from 'react';
-import { client } from './client';
 import { AuthContext } from './contexts/AuthContext';
 
 function App() {
