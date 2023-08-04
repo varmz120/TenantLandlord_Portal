@@ -27,20 +27,19 @@ function RequestTicket() {
   const [contact, setContact] = useState('');
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
-  const [formState, setFormState] = useState<string | any>({
+  const [formState, setFormState] = useState({
     formTitle: '',
-    formID: 5, // For demo purposes, this is set
-    formStatus: 'In Queue',
     formCategory: '',
     formDescription: '',
-    formAttachments: [''],
+    formAttachments: [] as File[],
     formAcknowledgement: false,
+    name: '',
+    email: user?.email ?? '',
+    number: '',
   });
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
-  // var email = 'dianmaisara@gmail.com';
-  var userCtc = '+65 9874 2311';
   var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
 
   const date = new Date();
@@ -97,13 +96,13 @@ function RequestTicket() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
-      const data: string[] = [];
+      const data: File[] = [];
       const names: string[] = [];
       if (!event.target.files || event.target.files.length === 0) {
         console.log('Select a file');
       } else {
         for (let i = 0; i < event.target.files.length; i++) {
-          data.push(URL.createObjectURL(event.target.files[i]));
+          data.push(event.target.files[i]);
           names.push(event.target.files[i].name);
         }
         console.log(data);
@@ -146,24 +145,24 @@ function RequestTicket() {
 
     if (Object.keys(errors).length > 0) {
     } else {
-      try {
-        console.log(formAttachments);
-        await client.service('ticket').create({
-          leaseId: Id,
-          title: formTitle,
-          description: formDescription,
-          attachements: formAttachments,
-          requestType: '',
-          contact: {
-            name: name,
-            email: email,
-            number: contact,
-          },
-        });
-      } catch (error) {
-        console.error('Failed to create ticket', error);
+      const form = new FormData();
+      form.set('leaseId', user?.leaseId ?? '');
+      form.set('title', formState.formTitle);
+      form.set('description', formState.formDescription);
+      form.set('requestType', formState.formCategory);
+      form.set('contact[name]', formState.name);
+      form.set('contact[email]', formState.email);
+      form.set('contact[number]', formState.number);
+      for (const attachement of formAttachments) {
+        form.append('attachements', attachement);
       }
-      setSubmit(true);
+      client.service('ticket').create(form as any, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => {
+        setSubmit(true);
+      });
     }
   };
 
@@ -181,31 +180,12 @@ function RequestTicket() {
     <React.Fragment>
       {/* // When user is not logged in */}
       {user === null ? (
-        <Navigate to="/401" replace={true} />
+        <Navigate to="/" replace={true} />
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 ? (
             <React.Fragment>
-              {/* FOR REFERENCE IF WANT TO TROUBLESHOOT ATTACHMENTS
-              {isSubmit ? (
-                <div className="h-full w-full flex flex-col items-center justify-center">
-                  <p>"{formTitle}" Ticket has been sent!</p>
-                  <p>Category: {formCategory}</p>
-                  <p>User acceptance: {formAcknowledgement ? 'yes' : ''}</p>
-                  {formDescription ? <p>Description: {formDescription}</p> : null}
-                  {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
-                  {formAttachments?.map((file: string) => {
-                    return (
-                      <iframe
-                        src={file}
-                        title="Attachments"
-                        className="flex align-center items-center mx-auto wx-full text-center"
-                      />
-                    );
-                  })}
-                </div>
-              ) : ( */}
               <div className="flex flex-row">
                 <BackButton
                   type="button"
@@ -231,42 +211,42 @@ function RequestTicket() {
                       <div className="grid grid-cols-2 gap-x-10">
                         <LineField
                           type={'text'}
-                          label="name"
+                          label="Name"
                           classnames=""
                           padding_right="0"
-                          value={name}
+                          value={formState.name}
                           name="name"
                           placeholder={''}
                           error=""
                           disabled={false}
                           layout={'vertical'}
-                          onChange={handleNameChange}
+                          onChange={handleValueChange}
+                        />
+                        <LineField
+                          type={'text'}
+                          label="Contact Number"
+                          classnames="w-4/5"
+                          padding_right="0"
+                          value={formState.number}
+                          name="number"
+                          placeholder={''}
+                          error=""
+                          disabled={false}
+                          layout={'vertical'}
+                          onChange={handleValueChange}
                         />
                         <LineField
                           type={'text'}
                           label="Email"
-                          classnames=""
-                          padding_right="0"
-                          value={email}
-                          name="name"
-                          placeholder={''}
-                          error=""
-                          disabled={false}
-                          layout={'vertical'}
-                          onChange={handleEmailChange}
-                        />
-                        <LineField
-                          type={'text'}
-                          label="Contact"
                           classnames="w-4/5"
                           padding_right="0"
-                          value={contact}
-                          name="userCtc"
+                          value={formState.email}
+                          name="email"
                           placeholder={''}
                           error=""
                           disabled={false}
                           layout={'vertical'}
-                          onChange={handleContactChange}
+                          onChange={handleValueChange}
                         />
                       </div>
                       <LineField
@@ -281,19 +261,6 @@ function RequestTicket() {
                         disabled={false}
                         layout={'vertical'}
                         onChange={handleValueChange}
-                      />
-                      <LineField
-                        type={'text'}
-                        label="LeaseId"
-                        classnames="w-3/4"
-                        padding_right="0"
-                        value={Id}
-                        name="formTitle"
-                        placeholder={'Please type in a title'}
-                        error={errors.formTitle}
-                        disabled={false}
-                        layout={'vertical'}
-                        onChange={handleIdChange}
                       />
                       <DropdownField
                         type={'text'}
@@ -322,6 +289,7 @@ function RequestTicket() {
                       />
                       <UploadField
                         label="Add Attachments"
+                        layout=""
                         name="formAttachments"
                         padding_right="0"
                         filenames={filenames}

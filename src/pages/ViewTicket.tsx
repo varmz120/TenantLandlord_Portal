@@ -8,45 +8,35 @@ import ActionButton from '../components/ActionButton';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import React, { useContext, MouseEvent } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
+
+export enum TicketStatus {
+  Opened,
+  WaitingForQuotApproval,
+  InQueue,
+  InProgress,
+  PendingCompletionApproval,
+  Rejected,
+  Closed,
+}
 
 function ViewTicket() {
   // Navigation & routing
   const navigate = useNavigate();
   const locate = useLocation();
 
-  const formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var isSubmit = locate.state ? locate.state.isSubmit : false; // Temporary -> for demo purposes w/o backend
-  var title = formState ? formState.formTitle : ''; // Temporary -> for demo purposes w/o backend
-  var category = formState ? formState.formCategory : ''; // Temporary -> for demo purposes w/o backend
-  var description = formState ? formState.formDescription : ''; // Temporary -> for demo purposes w/o backend
-  var ticket_ID = formState ? formState.formID : ''; // Temporary -> for demo purposes w/o backend
-  var status = formState ? formState.formStatus : ''; // // Temporary -> for demo purposes w/o backend
-  var isClosed = locate.state ? locate.state.isClosed : false; // Temporary -> for demo purposes w/o backend
+  const ticket: Ticket = locate.state;
 
   // Context
   const { user } = useContext(AuthContext);
-
-  // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
-  // const [formState, setFormState] = useState<string | any>({
-  //   formTitle: title,
-  //   formID: ticket_ID,
-  //   formStatus: status,
-  //   formCategory: category,
-  //   formDescription: description,
-  //   formAttachments: attachments,
-  //   formAcknowledgement: form.formAcknowledgement,
-  // });
-  // Mock static Values
-  var building = 'SunPlaza';
-  var unit = '01-42';
 
   // Handlers
   const handleCloseTicket = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
     event.preventDefault();
 
-    formState.formStatus = 'Closed';
-    navigate('/tenantDashboard', {
-      state: { formState, isSubmit: true, isClosed: true },
+    client.service('ticket').closeTicket({ ticketId: ticket._id }).then(() => {
+      navigate('/tenantDashboard');
     });
   };
 
@@ -54,39 +44,35 @@ function ViewTicket() {
     <React.Fragment>
       {/* // When user is not logged in */}
       {user === null ? (
-        <Navigate to="/401" replace={true} />
+        <Navigate to="/403" replace={true} />
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.typ === 0 && formState ? (
+          {user?.typ === 0 ? (
             <div className="flex flex-col font-3xl" id="viewTicket">
               <BackButton
                 type="button"
                 label={'all tickets'}
-                handleClick={() =>
-                  navigate('/tenantDashboard', { state: { formState, isSubmit, isClosed } })
-                }
+                handleClick={() => navigate('/tenantDashboard')}
               />
               <div className="flex justify-center">
                 <p className="text-headerText pb-5 text-2xl font-medium">
-                  Service Ticket #00{ticket_ID} : {building} Unit {unit}
+                  Service Ticket #{ticket._id}
                 </p>
               </div>
               <div className="flex flex-row justify-center">
                 <div className="flex w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                   <form className="space-y-4">
                     <div className="flex flex-row w-full">
-                      <p className="flex text-lg text-left font-medium">{title}</p>
-                      {isSubmit ? (
+                      <p className="flex text-lg text-left font-medium">{ticket.title}</p>
+                      {ticket.quotation ? (
                         <ActionButton
                           value={'View Quote'}
                           padding_right={'30'}
                           type="quote"
                           firstViewState={false}
                           toggle={false}
-                          onClick={() =>
-                            navigate('/viewQuote', { state: { formState, isSubmit: false } })
-                          }
+                          onClick={() => navigate('/viewQuote', { state: ticket })}
                         />
                       ) : null}
                     </div>
@@ -95,7 +81,7 @@ function ViewTicket() {
                       type={'text'}
                       label="Category"
                       padding_right="50"
-                      value={category}
+                      value={ticket.requestType}
                       name="category"
                       placeholder={''}
                       error={''}
@@ -108,7 +94,7 @@ function ViewTicket() {
                       label={'Description'}
                       classnames="w-4/5"
                       padding_right={'32'}
-                      value={description}
+                      value={ticket.description}
                       id="description"
                       disabled={true}
                       layout=""
@@ -116,12 +102,15 @@ function ViewTicket() {
                       placeholder="Please inclue any additional remarks here."
                       onChange={() => null}
                     />
-                    <Gallery label={'Attachments'} value="" padding_right={'0'} />
+                    <Gallery
+                     label={'Attachments'} 
+                     values={ticket.attachements}
+                     padding_right={'0'} />
                     <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className="grid grid-cols-2 pt-1">
-                      <Status label={'Status'} value={status} padding_right={'0'} />
+                      <Status label={'Status'} value={ticket.status} padding_right={'0'} />
                       <div className="flex flex-col pt-1">
-                        {isClosed ? (
+                        {ticket.status === TicketStatus.Closed ? (
                           <ActionRequired
                             label={'Action Required'}
                             padding_right={'32'}
@@ -135,43 +124,36 @@ function ViewTicket() {
                           />
                         )}
                         <div className="flex flex-col gap-y-4">
-                          {isClosed ? null : isSubmit ? (
+                          {ticket.status === TicketStatus.PendingCompletionApproval ? (
                             <ActionButton
                               value={'Rate Ticket'}
                               padding_right={'30'}
                               type=""
                               firstViewState={false}
                               toggle={false}
-                              onClick={() =>
-                                navigate('/feedbackSurvey', {
-                                  state: { formState, isSubmit: false },
-                                })
-                              }
+                              onClick={() => navigate('/feedbackSurvey', { state: ticket })}
                             />
-                          ) : (
-                            <React.Fragment>
-                              <ActionButton
-                                value={'View Quote'}
-                                padding_right={'30'}
-                                type=""
-                                firstViewState={false}
-                                toggle={false}
-                                onClick={() =>
-                                  navigate('/viewQuote', {
-                                    state: { formState, isSubmit: true },
-                                  })
-                                }
-                              />
-                              <ActionButton
-                                value={'Close Ticket'}
-                                padding_right={'30'}
-                                type=""
-                                firstViewState={false}
-                                toggle={false}
-                                onClick={handleCloseTicket}
-                              />
-                            </React.Fragment>
-                          )}
+                          ) : null}
+                          {ticket.status === TicketStatus.WaitingForQuotApproval ? (
+                            <ActionButton
+                              value={'View Quote'}
+                              padding_right={'30'}
+                              type=""
+                              firstViewState={false}
+                              toggle={false}
+                              onClick={() => navigate('/viewQuote', { state: ticket })}
+                            />
+                          ) : null}
+                          {ticket.status === TicketStatus.Opened || ticket.status === TicketStatus.InQueue ? (
+                            <ActionButton
+                              value={'Close Ticket'}
+                              padding_right={'30'}
+                              type=""
+                              firstViewState={false}
+                              toggle={false}
+                              onClick={handleCloseTicket}
+                            />
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -179,34 +161,25 @@ function ViewTicket() {
                 </div>
                 <div className="ml-2 w-3/7 flex h-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                   <div className="space-y-4">
-                    <p className="text-lg text-left font-medium">Landlord Assigned</p>
+                    <p className="text-lg text-left font-medium">Personnel Assigned</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                    <LineField
-                      type={'text'}
-                      label="Name"
-                      padding_right="65"
-                      value={'Mr Smoy'}
-                      name="landlord"
-                      placeholder={''}
-                      error={''}
-                      disabled={true}
-                      layout=""
-                      classnames="w-3/5"
-                      onChange={() => null}
-                    />
-                    <LineField
-                      type={'text'}
-                      label="Contact"
-                      padding_right="50"
-                      value={'+65 8766 3211'}
-                      name="landlordCtc"
-                      placeholder={''}
-                      error={''}
-                      disabled={true}
-                      layout=""
-                      classnames="w-3/5"
-                      onChange={() => null}
-                    />
+                    {ticket.personnelAssigned ? (
+                      <LineField
+                        type={'text'}
+                        label="Name"
+                        padding_right="65"
+                        value={ticket.personnelAssigned}
+                        name="landlord"
+                        placeholder={''}
+                        error={''}
+                        disabled={true}
+                        layout=""
+                        classnames="w-3/5"
+                        onChange={() => null}
+                      />
+                    ) : (
+                      <p className="font-medium text-left">None</p>
+                    )}
                   </div>
                 </div>
               </div>

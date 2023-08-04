@@ -1,13 +1,19 @@
-import { FC, SetStateAction } from 'react';
+import { FC, SetStateAction, useEffect, MouseEvent } from 'react';
 import { useState } from 'react';
 
 interface InputProps {
   type: 'text';
   layout: string;
   error: string;
+  data: { value: string; label: string }[];
+  onClick: (event: MouseEvent<HTMLInputElement>) => void;
+  onBlur: (event: MouseEvent<HTMLInputElement>) => void;
 }
 
-const SearchField: FC<InputProps> = ({ type, layout, error }) => {
+const SearchField: FC<InputProps> = ({ onClick, onBlur, data, layout, error }) => {
+  const [options, setListData] = useState([
+    {value: '', label: ''}
+  ]);
   const [value, setValue] = useState('');
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
@@ -18,27 +24,16 @@ const SearchField: FC<InputProps> = ({ type, layout, error }) => {
 
   const onSearch = (searchTerm: SetStateAction<string>) => {
     setValue(searchTerm);
-    //console.log('search', searchTerm);
     setIsOptionSelected(true);
   };
 
-  const options = [
-    { value: 'Bob', label: 'Bob' },
-    { value: 'Mary', label: 'Mary' },
-    { value: 'Joseph', label: 'Joseph' },
-    { value: 'Sarah', label: 'Sarah' },
-    { value: 'Michael', label: 'Michael' },
-    { value: 'Moana', label: 'Moana' },
-    { value: 'Henry', label: 'Henry' },
-    { value: 'Jake', label: 'Jake' },
-    { value: 'Jane', label: 'Jane' },
-    { value: 'Bernice', label: 'Bernice' },
-    { value: 'John', label: 'John' },
-    { value: 'Abraham', label: 'Abraham' },
-    { value: 'Elisa', label: 'Elisa' },
-    { value: 'Elysia', label: 'Elysia' },
-    { value: 'Alice', label: 'Alice' },
-  ];
+  const loadData = () => {
+    setListData(data);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [loadData])
 
   return (
     <div
@@ -55,9 +50,13 @@ const SearchField: FC<InputProps> = ({ type, layout, error }) => {
             className="border border-gray rounded-lg"
             type="text"
             value={value}
+            name="formTenantID"
             onChange={onChange}
+            onClick={onClick}
+            onMouseDown={onBlur}
           />
         </div>
+        {!isOptionSelected ?
         <div className="dropdown">
           {options
             .filter((options) => {
@@ -73,11 +72,13 @@ const SearchField: FC<InputProps> = ({ type, layout, error }) => {
                 onClick={() => onSearch(options.label)}
                 className="dropdown-row"
                 key={options.label}
+                id="formTenantID"
               >
                 {options.label}
               </div>
             ))}
         </div>
+        : null}
       </div>
       {error && !isOptionSelected && <p className="error text-red-500">{error}</p>}
     </div>

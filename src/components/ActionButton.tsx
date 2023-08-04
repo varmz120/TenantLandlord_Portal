@@ -68,6 +68,10 @@ const ActionButton: FC<InputProps> = ({
       icon = " bg-50 h-5  !mt-1  bg-left bg-no-repeat bg-[url('./images/delete.svg')] ";
       break;
     }
+    case 'unassign': {
+      className="block rounded flex border-solid text-headerText border-1 px-10 py-5 m-4 flex justify-center items-center hover:text-textActive border-button hover:border-buttonActive hover:bg-buttonActive"
+      break;
+    }
     default: {
       className =
         'w-32 text-headerText border-button hover:text-textActive border-button hover:border-buttonActive hover:bg-buttonActive';

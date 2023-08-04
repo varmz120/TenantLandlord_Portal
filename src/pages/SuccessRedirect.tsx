@@ -19,7 +19,7 @@ function SuccessRedirect() {
     if (user !== null) {
       setTimeout(() => {
         navigate(redirectLink, { state: { formState, isSubmit, isClosed } });
-      }, 5000);
+      }, 10);
     } else {
       navigate('/401');
     }

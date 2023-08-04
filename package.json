@@ -22,6 +22,7 @@
     "mongodb": "^5.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
@@ -31,6 +32,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "fuzz": "npx jazzer \"./src/tests/fuzztarget\" ",
     "prettier": "npx prettier \"**/*.(js|jsx|ts|tsx)\" --write",
     "eject": "react-scripts eject"
   },
@@ -57,6 +59,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@jazzer.js/core": "^1.5.1",
+    "@types/react-modal": "^3.16.0",
     "autoprefixer": "^10.4.14",
     "husky": "^8.0.3",
     "postcss": "^8.4.24",
@@ -68,7 +72,9 @@
       "pre-commit": "npm run prettier"
     }
   },
-  "jest":{
-    "watchPathIgnorePatterns": ["<rootDir>/src/esc-backend/"]
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "<rootDir>/src/esc-backend/"
+    ]
   }
 }

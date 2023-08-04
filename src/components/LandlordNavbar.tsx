@@ -3,20 +3,36 @@ import homeImage from '../images/home.svg';
 import userIcon from '../images/user_icon.svg';
 import userIconDark from '../images/user_icon_dark.svg';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import { useContext } from 'react';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [usernameIsActive, setUsernameIsActive] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+
   const handleUsernameActive = () => {
     setUsernameIsActive(true);
   };
+
+  // const AddService = async () => {
+  //   try {
+  //     await client.service('building').patch({});
+  //     console.log('tickets are:' + tickets)
+  //     return tickets;
+  //   } catch (error) {
+  //     console.error('Failed to get ticket data', error);
+  //     return null;
+  //   }
+  // };
+  // }
 
   const handleUsernameInactive = () => {
     setUsernameIsActive(false);
   };
 
   const homeOnClick = () => {
-    navigate('/');
+    navigate('/LandlordDashboard');
   };
 
   const addServiceOnClick = () => {
@@ -25,6 +41,19 @@ const Navbar = () => {
 
   const addLeaseOnClick = () => {
     navigate('/LandlordAddLease');
+  }
+
+  const createAccountOnClick = () => {
+    navigate('/LandlordAccountCreation');
+  }
+
+  const handleLogInOut = () => {
+    if (user === null) {
+      navigate('/', { replace: true });
+    } else {
+      logout();
+      navigate('/', { replace: true });
+    }
   };
 
   return (
@@ -62,7 +91,15 @@ const Navbar = () => {
         <div className="h-full hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
-              <a
+            <a
+                href="/LandlordAccountCreation"
+                className="h-full items-center flex text-white rounded md:bg-transparent p-4
+									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
+                onClick={createAccountOnClick}
+              >
+                Create Account
+              </a>
+            <a
                 href="/LandlordAddService"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
@@ -101,19 +138,21 @@ const Navbar = () => {
             </li>
             <li className="flex items-center mx-3 mr-5">
               <a
-                href="/"
-                className="block rounded flex border-solid border-1 px-2 py-1 
-									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
-                onMouseDown={handleUsernameActive}
-                onMouseUp={handleUsernameInactive}
-                onMouseLeave={handleUsernameInactive}
+                href="/#"
+                id="user"
+                className="group block rounded flex border-solid border-1 px-1 py-1 
+									flex items-center text-[#3180ba] bg-[#edfdff] hover:text-[#cbe6ec] hover:bg-[#193446] active:text-[#cbe6ec] active:bg-[#193446]"
+                onClick={handleLogInOut}
               >
-                <img
-                  src={usernameIsActive ? userIconDark : userIcon}
-                  className="h-5 mx-3 ml-4"
-                  alt="user"
-                ></img>
-                <div className="mr-4">Username</div>
+                <div
+                  className={
+                    'w-8 h-5 bg-contain bg-center bg-no-repeat ' +
+                    (user
+                      ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2"
+                      : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
+                  }
+                ></div>
+                <div className="mr-4">{user ? 'Log Out' : 'Log In'}</div>
               </a>
             </li>
           </ul>

@@ -1,82 +1,64 @@
 import React, { useState, useContext, MouseEvent, useEffect } from 'react';
-
 import { useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import Navbar from '../components/Navbar';
+import LandlordNavbar from '../components/LandlordNavbar';
+import { client } from '../client';
 
-const TenantDashboard = () => {
-  // Navigation & routing
-  const locate = useLocation();
-  var formState = locate.state ? locate.state.formState : null; // Temporary -> for demo purposes w/o backend
-  var Seen = locate.state ? locate.state.Seen : ''; // Temporary -> for demo purposes w/o backend
-  var Background = locate.state ? locate.state.Background : null; // Temporary -> for demo purposes w/o backend
-  var Notification_details = locate.state ? locate.state.Notification_details : null; // Temporary -> for demo purposes w/o backend
-  var Time_elapsed = locate.state ? locate.state.Time_elapsed : null; // Temporary -> for demo purposes w/o backend
-
-  // Context
+const NotificationComponent = () => {
   const { user } = useContext(AuthContext);
 
-  // Mock static values
-  const [tableData, setTableData] = useState([
+  const timeElapsed = (timestamp) => {
+    const currentTime = new Date().getTime();
+    const difference = currentTime - timestamp; // difference in milliseconds
+    const seconds = Math.floor((difference / 1000) % 60);
+    const minutes = Math.floor((difference / (1000 * 60)) % 60);
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    if (days > 0) return `${days} days ago`;
+    if (hours > 0) return `${hours} hours ago`;
+    if (minutes > 0) return `${minutes} minutes ago`;
+    return `${seconds} seconds ago`;
+  };
+
+  const [formattedNotifications, setFormattedNotifications] = useState([
     {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
-      Seen: false,
-      Background: '#EDFDFF',
-    },
-    {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
-      Seen: false,
-      Background: '#EDFDFF',
-    },
-    {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
-      Seen: false,
-      Background: '#EDFDFF',
-    },
-    {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
-      Seen: false,
-      Background: '#EDFDFF',
-    },
-    {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
-      Seen: false,
-      Background: '#EDFDFF',
-    },
-    {
-      Notification_details: 'Landlord updated: Service Request #07_563',
-      Time_elapsed: '2 minutes ago',
+      Notification_details: '',
+      Time_elapsed: '',
       Seen: false,
       Background: '#EDFDFF',
     },
   ]);
 
-  // Handlers
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>, index: number): void => {
     event.preventDefault();
 
-    // Update the "Seen" property for the clicked item
-    const updatedTableData = [...tableData];
-    updatedTableData[index].Seen = true;
-    updatedTableData[index].Background = '#FFFFFF';
-    setTableData(updatedTableData);
   };
 
+
   useEffect(() => {
-    if (formState) {
-      var newData = {
-        Notification_details: 'Landlord updated: Service Request #07_563',
-        Time_elapsed: '2 minutes ago',
-        Seen: false,
-        Background: 'bg-tableHover',
+    if (user) {
+      const fetchNotifications = async () => {
+        try {
+          const response = await client.service('users').get(user._id);
+          const notifications = response.notifications || [];
+          const formattedNotifications = notifications.map((notification) => ({
+            Notification_details: notification.text,
+            Time_elapsed: timeElapsed(notification.timestamp),
+            Seen: false,
+            Background: '#EDFDFF',
+          }));
+          setFormattedNotifications(formattedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
       };
-      setTableData((tableData) => [...tableData, newData]);
+      fetchNotifications();
+      window.addEventListener("focus", fetchNotifications);
+
+      return () => window.removeEventListener('focus', fetchNotifications);
     }
-  }, [formState, Notification_details, Time_elapsed, Seen, Background]);
+  }, [user]);
 
   return (
     <React.Fragment>
@@ -87,6 +69,7 @@ const TenantDashboard = () => {
         <React.Fragment>
           {/* // When user is logged in */}
           {user?.typ !== null ? (
+            <div> {user?.typ === 2 ? (<LandlordNavbar></LandlordNavbar>) : (<Navbar></Navbar>)}
             <div className="flex justify-center items-center">
               <div className="container mx-auto mt-10 mb-10 h-156 w-656">
                 <div className="bg-white h-full overflow-y-auto rounded-lg drop-shadow-2xl">
@@ -99,29 +82,25 @@ const TenantDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="">
-                      {tableData.map((row) => (
-                        <tr
-                          className="hover:bg-tableHover hover:shadow-lg"
-                          key={row.Notification_details}
-                          bgcolor={row.Background}
-                          onClick={(event) => handleRowClick(event, tableData.indexOf(row))}
+                      {formattedNotifications.map((notification, index) => (
+                        <tr 
+                          key={index} 
+                          style={{backgroundColor: notification.Background}} 
+                          onClick={(event) => handleRowClick(event, index)}
                         >
                           <td className="pb-10 pt-5 py-2 px-5 text-left">
                             <div className="flex">
-                              <span
-                                className={`mt-5 w-2 h-2 rounded-full justify-center ${
-                                  row.Seen ? 'bg-transparent' : 'bg-activeField'
-                                }`}
-                              ></span>
-                              <div className="ml-10 text-lg">{row.Notification_details}</div>
+                              <span className="mt-5 w-2 h-2 rounded-full justify-center bg-activeField"></span>
+                              <div className="ml-10 text-lg">{notification.Notification_details}</div>
                             </div>
                           </td>
-                          <td className="px-5 py-2">{row.Time_elapsed}</td>
+                          <td className="px-5 py-2">{notification.Time_elapsed}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
+              </div>
               </div>
             </div>
           ) : (
@@ -134,4 +113,4 @@ const TenantDashboard = () => {
   );
 };
 
-export default TenantDashboard;
+export default NotificationComponent;

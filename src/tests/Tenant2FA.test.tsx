@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
+import { AuthContext } from '../contexts/AuthContext';
 import Tenant2FA from '../pages/Tenant2FA';
 
 // Mock useNavigate
@@ -11,12 +12,20 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Tenant2FA', () => {
+  const setUser = jest.fn();
+  const logout = jest.fn();
+
   beforeEach(() => {
     // Reset mockNavigate before each test to clean up previous interactions.
     mockNavigate.mockReset();
 
+    // Render Tenant2FA within the AuthContext with a user type of 0 (tenant)
     // eslint-disable-next-line
-    render(<Tenant2FA />);
+    render(
+      <AuthContext.Provider value={{ user: { typ: 0 }, setUser, logout }}>
+        <Tenant2FA />
+      </AuthContext.Provider>
+    );
   });
 
   test('renders without crashing', () => {
@@ -38,7 +47,8 @@ describe('Tenant2FA', () => {
   });
 
   test('renders Verify button', () => {
-    // TODO: Add test for clicking on Verify button
+    const submitButton = screen.getByRole('button', { name: /Submit/i });
+    expect(submitButton).toBeInTheDocument();
   });
 
   test('authentication code field updates on change', () => {
@@ -52,6 +62,16 @@ describe('Tenant2FA', () => {
   });
 
   test('navigates to correct dashboard when Verify button is clicked', () => {
-    // TODO: Add test for correct authentication code
+    const authCodeInput = screen.getByPlaceholderText(/Enter authentication code/i);
+    const submitButton = screen.getByRole('button', { name: /Submit/i });
+
+    // Simulate entering an authentication code and clicking the Verify button
+    fireEvent.change(authCodeInput, { target: { value: '123456' } });
+    fireEvent.click(submitButton);
+
+    // Check that useNavigate was called with the correct path
+    expect(mockNavigate).toHaveBeenCalledWith('/Success', {
+      state: { redirect: '/tenantDashboard' },
+    });
   });
 });

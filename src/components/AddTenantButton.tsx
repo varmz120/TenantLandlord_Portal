@@ -13,7 +13,6 @@ const AddTenantButton: FC<InputProps> = ({ type, label, handleClick }) => {
         type={type}
         name=""
         onClick={handleClick}
-        onSubmit={handleClick}
         className="inline-block align-middle py-1 px-1 border border-white bg-white font-small text-[#3180BA] rounded drop-shadow-md"
       >
         {label}
