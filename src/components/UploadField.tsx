@@ -50,7 +50,7 @@ const UploadField: FC<InputProps> = ({
         </label>
         <p className="pt-2 pl-2 font-light text-sm text-left break-all">
           {filenames.map((name: string) => {
-            return <li className="inline-block md:w-64 overflow-hidden px-2"> {name} </li>;
+            return <li key={name} className="inline-block md:w-64 overflow-hidden px-2"> {name} </li>;
           })}
         </p>
       </span>

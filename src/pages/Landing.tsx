@@ -47,13 +47,17 @@ function Landing() {
         setTimeout(() => {
           navigate('/tenantDashboard');
         }, 1000);
+      }else if (user.typ === 2) {
+        setTimeout(() => {
+          navigate('/LandlordDashboard');
+        }, 1000);
       } else if (user.typ === 3) {
         setTimeout(() => {
           navigate('/adminDashboard');
         }, 1000);
       } else {
         setTimeout(() => {
-          navigate('/tenantDashboard');
+          navigate('/ServProvDashboard');
         }, 1000);
       }
     }
