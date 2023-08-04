@@ -1,8 +1,11 @@
 import React, { useState, MouseEvent } from 'react';
 import trashBinIcon from '../images/trash_bin_icon.svg';
 import filterIcon from '../images/filter_icon.svg';
-import ServProvNavbar from '../components/ServProvNavbar';
+import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
+import { ticket } from '../esc-backend/src/services/ticket/ticket';
+import Status from '../components/Status';
 
 // making a dashboard component
 const Dashboard = () => {
@@ -147,8 +150,9 @@ const Dashboard = () => {
   ];
 
   // Function to update the status of the row for dropdown selection
-  const handleStatusUpdate = (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatusUpdate = async (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
     e.stopPropagation();
+    const ticketId = parseInt(itemId, 10);
     const updateTableData = tableData.map((row) => {
       if (row.ID === itemId) {
         return { ...row, Status: e.target.value };
@@ -163,6 +167,11 @@ const Dashboard = () => {
       return row;
     });
     setFilteredTableData(updateFilteredTableData);
+    try {
+      await client.service('ticket').registerWorkFinished({ticketId})
+    } catch (error) {
+      console.error('Failed to change ticket status',error);
+    }
   };
 
   // Function for delete row
@@ -178,7 +187,7 @@ const Dashboard = () => {
   return (
     // Card component that will be used to display the data
     <div className="flex flex-col h-screen">
-      <ServProvNavbar />
+      <Navbar />
       <div className="flex-grow flex flex-col h-screen bg-[#ECEDED] justify-center items-center">
         <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
           <div

@@ -4,13 +4,14 @@ import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import pencilEditIcon from '../../images/pencil_edit_icon.svg';
 import { useNavigate } from 'react-router-dom';
-
+import { client } from '../../client';
 interface Props {
   clicked: boolean;
   handleClick: () => void;
+  data: { ID: string; Email: string, LeaseID:string }[];
 }
 
-const TenantAccounts = ({ clicked, handleClick }: Props) => {
+const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
   const [tableData, setTableData] = useState([
     { ID: '', Email: '', LeaseID: '' },
     // { ID: '1', Email: 'john@example.com', LeaseID: 'XYZ789' },
@@ -34,6 +35,13 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
   const userType = 'Tenant';
 
   const [initialRender, setInitialRender] = useState(true);
+  interface TableDataItem {
+    ID: string;
+    Email: string;
+    LeaseID: string;
+    
+    
+  }
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Email' | 'LeaseID';
@@ -46,7 +54,23 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
   });
 
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState(tableData);
+  const [filteredTableData, setFilteredTableData] = useState(data);
+
+  const applyFilters = (
+    data: TableDataItem[],
+    filters: Record<TableColumn, string>
+  ): TableDataItem[] => {
+    return data.filter((row) => {
+      for (const column of Object.keys(filters) as TableColumn[]) {
+        const filterValue = filters[column].toLowerCase();
+        const rowValue = row[column].toString().toLowerCase();
+        if (filterValue && !rowValue.includes(filterValue)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
 
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
@@ -54,10 +78,9 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
       [column]: value,
     }));
 
-    const filteredData = tableData.filter((row) => {
-      const rowValue = row[column].toString().toLowerCase();
-      const searchValue = value.toLowerCase();
-      return rowValue.includes(searchValue);
+    const filteredData = applyFilters(data, {
+      ...searchInputs,
+      [column]: value,
     });
 
     setFilteredTableData(filteredData);
@@ -71,13 +94,14 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
       LeaseID: '',
     });
 
-    setFilteredTableData(tableData);
+    setFilteredTableData(data);
   };
 
   //Implement Hidden Filter Row function for table
   const [isRowVisible, setIsRowVisible] = useState(false);
 
-  const toggleRowVisibility = () => {
+  const toggleRowVisibility = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
     setIsRowVisible(!isRowVisible);
   };
 
@@ -102,13 +126,23 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
   };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
     let filtercopy = [...filteredTableData];
     filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
     setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('users').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+    }
   };
 
   //Component for filter buttons
@@ -133,13 +167,13 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
       { ID: '14', Email: 'daniel@example.com', LeaseID: 'TUV789' },
       { ID: '15', Email: 'sophia@example.com', LeaseID: 'WXY012' },
     ];
-    setTableData(TenantData);
-    setFilteredTableData(TenantData);
+    setTableData(data);
+    setFilteredTableData(data);
   };
 
   //on modify account button click
-  const handleModifyAccount = (email: string) => {
-    navigate('/AccountManagement', { state: { email, userType } });
+  const handleModifyAccount = (email: string,leaseID:string,rowId:string) => {
+    navigate('/AccountManagement', { state: { email, userType,leaseID,rowId } });
   };
 
   useEffect(() => {
@@ -169,7 +203,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
             href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
-            onClick={toggleRowVisibility}
+            onClick={(e) => toggleRowVisibility(e)}
             style={{ width: '57px', height: '57px' }}
           >
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>
@@ -251,7 +285,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
                   type="text"
                   value={searchInputs.LeaseID}
                   onChange={(e) => handleSearchInputChange('LeaseID', e.target.value)}
-                  placeholder="Search Lease ID"
+                  placeholder="Search LeaseID"
                   style={{ color: 'gray' }}
                 />
               </th>
@@ -282,7 +316,7 @@ const TenantAccounts = ({ clicked, handleClick }: Props) => {
                 <td className="w-auto px-2 mt-2 mx-0 mb-2 text-md flex justify-center items-center whitespace-nowrap">
                   <div
                     className="flex justify-center items-center border border-black rounded-xl px-4 py-1 mx-2 cursor-pointer"
-                    onClick={() => handleModifyAccount(row.Email)}
+                    onClick={() => handleModifyAccount(row.Email,row.LeaseID,row.ID)}
                   >
                     <img className="mr-2" alt="pencil icon" src={pencilEditIcon} />
                     <p>Modify Account</p>

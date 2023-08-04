@@ -11,8 +11,8 @@ const TenantLogin = () => {
   const { user, temp_details, login, tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('jone');
+  const [username, setUsername] = useState<any>();
+  const [password, setPassword] = useState<any>();
   // const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
@@ -26,24 +26,19 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = async () => {
-
-    // // TODO: Auth here.
-    try {
-      await client.get2FA({
-        strategy: 'local',
-        _id: username,
-        password: password,
-      })
-    } catch (error) {
-
-      tempLogin({
-        id: username,
-        password: password,
-      })
-      
-      navigate('/Tenant2FA');
-    };
-  };
+    
+    await client.get2FA({
+      strategy: 'local',
+      _id: username,
+      password: password,
+    });
+    console.log('Here')
+    tempLogin({
+      id: username,
+      password: password,
+    });
+    navigate('/Tenant2FA');
+  }
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
@@ -80,6 +75,7 @@ const TenantLogin = () => {
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500 '
             }
             value={password}
+            type="password"
             onChange={handlePasswordFieldChange}
             placeholder="Password"
           />

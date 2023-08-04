@@ -4,51 +4,44 @@ import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import SubmitButton from '../components/SubmitButton';
+import { client } from '../client';
 
 const AccountCreation = () => {
   const navigate = useNavigate();
 
-  const [userID] = useState('');
+  const [userId] = useState('');
 
   const [email, setEmail] = useState('');
   const [buildingID, setBuildingID] = useState('');
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
   
+  const handleAccountCreate = async () => {
+    try {
+      await client.service('users').create({
+        _id: userId,
+        typ: 1,
+        email: email,
+        buildingId: buildingID,
+      });
+    } catch (error) {
+      console.error('Failed to create account', error);
+    }
+  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);
 
     // Validate the email format
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    setEmailError(emailRegex.test(newValue) ? '' : 'Invalid email format');
+    // const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    // setEmailError(emailRegex.test(newValue) ? '' : 'Invalid email format');
   };
 
   const handleBuildingChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setBuildingID(newValue);
     setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-
-    // Validate the fields before submitting the form
-    if (!emailError) {
-      setEmailError(email.trim() ? '' : 'Email is required');
-    }
-    if (!buildingIDError) {
-      setBuildingIDError(buildingID === '' ? '' : 'Building ID is required');
-      console.log(buildingID);
-    }
-
-    if (email.trim() && !buildingIDError && !emailError) {
-      // All fields are filled and email format is valid, you can proceed with the form submission
-      console.log('Form submitted:', { email, buildingID });
-    } else {
-      console.log('Please fill in all required fields and correct the errors.');
-    }
   };
 
 
@@ -70,7 +63,10 @@ const AccountCreation = () => {
               </p>
             </div>
             <div className="flex w-fit bg-white border-gray-200 rounded-lg shadow sm:p-5 items-center ">
-              <form className="space-y-4 mx-auto w-fit bg-white">
+              <form className="space-y-4 mx-auto w-fit bg-white"  onSubmit={(event) => {
+            event.preventDefault();
+            handleAccountCreate();
+          }}>
                 <p className="text-lg text-left font-medium">Service Provider Details</p>
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                 <LineField

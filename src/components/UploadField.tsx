@@ -54,7 +54,7 @@ const UploadField: FC<InputProps> = ({
         {layout === 'vertical' ?
         <p className={"font-light text-sm text-left break-all " + (layout === 'vertical' ? 'pt-2 pl-2' : 'pl-2')}>
           {filenames.map((name: string) => {
-            return <li className="inline-block md:w-64 overflow-hidden px-2"> {name} </li>;
+            return <li key={name} className="inline-block md:w-64 overflow-hidden px-2"> {name} </li>;
           })}
         </p>: null}
       </span>

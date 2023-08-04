@@ -10,6 +10,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from '
 import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import BackButton from '../components/BackButton';
+import { client } from '../client';
 
 function RequestTicket() {
   // Navigation & routing
@@ -20,22 +21,25 @@ function RequestTicket() {
 
   // UseStates & Backend Data
   const [isSubmit, setSubmit] = useState(false);
+  const [Id, setId] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
-  const [formState, setFormState] = useState<string | any>({
+  const [formState, setFormState] = useState({
     formTitle: '',
-    formID: 5, // For demo purposes, this is set
-    formStatus: 'In Queue',
     formCategory: '',
     formDescription: '',
-    formAttachments: [],
+    formAttachments: [] as File[],
     formAcknowledgement: false,
+    name: '',
+    email: user?.email ?? '',
+    number: '',
   });
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
-  var email = 'dianmaisara@gmail.com';
-  var userCtc = '+65 9874 2311';
   var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
 
   const date = new Date();
@@ -64,6 +68,22 @@ function RequestTicket() {
       });
     }
   };
+  const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setId(newValue);
+  };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setName(newValue);
+  };
+  const handleContactChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setContact(newValue);
+  };
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setEmail(newValue);
+  };
 
   const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('checked' in event.target) {
@@ -76,15 +96,16 @@ function RequestTicket() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
-      const data: string[] = [];
+      const data: File[] = [];
       const names: string[] = [];
       if (!event.target.files || event.target.files.length === 0) {
         console.log('Select a file');
       } else {
         for (let i = 0; i < event.target.files.length; i++) {
-          data.push(URL.createObjectURL(event.target.files[i]));
+          data.push(event.target.files[i]);
           names.push(event.target.files[i].name);
         }
+        console.log(data);
         const updatedAttachments = formState['formAttachments'].concat(data);
         setFormState({
           ...formState,
@@ -95,7 +116,7 @@ function RequestTicket() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!formState.formTitle) {
@@ -124,7 +145,24 @@ function RequestTicket() {
 
     if (Object.keys(errors).length > 0) {
     } else {
-      setSubmit(true);
+      const form = new FormData();
+      form.set('leaseId', user?.leaseId ?? '');
+      form.set('title', formState.formTitle);
+      form.set('description', formState.formDescription);
+      form.set('requestType', formState.formCategory);
+      form.set('contact[name]', formState.name);
+      form.set('contact[email]', formState.email);
+      form.set('contact[number]', formState.number);
+      for (const attachement of formAttachments) {
+        form.append('attachements', attachement);
+      }
+      client.service('ticket').create(form as any, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => {
+        setSubmit(true);
+      });
     }
   };
 
@@ -142,7 +180,7 @@ function RequestTicket() {
     <React.Fragment>
       {/* // When user is not logged in */}
       {user === null ? (
-        <Navigate to="/401" replace={true} />
+        <Navigate to="/" replace={true} />
       ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
@@ -173,29 +211,42 @@ function RequestTicket() {
                       <div className="grid grid-cols-2 gap-x-10">
                         <LineField
                           type={'text'}
-                          label="Email"
+                          label="Name"
                           classnames=""
                           padding_right="0"
-                          value={email}
+                          value={formState.name}
                           name="name"
                           placeholder={''}
                           error=""
-                          disabled={true}
+                          disabled={false}
                           layout={'vertical'}
-                          onChange={() => null}
+                          onChange={handleValueChange}
                         />
                         <LineField
                           type={'text'}
-                          label="Contact"
+                          label="Contact Number"
                           classnames="w-4/5"
                           padding_right="0"
-                          value={userCtc}
-                          name="userCtc"
+                          value={formState.number}
+                          name="number"
                           placeholder={''}
                           error=""
-                          disabled={true}
+                          disabled={false}
                           layout={'vertical'}
-                          onChange={() => null}
+                          onChange={handleValueChange}
+                        />
+                        <LineField
+                          type={'text'}
+                          label="Email"
+                          classnames="w-4/5"
+                          padding_right="0"
+                          value={formState.email}
+                          name="email"
+                          placeholder={''}
+                          error=""
+                          disabled={false}
+                          layout={'vertical'}
+                          onChange={handleValueChange}
                         />
                       </div>
                       <LineField
@@ -233,7 +284,7 @@ function RequestTicket() {
                         disabled={false}
                         layout={'vertical'}
                         error={''}
-                        placeholder="Please inclue any additional remarks here."
+                        placeholder="Please include any additional remarks here."
                         onChange={handleTextChange}
                       />
                       <UploadField

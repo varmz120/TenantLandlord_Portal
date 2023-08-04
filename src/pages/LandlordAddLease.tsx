@@ -318,7 +318,9 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                     <AddTenantButton
                       type="button"
                       label={'+ Create New Tenant'}
-                      handleClick={handleAddTenant}
+                      handleClick={(event: { preventDefault: () => void; }) => { 
+                        event.preventDefault();
+                        setTenantPopupVisible(true)}}
                     ></AddTenantButton>
                   </div>
                 </div>
@@ -349,7 +351,9 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                     <AddBldgButton
                       type="button"
                       label={'+ Add Building'}
-                      handleClick={handleAddBuilding}
+                      handleClick={(event: { preventDefault: () => void; }) => {
+                        event.preventDefault();
+                        setBldgPopupVisible(true)}}
                     ></AddBldgButton>
                   </div>
                 </div>

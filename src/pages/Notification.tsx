@@ -1,6 +1,9 @@
 import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import Navbar from '../components/Navbar';
+import LandlordNavbar from '../components/LandlordNavbar';
+import { client } from '../client';
 
 const NotificationComponent = () => {
   const { user } = useContext(AuthContext);
@@ -18,24 +21,44 @@ const NotificationComponent = () => {
     return `${seconds} seconds ago`;
   };
 
-  const initialFormattedNotifications = user?.notifications?.map((notification) => ({
-    Notification_details: notification.text,
-    Time_elapsed: timeElapsed(notification.timestamp),
-    Seen: false,
-    Background: '#EDFDFF',
-  })) || [];
-
-  const [formattedNotifications, setFormattedNotifications] = useState(initialFormattedNotifications);
+  const [formattedNotifications, setFormattedNotifications] = useState([
+    {
+      Notification_details: '',
+      Time_elapsed: '',
+      Seen: false,
+      Background: '#EDFDFF',
+    },
+  ]);
 
   const handleRowClick = (event: MouseEvent<HTMLTableRowElement>, index: number): void => {
     event.preventDefault();
 
-    // Update the "Seen" property for the clicked item
-    const updatedNotifications = [...formattedNotifications];
-    updatedNotifications[index].Seen = true;
-    updatedNotifications[index].Background = '#FFFFFF';
-    setFormattedNotifications(updatedNotifications);
   };
+
+
+  useEffect(() => {
+    if (user) {
+      const fetchNotifications = async () => {
+        try {
+          const response = await client.service('users').get(user._id);
+          const notifications = response.notifications || [];
+          const formattedNotifications = notifications.map((notification) => ({
+            Notification_details: notification.text,
+            Time_elapsed: timeElapsed(notification.timestamp),
+            Seen: false,
+            Background: '#EDFDFF',
+          }));
+          setFormattedNotifications(formattedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+      fetchNotifications();
+      window.addEventListener("focus", fetchNotifications);
+
+      return () => window.removeEventListener('focus', fetchNotifications);
+    }
+  }, [user]);
 
   return (
     <React.Fragment>
@@ -46,6 +69,7 @@ const NotificationComponent = () => {
         <React.Fragment>
           {/* // When user is logged in */}
           {user?.typ !== null ? (
+            <div> {user?.typ === 2 ? (<LandlordNavbar></LandlordNavbar>) : (<Navbar></Navbar>)}
             <div className="flex justify-center items-center">
               <div className="container mx-auto mt-10 mb-10 h-156 w-656">
                 <div className="bg-white h-full overflow-y-auto rounded-lg drop-shadow-2xl">
@@ -76,6 +100,7 @@ const NotificationComponent = () => {
                     </tbody>
                   </table>
                 </div>
+              </div>
               </div>
             </div>
           ) : (
