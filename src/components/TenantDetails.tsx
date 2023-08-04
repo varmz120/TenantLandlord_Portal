@@ -2,6 +2,8 @@ import React, { FormEvent, useState } from 'react';
 import LineField from '../components/LineField';
 import SubmitButton from './SubmitButton';
 import DeleteIcon from '../images/delete.svg';
+import { userValidator } from '../esc-backend/src/services/users/users.schema';
+import { client } from '../client';
 
 interface Props {
   handleDelClick: () => void;
@@ -12,6 +14,16 @@ const TenantDetails = ({ handleDelClick }: Props) => {
   const [, setName] = useState('');
   const [, setAddress] = useState('');
   const [, setPostalCode] = useState('');
+
+  // const handleCreateTenant =async () => {
+  //   try {
+  //     await client.service('users').create({
+  //       _id: userId
+  //       typ: 0
+  //       email: email
+  //     })
+  //   }
+  // }
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;

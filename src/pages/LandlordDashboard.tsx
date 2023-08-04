@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { client } from '../client';
 import { Ticket } from '../esc-backend/src/client';
-import { ticket } from '../esc-backend/lib/services/ticket/ticket';
+// import { ticket } from '../esc-backend/lib/services/ticket/ticket';
 
 const statusMap = [
   'Opened',
@@ -21,9 +21,6 @@ const statusMap = [
 
 // making a dashboard component
 const Dashboard = () => {
-  // useStates
-  const navigate = useNavigate();
-  const [updatedTicketIds, setUpdatedTicketIds] = useState<string[]>([]);
 
   const [userIsActive, setUserIsActive] = useState(false);
   const [isRowVisible, setIsRowVisible] = useState(false);
@@ -34,6 +31,33 @@ const Dashboard = () => {
     Date: '',
     Status: '',
   });
+  
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
+    // let copy = [...tableData];
+    // copy = copy.filter((row) => !rowId.includes(row.ID));
+    // setTableData(copy);
+    let filtercopy = [...filteredTableData];
+    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
+    setFilteredTableData(filtercopy);
+    console.log(rowId);
+    const ticketsToDelete = tickets.filter((ticket) => rowId.includes(ticket._id.toString()));
+    for (const ticket of ticketsToDelete) {
+      try {
+        await client.service('ticket').remove(ticket._id)
+        // await client.service('ticket').remove(ticket.title);
+        console.log(`Ticket with ID ${ticket.userId.toString()} deleted successfully!`);
+      } catch (error) {
+        console.error('Failed to delete tickets', error);
+      }
+    }
+  };
+
+  const [ticket_ID, setTicketID] = useState(0);
+
+  // useStates
+  const navigate = useNavigate();
+  const [updatedTicketIds, setUpdatedTicketIds] = useState<string[]>([]);
 
   // Check all checkbox function using indeterminate checkbox
   const [checked, setChecked] = useState<string[]>([]);
@@ -76,6 +100,7 @@ const Dashboard = () => {
     navigate('/LandlordViewTicket');
   };
 
+  
   // Implement Filter function for table
 
   const applyFilters = (
@@ -155,35 +180,7 @@ const Dashboard = () => {
     { value: 'Open', label: 'Open' },
   ];
 
-  // Function to update the status of the row for dropdown selection
-  const handleStatusUpdate = (itemId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.stopPropagation();
-    const updateTableData = tableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    // setTableData(updateTableData);
-    const updateFilteredTableData = filteredTableData.map((row) => {
-      if (row.ID === itemId) {
-        return { ...row, Status: e.target.value };
-      }
-      return row;
-    });
-    setFilteredTableData(updateFilteredTableData);
-  };
-
-  // Function for delete row
-  const deleteRow = (rowId: string[]) => {
-    let copy = [...tableData];
-    copy = copy.filter((row) => !rowId.includes(row.ID));
-    // setTableData(copy);
-    let filtercopy = [...filteredTableData];
-    filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
-    setFilteredTableData(filtercopy);
-  };
-
+  
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -287,11 +284,11 @@ const Dashboard = () => {
     updateTicket();
   }, [tickets]);
 
-  useEffect(() => {
-    console.log(filteredTableData);
-    // console.log(checked);
-    // console.log(tickets);
-  }, [filteredTableData]);
+  // useEffect(() => {
+  //   console.log(filteredTableData);
+  //   // console.log(checked);
+  //   // console.log(tickets);
+  // }, [filteredTableData]);
 
   return (
     // Card component that will be used to display the data
@@ -338,7 +335,7 @@ const Dashboard = () => {
                 onMouseLeave={handleUserInactive}
                 onClick={() => {
                   deleteRow(checked);
-                  console.log(checked);
+                  // console.log(checked);
                 }}
                 style={{ width: '57px', height: '57px' }}
               >
@@ -431,7 +428,7 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
-                    Personnel Assigned
+                    Category
                     <input
                       type="text"
                       value={searchInputs.Category}
@@ -467,6 +464,7 @@ const Dashboard = () => {
                   <th className="border px-4 py-2 bg-[#3180BA] text-white"></th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">ID</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Task/Description</th>
+                  <th className="border px-4 py-2 bg-[#3180BA] text-white">Category</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Personnel Assigned</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Date</th>
                   <th className="border px-4 py-2 bg-[#3180BA] text-white">Status</th>

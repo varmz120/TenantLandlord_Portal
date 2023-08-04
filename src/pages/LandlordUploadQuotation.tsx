@@ -3,19 +3,23 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
 
 function UploadQuote() {
   const navigate = useNavigate();
+  const locate = useLocation()
+  const ticket: Ticket | undefined = locate.state
 
   const [formState, setFormState] = useState<string | any>({
     totalAmount: '',
     formAttachments: [],
     //isSubmitted: false
   });
-  const [, setSubmit] = useState(false);
+  const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
 
@@ -66,8 +70,10 @@ function UploadQuote() {
 
     if (!noQuotationNeeded && !formState.totalAmount) {
       errors.formTotalAmount = 'Enter a Amount!';
+      errors.formAttachments = 'Attach Quotation File!'
     } else {
       delete errors.formTotalAmount;
+      delete errors.formAttachments;
       navigate('/LandlordViewTicket');
     }
 
@@ -78,15 +84,33 @@ function UploadQuote() {
       console.log(errors);
       console.log(formState);
     } else {
-      setSubmit(true);
+      const form = new FormData();
+      form.set('amount', formState.totalAmount)
+      form.set('ticketId', '888')
+      form.set('remarks', 'test remark')
+      form.set('uri', 'wegfgeik')
+      for (const attachment of formAttachments) {
+        form.append('attachments', attachment);
+      }
+      client.service('ticket').uploadQuotation(form as any, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        setSubmit(true);
       console.log('Success');
-
-      // Will redirect to home/dashboard after 5 seconds
-      // setTimeout(()=> {
-      //     navigate('/ViewTicket', {state: {formState, isSubmit }});
-      //     }, 5000);
+      });
     }
   };
+
+   // Will redirect to home/dashboard after 5 seconds
+   useEffect(() => {
+    if (isSubmit) {
+      let redirect = '/LandlordDashboard';
+    navigate('/Success', {state: {redirect, formState, isSubmit }});
+    }
+  }, [isSubmit, formState, navigate]);
 
   // Mock static values
   var quotationby = 'Tom';
@@ -94,15 +118,39 @@ function UploadQuote() {
 
   const { totalAmount, formAttachments } = formState;
 
+  // const handleGiveQuotation = (event: MouseEvent<HTMLButtonElement>): void => {
+  //   client.service('ticket').uploadQuotation({
+  //     ticketId: ticket?._id ?? 0,
+  //     uri: '',
+  //     amount: totalAmount,
+  //     remarks: ''
+  //   })
+  //   .then(() => navigate('/LandlordViewTicket', {state: ticket}));
+  // };
+
+  const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (formAttachments.length > 0) {
+      setIframeSrc(formAttachments[0]); // Use the first attachment URL as iframe src
+    } else if (ticket?.quotation?.uri) {
+      // Use the URI from the ticket if available (when editing existing quote)
+      setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);
+    } else {
+      // Set to undefined when there are no attachments or ticket URI
+      setIframeSrc(undefined);
+    }
+  }, [formAttachments, ticket]);
+
   return (
-    <div className="flex flex-col h-1000px bg-[#ECEDED]">
+    <div className="flex flex-col h-screen bg-[#ECEDED]">
       <LandlordNavbar />
       <div className="flex flex-col font-3xl" id="viewTicket">
         <BackButton type="button" label={'view ticket'} handleClick={handleBack} />
         <div className="flex-grow flex flex-col justify-center items-center bg-[#ECEDED]">
           <p className="text-headerText pb-5 text-2xl font-medium">New Quotation</p>
         </div>
-        <div className="flex mx-auto my-auto w-4/5 bg-white border-gray-200 rounded-lg shadow sm:p-7">
+        <div className="flex mx-auto my-auto w-2/4 bg-white border-gray-200 rounded-lg shadow sm:p-7">
           <div className="grid grid-cols-2 w-fit">
             <form onSubmit={handleSubmit} className="space-y-5">
               <p className="text-lg text-center font-medium h-5">New Request Form</p>
@@ -150,18 +198,20 @@ function UploadQuote() {
               />
             </form>
             <div className="border-l-2 border-gray-300 items-center bg-[white]">
-              <div className="border-l-2 border-gray-300 flex flex-col items-center bg-[white]">
+              <div className="flex flex-col items-center bg-[white]">
                 <p className="text-lg text-left font-medium text-headerText text-center">
                   Document View
                 </p>
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                <img
+                {/* <img
                   src={Example_quote}
                   className="flex mx-auto mt-3 h-4/5 w-2/3"
                   alt="Quote PDF"
-                />
-                {/* <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/> */}
-
+                /> */}
+            <div className='flex flex-col items-center'>
+              {iframeSrc && (
+                 <iframe src={iframeSrc} title="Quotation Document" className="flex mx-auto mt-3 h-4/5 w-1/3" />
+              )}
                 <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
                   <AttachQuotation
                     label="Add Attachments"
@@ -190,6 +240,7 @@ function UploadQuote() {
                 <div className="flex justify-end">
                   <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
                 </div>
+              </div>
               </div>
             </div>
           </div>

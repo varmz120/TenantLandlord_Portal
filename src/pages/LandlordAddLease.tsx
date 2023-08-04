@@ -166,7 +166,9 @@ const AddLease = () => {
                     <AddTenantButton
                       type="submit"
                       label={'+ Create New Tenant'}
-                      handleClick={() => setTenantPopupVisible(true)}
+                      handleClick={(event: { preventDefault: () => void; }) => { 
+                        event.preventDefault();
+                        setTenantPopupVisible(true)}}
                     ></AddTenantButton>
                   </div>
                 </div>
@@ -191,7 +193,9 @@ const AddLease = () => {
                     <AddBldgButton
                       type="submit"
                       label={'+ Add Building'}
-                      handleClick={() => setBldgPopupVisible(true)}
+                      handleClick={(event: { preventDefault: () => void; }) => {
+                        event.preventDefault();
+                        setBldgPopupVisible(true)}}
                     ></AddBldgButton>
                   </div>
                 </div>
