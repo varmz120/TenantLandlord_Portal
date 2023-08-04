@@ -3,36 +3,59 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Ticket } from '../esc-backend/src/client';
 import { client } from '../client';
+import { AuthContext } from '../contexts/AuthContext';
 
 function UploadQuote() {
   const navigate = useNavigate();
   const locate = useLocation()
   const ticket: Ticket | undefined = locate.state
 
-  const [formState, setFormState] = useState<string | any>({
-    totalAmount: '',
-    formAttachments: [],
-    //isSubmitted: false
-  });
+  const { user } = useContext(AuthContext);
+
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
+  const [formState, setFormState] = useState<string | any>({
+    totalAmount: ticket?.quotation?.amount,
+    formRemarks: ticket?.quotation?.remarks,
+    formId: ticket?._id,
+    formAttachments: ticket?.quotation?.uri || "",
+    //isSubmitted: false
+  });
 
-  const handleValueChange = (
+  const { totalAmount, formRemarks, formAttachments } = formState;
+
+  const handleRemarksChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
   ): void => {
-    if ('value' in event.target) {
+    event.stopPropagation();
+    const target = event.target
+    if ('value' in target) {
       setFormState({
         ...formState,
-        [event.target.name]: event.target.value,
+        formRemarks: target.value
       });
     }
   };
+
+  const handleAmountChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
+  ): void => {
+    const target = event.target;
+  
+    if ('value' in target) {
+      setFormState({
+        ...formState,
+        totalAmount: target.value, // Use target.value instead of target.textContent
+      });
+    }
+  };
+
 
   const handleBack = () => {
     navigate('/LandlordViewTicket');
@@ -65,16 +88,16 @@ function UploadQuote() {
     setNoQuotationNeeded(event.target.checked);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (!noQuotationNeeded && !formState.totalAmount) {
       errors.formTotalAmount = 'Enter a Amount!';
       errors.formAttachments = 'Attach Quotation File!'
+      errors.formRemarks = ''
     } else {
       delete errors.formTotalAmount;
       delete errors.formAttachments;
-      navigate('/LandlordViewTicket');
+      delete errors.formRemarks;
     }
 
     setErrors({ ...errors });
@@ -84,22 +107,22 @@ function UploadQuote() {
       console.log(errors);
       console.log(formState);
     } else {
-      const form = new FormData();
-      form.set('amount', formState.totalAmount)
-      form.set('ticketId', '888')
-      form.set('remarks', 'test remark')
-      form.set('uri', 'wegfgeik')
-      for (const attachment of formAttachments) {
-        form.append('attachments', attachment);
-      }
-      client.service('ticket').uploadQuotation(form as any, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      
+      console.log(ticket?.status)
+      console.log(user?.typ)
+      console.log(user?._id == ticket?.personnelAssigned)
+
+      console.log(formState); 
+      await client.service('ticket').uploadQuotation({
+        ticketId: ticket?._id || 0,
+        remarks: formState.formRemarks,
+        amount: parseInt(formState.totalAmount),
+        uri: formState.formAttachments,
       })
       .then(() => {
+        console.log("This is after.then: " + formState);
+        console.log('Success');
         setSubmit(true);
-      console.log('Success');
       });
     }
   };
@@ -111,22 +134,10 @@ function UploadQuote() {
     navigate('/Success', {state: {redirect, formState, isSubmit }});
     }
   }, [isSubmit, formState, navigate]);
+  
 
   // Mock static values
   var quotationby = 'Tom';
-  var date = '06/06/2023';
-
-  const { totalAmount, formAttachments } = formState;
-
-  // const handleGiveQuotation = (event: MouseEvent<HTMLButtonElement>): void => {
-  //   client.service('ticket').uploadQuotation({
-  //     ticketId: ticket?._id ?? 0,
-  //     uri: '',
-  //     amount: totalAmount,
-  //     remarks: ''
-  //   })
-  //   .then(() => navigate('/LandlordViewTicket', {state: ticket}));
-  // };
 
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 
@@ -171,16 +182,16 @@ function UploadQuote() {
                 />
                 <LineField
                   type={'text'}
-                  label="Date"
+                  label="Remarks"
                   classnames="w-4/5"
                   padding_right="0"
-                  value={date}
-                  name="date"
-                  placeholder={''}
-                  error=""
-                  disabled={true}
+                  value={formRemarks}
+                  name="formRemarks"
+                  placeholder={'remarks'}
+                  error={errors.formRemarks}
+                  disabled={false}
                   layout={'vertical'}
-                  onChange={() => null}
+                  onChange={handleRemarksChange}
                 />
               </div>
               <LineField
@@ -194,7 +205,7 @@ function UploadQuote() {
                 error={errors.formTotalAmount}
                 disabled={false}
                 layout={'vertical'}
-                onChange={handleValueChange}
+                onChange={handleAmountChange}
               />
             </form>
             <div className="border-l-2 border-gray-300 items-center bg-[white]">
@@ -238,7 +249,9 @@ function UploadQuote() {
                   </label>
                 </div>
                 <div className="flex justify-end">
+                
                   <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
+                
                 </div>
               </div>
               </div>
