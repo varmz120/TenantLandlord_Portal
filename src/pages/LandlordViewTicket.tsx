@@ -121,7 +121,7 @@ function ViewTicket() {
                         <div className="flex flex-col gap-y-4">
                         <React.Fragment>
                           {
-                            ticket?.status === 2 ? (
+                            ticket?.status === 1 ? (
                               <ActionButton
                                 value={'Give Quote'}
                                 padding_right={'30'}
