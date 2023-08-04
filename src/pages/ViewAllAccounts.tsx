@@ -6,13 +6,165 @@ import LandlordAccounts from '../components/tables/LandlordAccounts';
 import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccounts';
 import TenantAccounts from '../components/tables/TenantAccounts';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
+import { client } from '../client';
+import { Type, getValidator, querySyntax } from '@feathersjs/typebox';
 const ViewAllAccounts = () => {
   const navigate = useNavigate();
+  const [adminData, setAdminData] = useState([{ ID: '', Email: '' }]);
+  const [tenantData, setTenantData] = useState([{ ID: '', Email: '', LeaseID: '' }]);
+  const [landlordData, setLandlordData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
+  const [serviceProviderData, setServiceProviderData] = useState([{ ID: '', Email: '', BuildingID: '' }]);
   const [initialRender, setInitialRender] = useState(true);
   const [isClicked, setClicked] = useState(false);
 
   //Component for filter buttons
   const [filterButtonActive, setFilterButtonActive] = useState('');
+  const getAdminData = async () => {
+    try {
+      const adminData = await client.service('users').find({ query: { typ: 3 } });
+      const adminUsers = adminData.data;
+      const adminUsersUpdated = adminUsers.map((user) => ({
+        ID: user._id,
+        Email: user.email,
+      }));
+      // console.log(adminUsersUpdated);
+      return adminUsersUpdated;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return null;
+    }
+  };
+  const fetchAdminData = async () => {
+    try {
+      const adminDataFetched = await getAdminData();
+
+      console.log(adminDataFetched);
+
+      if (adminDataFetched !== null) {
+        setAdminData(adminDataFetched);
+        console.log(adminDataFetched)
+      } else {
+        // Handle the case when adminData is null (error occurred)
+        // You can set it to an empty array or handle it based on your use case.
+        setAdminData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      // Handle the error case
+      setAdminData([]);
+    }
+  };
+
+  const getTenantData = async () => {
+    try {
+      const tenantData = await client.service('users').find({ query: { typ: 0 } });
+      const tenantUsers = tenantData.data;
+      const tenantUsersUpdated = tenantUsers.map((user) => ({
+        ID: user._id,
+        Email: user.email,
+        LeaseID: user.leaseId|| ''
+      }));
+      // console.log(adminUsersUpdated);
+      return tenantUsersUpdated;
+    } catch (error) {
+      console.error('Error fetching admin users:', error);
+      return null;
+    }
+  };
+  const fetchTenantData = async () => {
+    try {
+      const tenantData = await getTenantData();
+
+      console.log(tenantData);
+
+      if (tenantData !== null) {
+        setTenantData(tenantData);
+      } else {
+        // Handle the case when adminData is null (error occurred)
+        // You can set it to an empty array or handle it based on your use case.
+        setTenantData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching tenant users:', error);
+      // Handle the error case
+      setTenantData([]);
+    }
+  };
+  const getLandlordData = async () => {
+    try {
+      const landlordData = await client.service('users').find({ query: { typ: 2 } });
+      const landlordUsers = landlordData.data;
+      const landlordUsersUpdated = landlordUsers.map((user) => ({
+        ID: user._id,
+        Email: user.email,
+        BuildingID: user.buildingId|| ''
+      }));
+      // console.log(adminUsersUpdated);
+      return landlordUsersUpdated;
+    } catch (error) {
+      console.error('Error fetching landlord users:', error);
+      return null;
+    }
+  };
+
+  const fetchLandlordData = async () => {
+    try {
+      const landlordData = await getLandlordData();
+
+      console.log(landlordData);
+
+      if (landlordData !== null) {
+        setLandlordData(landlordData);
+      } else {
+        // Handle the case when adminData is null (error occurred)
+        // You can set it to an empty array or handle it based on your use case.
+        setTenantData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching tenant users:', error);
+      // Handle the error case
+      setTenantData([]);
+    }
+  };
+
+  const getServiceProviderData = async () => {
+    try {
+      const serviceProviderData = await client.service('users').find({ query: { typ: 1 } });
+      const serviceProviderUsers = serviceProviderData.data;
+      const serviceProviderUsersUpdated = serviceProviderUsers.map((user) => ({
+        ID: user._id,
+        Email: user.email,
+        BuildingID: user.buildingId|| ''
+      }));
+      
+      return serviceProviderUsersUpdated;
+    } catch (error) {
+      console.error('Error fetching landlord users:', error);
+      return null;
+    }
+  };
+  const fetchServiceProviderData = async () => {
+    try {
+      const serviceProviderData = await getServiceProviderData();
+
+      console.log(serviceProviderData);
+
+      if (serviceProviderData !== null) {
+        setServiceProviderData(serviceProviderData);
+      } else {
+        // Handle the case when adminData is null (error occurred)
+        // You can set it to an empty array or handle it based on your use case.
+        setServiceProviderData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching tenant users:', error);
+      // Handle the error case
+      setServiceProviderData([]);
+    }
+  };
+
+  
+  
 
   const handleAccClick = () => {
     setClicked(true);
@@ -22,6 +174,10 @@ const ViewAllAccounts = () => {
   };
   const handleDeleteClick = () => {
     setClicked(false);
+    fetchAdminData();
+    fetchTenantData();
+    fetchLandlordData();
+    fetchServiceProviderData();
   };
 
   const handleToggle = useCallback(
@@ -108,17 +264,25 @@ const ViewAllAccounts = () => {
   const DataTable: React.FC<DataTableProps> = ({ userType }) => {
     switch (userType) {
       case 'Admins':
-        return <AdminAccounts clicked={isClicked} handleClick={handleAccClick} />;
+        return <AdminAccounts clicked={isClicked} handleClick={handleAccClick} data={adminData} />;
       case 'Landlords':
-        return <LandlordAccounts clicked={isClicked} handleClick={handleAccClick} />;
+        return <LandlordAccounts clicked={isClicked} handleClick={handleAccClick} data={landlordData}/>;
       case 'Service Providers':
-        return <ServiceProvidersAccounts clicked={isClicked} handleClick={handleAccClick} />;
+        return <ServiceProvidersAccounts clicked={isClicked} handleClick={handleAccClick} data={serviceProviderData}/>;
       default:
-        return <TenantAccounts clicked={isClicked} handleClick={handleTenClick} />;
+        return <TenantAccounts clicked={isClicked} handleClick={handleAccClick} data={tenantData} />;
     }
   };
 
   useEffect(() => {
+    
+    fetchAdminData();
+    fetchTenantData(); 
+    fetchLandlordData();
+    fetchServiceProviderData();
+
+    
+    
     if (initialRender) {
       handleToggle('tenants');
       handleClick('tenants');
@@ -129,7 +293,7 @@ const ViewAllAccounts = () => {
 
   return (
     <>
-      <div className={`h-auto bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
+      <div className={`h-screen bg-[#ECEDED] flex-1 ${isClicked ? 'opacity-20' : ''}`}>
         <a href="#/">
           <div className="flex items-center ml-5 mt-5" onClick={handleBack}>
             <img src={BackArrowIcon} alt="back arrow"></img>
@@ -139,7 +303,7 @@ const ViewAllAccounts = () => {
         <div className="h-auto w-full flex flex-col justify-center items-center">
           <div className="w-auto md:w-4/5">
             <div className="flex-grow flex flex-col justify-center items-center">
-              <div className="container mx-auto" style={{ maxWidth: '1329px', height: '656px' }}>
+              
                 <div className="text-left text-3xl w-full mb-4">
                   <p>Accounts</p>
                 </div>
@@ -149,8 +313,11 @@ const ViewAllAccounts = () => {
                   {filterButton('service-providers', 'Service Providers')}
                   {filterButton('admins', 'Admins')}
                 </div>
-                <DataTable userType={userType} />
-              </div>
+                <div className="container mx-auto max-h-[600px] overflow-y-auto" style={{ maxWidth: '1329px' }}>
+                  <DataTable userType={userType} />
+                </div>          
+                
+              
             </div>
           </div>
         </div>

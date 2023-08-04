@@ -3,16 +3,25 @@ import trashBinIcon from '../../images/trash_bin_icon.svg';
 import addServiceProviderIcon from '../../images/add_service_provider_icon.svg';
 import filterIcon from '../../images/filter_icon.svg';
 import deleteIcon from '../../images/delete.svg';
+import { client } from '../../client';
 
 interface Props {
   clicked: boolean;
   handleClick: () => void;
+  data: { ID: string, Name: string, Address:string }[];
 }
 
-const BuildingsTable = ({ clicked, handleClick }: Props) => {
+const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
   const [tableData, setTableData] = useState([{ ID: '', Name: '', Address: '' }]);
 
   const [initialRender, setInitialRender] = useState(true);
+
+  interface TableDataItem {
+    ID: string;
+    Name: string;
+    Address: string;
+    
+  }
 
   // Define a type for the column names
   type TableColumn = 'ID' | 'Name' | 'Address';
@@ -25,7 +34,24 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   });
 
   // Implement Filter function for table
-  const [filteredTableData, setFilteredTableData] = useState(tableData);
+  const [filteredTableData, setFilteredTableData] = useState(data);
+
+  const applyFilters = (
+    data: TableDataItem[],
+    filters: Record<TableColumn, string>
+  ): TableDataItem[] => {
+    return data.filter((row) => {
+      for (const column of Object.keys(filters) as TableColumn[]) {
+        const filterValue = filters[column].toLowerCase();
+        const rowValue = row[column].toString().toLowerCase();
+        if (filterValue && !rowValue.includes(filterValue)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
+
 
   const handleSearchInputChange = (column: TableColumn, value: string) => {
     setSearchInputs((prevState) => ({
@@ -33,10 +59,9 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       [column]: value,
     }));
 
-    const filteredData = tableData.filter((row) => {
-      const rowValue = row[column].toString().toLowerCase();
-      const searchValue = value.toLowerCase();
-      return rowValue.includes(searchValue);
+    const filteredData = applyFilters(data, {
+      ...searchInputs,
+      [column]: value,
     });
 
     setFilteredTableData(filteredData);
@@ -50,13 +75,14 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       Address: '',
     });
 
-    setFilteredTableData(tableData);
+    setFilteredTableData(data);
   };
 
   //Implement Hidden Filter Row function for table
   const [isRowVisible, setIsRowVisible] = useState(false);
 
-  const toggleRowVisibility = () => {
+  const toggleRowVisibility = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
     setIsRowVisible(!isRowVisible);
   };
 
@@ -81,13 +107,23 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
   };
 
   // Function for delete row
-  const deleteRow = (rowId: string[]) => {
+  const deleteRow = async (rowId: string[]) => {
+    //delete this after the backend retrieving to table works
     let copy = [...tableData];
     copy = copy.filter((row) => !rowId.includes(row.ID));
     setTableData(copy);
     let filtercopy = [...filteredTableData];
     filtercopy = filtercopy.filter((row) => !rowId.includes(row.ID));
     setFilteredTableData(filtercopy);
+    console.log(rowId);
+    for (var Id of rowId) {
+      console.log('the id is ' + Id);
+      try {
+        await client.service('building').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete building', error);
+      }
+    }
   };
 
   //Component for filter buttons
@@ -108,8 +144,9 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
       { ID: '25', Name: 'alexander@example.com', Address: 'HIJ567' },
       { ID: '26', Name: 'olivia@example.com', Address: 'KLM890' },
     ];
-    setTableData(landlordData);
-    setFilteredTableData(landlordData);
+    setTableData(data);
+    setFilteredTableData(data);
+    
   };
 
   //on modify account button click
@@ -140,7 +177,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
             href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446] "
-            onClick={toggleRowVisibility}
+            onClick={(e) => toggleRowVisibility(e)}
             style={{ width: '57px', height: '57px' }}
           >
             <img src={filterIcon} className="mx-auto scale-150" alt="?"></img>
@@ -222,7 +259,7 @@ const BuildingsTable = ({ clicked, handleClick }: Props) => {
                   type="text"
                   value={searchInputs.Address}
                   onChange={(e) => handleSearchInputChange('Address', e.target.value)}
-                  placeholder="Search Building ID"
+                  placeholder="Search Address"
                   style={{ color: 'gray' }}
                 />
               </th>

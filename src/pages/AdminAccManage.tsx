@@ -4,23 +4,34 @@ import LineField from '../components/LineField';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 import deleteIcon from '../images/delete.svg';
 import pencilIcon from '../images/pencil_edit_icon.svg';
+import { client } from '../client';
 
 const AdminAccManage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [CannotEdit, setCannotEdit] = useState(true);
   const [email, setEmail] = useState(location.state.email);
+  const [leaseId, setLeaseId] = useState(location.state.leaseID);
+  const [Id, SetId] = useState(location.state.rowId);
   const [BuildingID, setBuildingID] = useState(location.state.BuildingID);
   const [, setSubmit] = useState(false);
   const [userType] = useState(location.state.userType);
   const [emailError, setEmailError] = useState('');
   const [buildingIDError, setBuildingIDError] = useState('');
+  const [LeaseIdError, setLeaseIdError] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     setEmail(newValue);
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     setEmailError(emailRegex.test(newValue) ? '' : 'Invalid email format');
+  };
+
+  const handleLeaseIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    setLeaseId(newValue);
+    setLeaseIdError(newValue.trim() ? '' : 'Building ID is required');
+    
   };
 
   const handleBuildingChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -33,16 +44,45 @@ const AdminAccManage = () => {
     setCannotEdit(false);
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async () => {
     // Validate the fields before submitting the form
     if (!emailError) {
       setEmailError(email.trim() ? '' : 'Email is required');
     }
 
-    if (email.trim() && !buildingIDError && !emailError) {
+    if (email.trim() && !buildingIDError && !emailError&&!LeaseIdError) { 
       // All fields are filled and email format is valid, you can proceed with the form submission
       setSubmit(true);
       setCannotEdit(true);
+
+      if(userType === "Tenant"){
+        try {
+          await client.service('users').patch(Id, { email: email, leaseId: leaseId});
+        } catch (error) {
+          console.error('Failed to delete account', error);
+        }
+
+      }
+      if(userType === "Landlord"||userType==="Service Provider"){
+        try {
+          await client.service('users').patch(Id, { email: email, buildingId: BuildingID});
+        } catch (error) {
+          console.error('Failed to delete account', error);
+        }
+
+      }
+      if(userType==="Admin"){
+        try {
+          await client.service('users').patch(Id, { email: email });
+        } catch (error) {
+          console.error('Failed to delete account', error);
+        }
+
+
+      }
+
+      
+
       console.log('Form submitted:', { email, BuildingID });
     } else {
       console.log('Please fill in all required fields and correct the errors.');
@@ -101,6 +141,21 @@ const AdminAccManage = () => {
                   layout="vertical"
                   classnames=""
                   onChange={handleBuildingChange}
+                />
+              )}
+              {userType === 'Tenant'  && (
+                <LineField
+                  type="text"
+                  label="Lease ID"
+                  padding_right="20"
+                  value={leaseId}
+                  name="category"
+                  placeholder=""
+                  error={LeaseIdError}
+                  disabled={CannotEdit}
+                  layout="vertical"
+                  classnames=""
+                  onChange={handleLeaseIdChange}
                 />
               )}
 
