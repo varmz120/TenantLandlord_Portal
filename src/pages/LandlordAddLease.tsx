@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState, useEffect, MouseEvent } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect, MouseEvent, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LineField from '../components/LineField';
 import LandlordNavbar from '../components/LandlordNavbar';
@@ -15,7 +15,6 @@ import UploadField from '../components/UploadField';
 
 import { client } from '../client';
 
-// TODO: Fix the two and upload lease field, lease ID field
 const AddLease = () => {
   const navigate = useNavigate();
 
@@ -25,11 +24,11 @@ const AddLease = () => {
   // UseStates & Backend Data - Temporarily None -> for demo purposes w/o backend
   const [formState, setFormState] = useState<string | any>({
     formUserID: '',
-    formTenantID: 'tenant',
+    formTenantID: '',
     formEmail: '',
     formUnit: '',
     formLeaseID: '',
-    formBuildingID: '00',
+    formBuildingID: '',
     formMonthlyRent: '',
     formCommencement: '',
     formExpiry: '',
@@ -71,13 +70,14 @@ const AddLease = () => {
   };
 
   const handleValueChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement> | MouseEvent<HTMLInputElement>
   ): void => {
     if ('value' in event.target) {
       setFormState({
         ...formState,
         [event.target.name] : event.target.value,
-      })
+      });
+      console.log(event.target.value);
     }
   };
 
@@ -161,14 +161,19 @@ const AddLease = () => {
     } catch (error) {
       console.error('Error fetching buildings:', error);
       // Handle the error case
-      setTenantData([]);
+      setBuildingData([]);
     }
   };
 
-  useEffect(() => {
-    fetchTenantData();
+  const handleBuilding = async () => {
     fetchBuildingData();
-  })
+    console.log(buildingData);
+  }
+
+  const handleTenant = async () => {
+    fetchTenantData();
+    console.log(tenantData);
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -221,30 +226,15 @@ const AddLease = () => {
 
     setErrors({ ...errors });
 
+    console.log(errors);
+
     if (Object.keys(errors).length > 0) {
     } else {
       const leaseForm = new FormData();
-
-      const tenant = {
-        _id: "qfeqf",
-        name: 'Name',
-        address: 'Address',
-        leases: [],
-      };
-
-      const testAdminUser = {
-        _id: 'admin',
-        typ: 3,
-        email: 'admin@test.com',
-        password: 'supersecret',
-      };
-
-      await client.service('tenants').create(tenant, { user: testAdminUser })
       
-      //const test1 = await fs.readFile(__dirname + '/test1.png');
       leaseForm.set('_id', formLeaseID); // Change this
       leaseForm.set('userId', formUserID);
-      leaseForm.set('tenantId', 'test'); // formTenantID
+      leaseForm.set('tenantId', formTenantID); // formTenantID
       leaseForm.set('units[0][number]', formUnit);
       leaseForm.set('units[0][buildingId]', formBuildingID); // Change component tied to this
       leaseForm.set('units[0][leaseId]', formLeaseID);
@@ -252,6 +242,8 @@ const AddLease = () => {
       leaseForm.set('expiryDate', formExpiry);
       leaseForm.set('monthlyRent', formMonthlyRent);
       leaseForm.set('leaseFile', formAttachments);
+
+      console.log(formState);
 
       await client.service('lease').create(leaseForm as any, {
         headers: {
@@ -319,6 +311,8 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                     layout={''} 
                     error={errors.formTenant}
                     data={tenantData}
+                    onClick={handleTenant}
+                    onBlur={handleValueChange}
                   />
                   <div>
                     <AddTenantButton
@@ -348,7 +342,9 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                     type={'text'} 
                     layout={''} 
                     error={errors.formBldgID}
-                    data={buildingData} />
+                    data={buildingData}
+                    onClick={handleBuilding}
+                    onBlur={handleValueChange} />
                   <div>
                     <AddBldgButton
                       type="button"

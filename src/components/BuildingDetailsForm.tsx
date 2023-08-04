@@ -43,7 +43,7 @@ const BuildingDetailsForm = ({ handleDelete }: Props) => {
       // buildingForm.set('requestTypes', []);
 
       const buildingData = {
-        _id: "rfwfe",
+        _id: "testMOOT",
         name: name,
         address: address,
         requestTypes: []
@@ -100,7 +100,7 @@ const BuildingDetailsForm = ({ handleDelete }: Props) => {
               />
 
               <div className="flex justify-end">
-                <SubmitButton type="submit" label="Submit" handleClick={() => {}} />
+                <SubmitButton type="submit" label="Submit" handleClick={handleSubmit} />
               </div>
             </form>
           </div>
