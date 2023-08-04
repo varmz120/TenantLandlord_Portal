@@ -4,7 +4,7 @@ import homeImage from '../images/home.svg';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
+function TenantNavbar() {
   const { user, logout } = useContext(AuthContext);
 
   // Navigation & routing
@@ -14,30 +14,16 @@ function Navbar() {
     if (user === null) {
       navigate('/', { replace: true });
     } else {
-      logout()//.then(() => navigate('/', { replace: true }));
+      logout();
+      navigate('/', { replace: true });
     }
   };
-
-  const decideUserType = () => {
-    if (user?.typ === 0) {
-      return '/tenantDashboard';
-    } else if (user?.typ === 1) {
-      return '/ServProvDashboard';
-    } else if (user?.typ === 2) {
-      return '/LandlordDashboard';
-    } else if (user?.typ === 3) {
-      return '/AdminDashboard';
-    } else {
-      return '/';
-    }
-  };
-
 
   return (
     <nav className="max-w-screen h-12 border-gray-200 bg-navbar">
       <div className="flex flex-wrap items-center justify-between h-12">
         <a
-          href={decideUserType()}
+          href="/#"
           className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
         >
@@ -69,7 +55,7 @@ function Navbar() {
           <ul className="h-full font-base text-sm flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
               <a
-                href={decideUserType()}
+                href="/tenantDashboard"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
                 aria-current="page"
@@ -112,4 +98,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default TenantNavbar;

@@ -1,12 +1,14 @@
-export interface IUser {
+import { UserData } from "../esc-backend/src/client";
+
+export interface IUserLogin {
   id: string | null;
-  email: string | null;
-  typ: number | null;
-  notifications?: [] | null;
+  password: string | null;
 }
 
 export interface IAuthContextType {
-  user: IUser | null;
-  login: (user: IUser) => void;
-  logout: () => void;
+  user: UserData | null;
+  temp_details: IUserLogin | null;
+  login: (user: UserData) => void;
+  logout: () => Promise<void>;
+  tempLogin: (tempdetails: IUserLogin) => void;
 }
