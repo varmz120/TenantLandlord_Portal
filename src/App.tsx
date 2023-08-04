@@ -4,10 +4,11 @@ import '@fontsource-variable/lexend';
 import { client } from './client';
 
 // Routing library and auth context
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, redirect, useNavigate, Navigate } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext.tsx';
 
 import Navbar from './components/Navbar.tsx';
+import TenantNavbar from './components/TenantNavbar.tsx';
 import SuccessRedirect from './pages/SuccessRedirect.tsx';
 
 // Login pages
@@ -52,16 +53,41 @@ import LandlordAccountCreation from './pages/LandlordAccountCreation.tsx';
 import LandlordAddService from './pages/LandlordAddService.tsx';
 import TenantAddAcc from './pages/TenantAddAcc.tsx';
 
+//Service Provider Pages
+import ServProvDashboard from './pages/ServProvDashboard.tsx';
+import ServProvViewTicket from './pages/ServProvViewTicket.tsx'
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './contexts/AuthContext';
+
 function App() {
+  const [isLoading, setLoading] = useState(true);
+  const { user, login } = useContext(AuthContext);
+
+  useEffect(() => {
+    client.reAuthenticate()
+      .then(({ user }) => {
+        login(user);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+
+  }, []);
+
   return (
-    <AuthContextProvider>
+    isLoading ? "Loading..." :
+
       <Routes>
         {/*Routing for app */}
         <Route path="/" element={<LandingPage />} />
+        {/*Routing for login pages */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<TenantLoginPage />} />
         {/*Routing for password reset */}
         <Route path="/reset1" element={<PasswordResetPage1 />} />
         <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
-        <Route path="/reset2" element={<PasswordResetPage2 />} />
+        <Route path="/reset-password" element={<PasswordResetPage2 />} />
         <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
         <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
         <Route path="/resetrequestsuccess" element={<PasswordResetRequestSuccessPage />} />
@@ -87,6 +113,8 @@ function App() {
         <Route path="/LandlordAddLease" element={<LandlordAddLeasePage />} />
         <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
         <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
+        <Route path="/ServProvDashboard" element={<ServProvDashboardPage />} />
+        <Route path="/ServProvViewTicket" element={<ServProvViewTicketPage />} />
         <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
         {/*Routing for errors */}
         <Route path="/*" element={<ErrorPage404 />} />
@@ -96,7 +124,6 @@ function App() {
         {/*Routing for misc */}
         <Route path="/Success" element={<SuccessRedirectPage />} />
       </Routes>
-    </AuthContextProvider>
   );
 }
 
@@ -105,7 +132,6 @@ function TenantLoginPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <TenantLogin />
       </ErrorBoundary>
     </div>
@@ -116,7 +142,6 @@ function PasswordResetPage1() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetOne />
       </ErrorBoundary>
     </div>
@@ -127,7 +152,6 @@ function Tenant2FAPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <Tenant2FA />
       </ErrorBoundary>
     </div>
@@ -138,7 +162,6 @@ function PasswordResetPage2() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetTwo />
       </ErrorBoundary>
     </div>
@@ -149,7 +172,6 @@ function PasswordResetSuccessfulPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetSuccessful />
       </ErrorBoundary>
     </div>
@@ -160,7 +182,6 @@ function PasswordResetUnsuccessfulPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetUnsuccessful />
       </ErrorBoundary>
     </div>
@@ -171,7 +192,6 @@ function PasswordResetRequestSuccessPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetRequestSuccess />
       </ErrorBoundary>
     </div>
@@ -182,7 +202,6 @@ function PasswordResetRequestFailedPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <PasswordResetRequestFailed />
       </ErrorBoundary>
     </div>
@@ -204,7 +223,7 @@ function RequestTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <RequestTicket />
       </ErrorBoundary>
     </div>
@@ -215,7 +234,7 @@ function ViewTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <ViewTicket />
       </ErrorBoundary>
     </div>
@@ -226,7 +245,7 @@ function ViewQuotePage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <ViewQuote />
       </ErrorBoundary>
     </div>
@@ -237,7 +256,7 @@ function RateTicketPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
+        <TenantNavbar />
         <RateTicket />
       </ErrorBoundary>
     </div>
@@ -245,11 +264,51 @@ function RateTicketPage() {
 }
 
 function LandingPage() {
+  const { user } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    client.reAuthenticate()
+      .then(({ user }) => {
+        login(user);
+      })
+      .catch(() => redirect('/login'));
+  }, []);
+
+        if (user?.typ == 0) {
+          console.log('User is a tenant');
+          let redirect = '/tenantDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+        else if (user?.typ == 1) {
+          console.log('User is a landlord');
+          let redirect = '/ServProvDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+        else if (user?.typ == 2) {
+          console.log('User is a landlord');
+          let redirect = '/landlordDashboard';
+          navigate('/Success', { state: { redirect } });
+        }
+         else if (user?.typ == 3) {
+          console.log('User is a admin');
+          let redirect = '/adminDashboard';
+          navigate('/Success', { state: { redirect } });
+        } else {
+          navigate('/401');
+        }
+
+  const to = user === null ? '/login'
+          : user.typ === 0 ? '/tenantDashboard'
+          : user.typ === 1 ? '/ServProvDashboard'
+          : user.typ === 2 ? '/landlordDashboard'
+          : '/adminDashboard';
+
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
-        <Landing />
+        <Navigate to={to} />
       </ErrorBoundary>
     </div>
   );
@@ -259,7 +318,6 @@ function NotificationPage() {
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
-        <Navbar />
         <Notification />
       </ErrorBoundary>
     </div>
@@ -345,6 +403,15 @@ function SuccessRedirectPage() {
       </ErrorBoundary>
     </div>
   );
+}
+
+
+function ServProvDashboardPage() {
+  return <ServProvDashboard />;
+}
+
+function ServProvViewTicketPage() {
+  return <ServProvViewTicket />;
 }
 
 export default App;

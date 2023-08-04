@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { client } from '../client';
 
 const PasswordResetOne = () => {
   //creating variable for navigation
@@ -8,6 +9,10 @@ const PasswordResetOne = () => {
   // Creating state variables for password 1 and password 2
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [userID, setUserID] = useState('');
+  const [token, setToken] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [passwordValid, setPasswordsValid] = useState(true);
 
   // Event handler for change in password 1 field
   const handlePassword1FieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,16 +25,62 @@ const PasswordResetOne = () => {
   };
 
   // Event handler for clicking password reset button
-  const handlePasswordReset = () => {
-    //TODO - Add authentication for storing new password in database
+  const handlePasswordReset = async () => {
+    if (password1 !== password2) {
+      setPasswordsMatch(false);
+      if (password1.length > 0) {
+        setPasswordsValid(true);
+      } else {
+        setPasswordsValid(false);
+        return;
+      }
+      return; // Exit the function without submitting the form
+    } else {
+      setPasswordsMatch(true);
+    }
+    if (password1.length > 0) {
+      setPasswordsValid(true);
+    } else {
+      setPasswordsValid(false);
+      return;
+    }
+    try {
+      console.log('here', { user_id: userID, token: token, password: password1 });
+      // If the user exists, create a password reset request using their _id
+      await client
+        .service('reset-password')
+        .reset({ user_id: userID, token: token, password: password1 })
+        .then(() => {
+          navigate('/resetrequestsuccess');
+        });
+    } catch (error) {
+      console.error('Failed to send password reset email', error);
+      navigate('/resetrequestfailure');
+    }
     navigate('/resetsuccessful'); // if successful, redirects to Password Reset Successful page
-    // navigate('/resetunsuccessful'); // if unsuccessful, redirects to Password Reset Successful page
   };
 
   // Event handler for clicking on back button
   const handlePageBack = () => {
     navigate('/');
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const user_id = params.get('user_id');
+    const token_param = params.get('token');
+
+    // Set the user_id in the state variable
+    if (user_id !== null) {
+      setUserID(user_id);
+    } else {
+      navigate('/resetunsuccessful');
+    }
+
+    if (token_param !== null) {
+      setToken(token_param);
+    }
+  });
 
   return (
     //first div sets background
@@ -44,11 +95,11 @@ const PasswordResetOne = () => {
             handlePasswordReset();
           }}
         >
-          <p className="text-5xl my-3 text-headerText">Tenant Portal</p>
+          <p className="text-5xl my-3 text-headerText">Anacle</p>
           <p className="text-3xl text-start mt-10 mr-1 mb-1 text-headerText">Password Reset</p>
           <p className="text-xs text-start mt-1">You are resetting password for</p>
           {/* Need to change the backend to show User ID */}
-          <p className="text-xs text-start mb-3 block">&lt;insert_id&gt;</p>
+          <p className="text-xs text-start mb-3 block">{userID}</p>
 
           <input
             className={
@@ -57,6 +108,7 @@ const PasswordResetOne = () => {
             value={password1}
             onChange={handlePassword1FieldChange}
             placeholder="Set new password"
+            type="password"
           />
 
           <input
@@ -66,7 +118,10 @@ const PasswordResetOne = () => {
             value={password2}
             onChange={handlePassword2FieldChange}
             placeholder="Confirm new password"
+            type="password"
           />
+          {!passwordsMatch && <div className="flex text-red-500">Passwords do not match!</div>}
+          {!passwordValid && <div className="flex text-red-500">Invalid password!</div>}
 
           <button
             type="submit"

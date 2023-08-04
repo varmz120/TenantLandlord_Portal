@@ -3,32 +3,59 @@ import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
+import { AuthContext } from '../contexts/AuthContext';
 
 function UploadQuote() {
   const navigate = useNavigate();
+  const locate = useLocation()
+  const ticket: Ticket | undefined = locate.state
 
-  const [formState, setFormState] = useState<string | any>({
-    totalAmount: '',
-    formAttachments: [],
-    //isSubmitted: false
-  });
-  const [, setSubmit] = useState(false);
+  const { user } = useContext(AuthContext);
+
+  const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
+  const [formState, setFormState] = useState<string | any>({
+    totalAmount: ticket?.quotation?.amount,
+    formRemarks: ticket?.quotation?.remarks,
+    formId: ticket?._id,
+    formAttachments: ticket?.quotation?.uri || "",
+    //isSubmitted: false
+  });
 
-  const handleValueChange = (
+  const { totalAmount, formRemarks, formAttachments } = formState;
+
+  const handleRemarksChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
   ): void => {
-    if ('value' in event.target) {
+    event.stopPropagation();
+    const target = event.target
+    if ('value' in target) {
       setFormState({
         ...formState,
-        [event.target.name]: event.target.value,
+        formRemarks: target.value
       });
     }
   };
+
+  const handleAmountChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
+  ): void => {
+    const target = event.target;
+  
+    if ('value' in target) {
+      setFormState({
+        ...formState,
+        totalAmount: target.value, // Use target.value instead of target.textContent
+      });
+    }
+  };
+
 
   const handleBack = () => {
     navigate('/LandlordViewTicket');
@@ -61,14 +88,16 @@ function UploadQuote() {
     setNoQuotationNeeded(event.target.checked);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (!noQuotationNeeded && !formState.totalAmount) {
       errors.formTotalAmount = 'Enter a Amount!';
+      errors.formAttachments = 'Attach Quotation File!'
+      errors.formRemarks = ''
     } else {
       delete errors.formTotalAmount;
-      navigate('/LandlordViewTicket');
+      delete errors.formAttachments;
+      delete errors.formRemarks;
     }
 
     setErrors({ ...errors });
@@ -78,31 +107,61 @@ function UploadQuote() {
       console.log(errors);
       console.log(formState);
     } else {
-      setSubmit(true);
-      console.log('Success');
+      
+      console.log(ticket?.status)
+      console.log(user?.typ)
+      console.log(user?._id == ticket?.personnelAssigned)
 
-      // Will redirect to home/dashboard after 5 seconds
-      // setTimeout(()=> {
-      //     navigate('/ViewTicket', {state: {formState, isSubmit }});
-      //     }, 5000);
+      console.log(formState); 
+      await client.service('ticket').uploadQuotation({
+        ticketId: ticket?._id || 0,
+        remarks: formState.formRemarks,
+        amount: parseInt(formState.totalAmount),
+        uri: formState.formAttachments,
+      })
+      .then(() => {
+        console.log("This is after.then: " + formState);
+        console.log('Success');
+        setSubmit(true);
+      });
     }
   };
 
+   // Will redirect to home/dashboard after 5 seconds
+   useEffect(() => {
+    if (isSubmit) {
+      let redirect = '/LandlordDashboard';
+    navigate('/Success', {state: {redirect, formState, isSubmit }});
+    }
+  }, [isSubmit, formState, navigate]);
+  
+
   // Mock static values
   var quotationby = 'Tom';
-  var date = '06/06/2023';
 
-  const { totalAmount, formAttachments } = formState;
+  const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (formAttachments.length > 0) {
+      setIframeSrc(formAttachments[0]); // Use the first attachment URL as iframe src
+    } else if (ticket?.quotation?.uri) {
+      // Use the URI from the ticket if available (when editing existing quote)
+      setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);
+    } else {
+      // Set to undefined when there are no attachments or ticket URI
+      setIframeSrc(undefined);
+    }
+  }, [formAttachments, ticket]);
 
   return (
-    <div className="flex flex-col h-1000px bg-[#ECEDED]">
+    <div className="flex flex-col h-screen bg-[#ECEDED]">
       <LandlordNavbar />
       <div className="flex flex-col font-3xl" id="viewTicket">
         <BackButton type="button" label={'view ticket'} handleClick={handleBack} />
         <div className="flex-grow flex flex-col justify-center items-center bg-[#ECEDED]">
           <p className="text-headerText pb-5 text-2xl font-medium">New Quotation</p>
         </div>
-        <div className="flex mx-auto my-auto w-4/5 bg-white border-gray-200 rounded-lg shadow sm:p-7">
+        <div className="flex mx-auto my-auto w-2/4 bg-white border-gray-200 rounded-lg shadow sm:p-7">
           <div className="grid grid-cols-2 w-fit">
             <form onSubmit={handleSubmit} className="space-y-5">
               <p className="text-lg text-center font-medium h-5">New Request Form</p>
@@ -123,16 +182,16 @@ function UploadQuote() {
                 />
                 <LineField
                   type={'text'}
-                  label="Date"
+                  label="Remarks"
                   classnames="w-4/5"
                   padding_right="0"
-                  value={date}
-                  name="date"
-                  placeholder={''}
-                  error=""
-                  disabled={true}
+                  value={formRemarks}
+                  name="formRemarks"
+                  placeholder={'remarks'}
+                  error={errors.formRemarks}
+                  disabled={false}
                   layout={'vertical'}
-                  onChange={() => null}
+                  onChange={handleRemarksChange}
                 />
               </div>
               <LineField
@@ -146,22 +205,24 @@ function UploadQuote() {
                 error={errors.formTotalAmount}
                 disabled={false}
                 layout={'vertical'}
-                onChange={handleValueChange}
+                onChange={handleAmountChange}
               />
             </form>
             <div className="border-l-2 border-gray-300 items-center bg-[white]">
-              <div className="border-l-2 border-gray-300 flex flex-col items-center bg-[white]">
+              <div className="flex flex-col items-center bg-[white]">
                 <p className="text-lg text-left font-medium text-headerText text-center">
                   Document View
                 </p>
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                <img
+                {/* <img
                   src={Example_quote}
                   className="flex mx-auto mt-3 h-4/5 w-2/3"
                   alt="Quote PDF"
-                />
-                {/* <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/> */}
-
+                /> */}
+            <div className='flex flex-col items-center'>
+              {iframeSrc && (
+                 <iframe src={iframeSrc} title="Quotation Document" className="flex mx-auto mt-3 h-4/5 w-1/3" />
+              )}
                 <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
                   <AttachQuotation
                     label="Add Attachments"
@@ -188,8 +249,11 @@ function UploadQuote() {
                   </label>
                 </div>
                 <div className="flex justify-end">
+                
                   <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
+                
                 </div>
+              </div>
               </div>
             </div>
           </div>

@@ -1,43 +1,30 @@
-import { useContext } from 'react';
+import React, { useState } from 'react';
 import homeImage from '../images/home.svg';
-
-import { AuthContext } from '../contexts/AuthContext';
+import userIcon from '../images/user_icon.svg';
+import userIconDark from '../images/user_icon_dark.svg';
 import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
-  const { user, logout } = useContext(AuthContext);
-
-  // Navigation & routing
+const ServProvNavbar = () => {
   const navigate = useNavigate();
-
-  const handleLogInOut = () => {
-    if (user === null) {
-      navigate('/', { replace: true });
-    } else {
-      logout()//.then(() => navigate('/', { replace: true }));
-    }
+  const [usernameIsActive, setUsernameIsActive] = useState(false);
+  const handleUsernameActive = () => {
+    setUsernameIsActive(true);
   };
 
-  const decideUserType = () => {
-    if (user?.typ === 0) {
-      return '/tenantDashboard';
-    } else if (user?.typ === 1) {
-      return '/ServProvDashboard';
-    } else if (user?.typ === 2) {
-      return '/LandlordDashboard';
-    } else if (user?.typ === 3) {
-      return '/AdminDashboard';
-    } else {
-      return '/';
-    }
+  const handleUsernameInactive = () => {
+    setUsernameIsActive(false);
   };
+
+  const homeOnClick = () => {
+    navigate('/ServProvDashboard');
+  }
 
 
   return (
-    <nav className="max-w-screen h-12 border-gray-200 bg-navbar">
-      <div className="flex flex-wrap items-center justify-between h-12">
+    <nav className="max-w-screen-3xl -border-gray-200 bg-[#31556F]">
+      <div className="flex flex-wrap items-center justify-between ">
         <a
-          href={decideUserType()}
+          href="/LandlordDashboard"
           className="flex items-center h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446]"
         >
@@ -59,27 +46,30 @@ function Navbar() {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fillRule="evenodd"
+              fill-rule="evenodd"
               d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clipRule="evenodd"
+              clip-rule="evenodd"
             ></path>
           </svg>
         </button>
         <div className="h-full hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="h-full font-base text-sm flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
+          <ul className="h-full font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:mt-0 md:border-0">
             <li className="flex items-center">
               <a
-                href={decideUserType()}
+                href="/ServProvDashboard"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
-                aria-current="page"
+                // aria-current="page"
+                onClick={homeOnClick}
               >
                 Home
               </a>
             </li>
-            <li>
+            <li
+            // className="flex items-center content-center justify-center ml-0"
+            >
               <a
-                href="/Notification"
+                href="/notification"
                 className="h-full items-center flex text-white rounded md:bg-transparent p-4
 									hover:bg-gradient-to-r from-[#193446] via-[#0b4975] to-[#193446] "
               >
@@ -88,21 +78,19 @@ function Navbar() {
             </li>
             <li className="flex items-center mx-3 mr-5">
               <a
-                href="/#"
-                id="user"
-                className="group block rounded flex border-solid border-1 px-1 py-1 
-									flex items-center text-[#3180ba] bg-[#edfdff] hover:text-[#cbe6ec] hover:bg-[#193446] active:text-[#cbe6ec] active:bg-[#193446]"
-                onClick={handleLogInOut}
+                href="/"
+                className="block rounded flex border-solid border-1 px-2 py-1 
+									flex items-center text-[#3180ba] bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
+                onMouseDown={handleUsernameActive}
+                onMouseUp={handleUsernameInactive}
+                onMouseLeave={handleUsernameInactive}
               >
-                <div
-                  className={
-                    'w-8 h-5 bg-contain bg-center bg-no-repeat ' +
-                    (user
-                      ? "bg-[url('./images/log_out_icon.svg')] group-hover:bg-[url('./images/log_out_icon_dark.svg')] ml-2"
-                      : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
-                  }
-                ></div>
-                <div className="mr-4">{user ? 'Log Out' : 'Log In'}</div>
+                <img
+                  src={usernameIsActive ? userIconDark : userIcon}
+                  className="h-5 mx-3 ml-4"
+                  alt="user"
+                ></img>
+                <div className="mr-4">Username</div>
               </a>
             </li>
           </ul>
@@ -110,6 +98,6 @@ function Navbar() {
       </div>
     </nav>
   );
-}
+};
 
-export default Navbar;
+export default ServProvNavbar;
