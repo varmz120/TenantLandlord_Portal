@@ -5,7 +5,8 @@ import BackButton from '../components/BackButton';
 import Example_quote from '../images/example_quote.png';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Ticket } from '../esc-backend/src/client';
 import { client } from '../client';
 
 function UploadQuote() {
@@ -117,18 +118,32 @@ function UploadQuote() {
 
   const { totalAmount, formAttachments } = formState;
 
-  const handleGiveQuotation = (event: MouseEvent<HTMLButtonElement>): void => {
-    client.service('ticket').uploadQuotation({
-      ticketId: ticket?._id ?? 0,
-      uri: '',
-      amount: totalAmount,
-      remarks: ''
-    })
-    .then(() => navigate('/LandlordViewTicket', {state: ticket}));
-  };
+  // const handleGiveQuotation = (event: MouseEvent<HTMLButtonElement>): void => {
+  //   client.service('ticket').uploadQuotation({
+  //     ticketId: ticket?._id ?? 0,
+  //     uri: '',
+  //     amount: totalAmount,
+  //     remarks: ''
+  //   })
+  //   .then(() => navigate('/LandlordViewTicket', {state: ticket}));
+  // };
+
+  const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (formAttachments.length > 0) {
+      setIframeSrc(formAttachments[0]); // Use the first attachment URL as iframe src
+    } else if (ticket?.quotation?.uri) {
+      // Use the URI from the ticket if available (when editing existing quote)
+      setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);
+    } else {
+      // Set to undefined when there are no attachments or ticket URI
+      setIframeSrc(undefined);
+    }
+  }, [formAttachments, ticket]);
 
   return (
-    <div className="flex flex-col h-1000px bg-[#ECEDED]">
+    <div className="flex flex-col h-screen bg-[#ECEDED]">
       <LandlordNavbar />
       <div className="flex flex-col font-3xl" id="viewTicket">
         <BackButton type="button" label={'view ticket'} handleClick={handleBack} />
@@ -183,18 +198,20 @@ function UploadQuote() {
               />
             </form>
             <div className="border-l-2 border-gray-300 items-center bg-[white]">
-              <div className="border-l-2 border-gray-300 flex flex-col items-center bg-[white]">
+              <div className="flex flex-col items-center bg-[white]">
                 <p className="text-lg text-left font-medium text-headerText text-center">
                   Document View
                 </p>
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
-                <img
+                {/* <img
                   src={Example_quote}
                   className="flex mx-auto mt-3 h-4/5 w-2/3"
                   alt="Quote PDF"
-                />
-                {/* <iframe src={'./images/alertImg.svg'} className='flex mx-auto my-5 h-2/5 w-2/3'/> */}
-
+                /> */}
+            <div className='flex flex-col items-center'>
+              {iframeSrc && (
+                 <iframe src={iframeSrc} title="Quotation Document" className="flex mx-auto mt-3 h-4/5 w-1/3" />
+              )}
                 <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
                   <AttachQuotation
                     label="Add Attachments"
@@ -221,8 +238,9 @@ function UploadQuote() {
                   </label>
                 </div>
                 <div className="flex justify-end">
-                  <SubmitButton type="submit" label={'Submit'} handleClick={handleGiveQuotation} />
+                  <SubmitButton type="submit" label={'Submit'} handleClick={handleSubmit} />
                 </div>
+              </div>
               </div>
             </div>
           </div>
