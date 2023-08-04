@@ -5,26 +5,52 @@ import Gallery from '../components/Gallery';
 import StarRating from '../components/StarRating';
 import BackButton from '../components/BackButton';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import { useContext, useEffect, useState } from 'react';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
 
 function ViewTicket() {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const locate = useLocation();
+  type UnitType = {
+    number: string;
+    buildingId: string;
+    leaseId: string;
+  };
 
-  console.log(locate.state);
+  const [unit, setUnit] = useState<UnitType | null>(null);
+  const [address, setAddress] = useState('');
+  const ticket: Ticket = locate.state;
 
   const handleBack = () => {
     navigate('/LandlordDashboard');
   };
 
-  // Mock static values
-  var ticket_id = '007';
-  var unit = '01-42';
-  var location = 'Sunplaza';
-  var completed_date = '06/06/2023';
-  //var isSubmit = locate.state? locate.state.isSubmit : false;
-  var title = 'Feedback';
-  var remarks = 'Good work, appreciate it! No other work needs to be done for now.';
-  //var isClosed = locate.state? locate.state.isClosed : false;
+  const ticket_id = ticket._id;
+  const completed_date = new Date(ticket?.completedOn).toLocaleDateString();
+  const rating = ticket.feedback?.rating;
+  const remarks = ticket.feedback?.description;
+  const title = ticket.title;
+
+  const getUnitNo = async () => {
+    const lease = await client.service('lease').get(user?.leaseId ?? '');
+    const units = lease.units.filter((unit) => unit.buildingId == user?.buildingId);
+    return units[0];
+  };
+
+  const getBuildingAddress = async () => {
+    const building = client.service('building').get(unit?.buildingId ?? '');
+    return (await building).address;
+  };
+
+  useEffect(() => {
+    getBuildingAddress().then((address) => setAddress(address));
+    getUnitNo().then((unit) => {
+      setUnit(unit);
+    });
+  }, []);
 
   return (
     <div className="flex flex-col h-screen">
@@ -33,7 +59,7 @@ function ViewTicket() {
         <BackButton type="button" label={'ticket details'} handleClick={handleBack} />
         <div className="flex justify-center">
           <p className="text-headerText pb-5 text-2xl font-medium">
-            Feedback for #00{ticket_id} : {location} Unit {unit}
+            Feedback for #00{ticket_id} : {address} Unit {unit?.number}
           </p>
         </div>
         <div className="flex mx-auto w-fit bg-white border-gray-200 rounded-lg shadow sm:p-7">
@@ -45,7 +71,7 @@ function ViewTicket() {
             <StarRating
               label="Rating"
               padding_right="106"
-              rating={5}
+              rating={rating}
               error=""
               handleClick={() => null}
             />
@@ -74,7 +100,7 @@ function ViewTicket() {
               placeholder="Please include any additional remarks here."
               onChange={() => null}
             />
-            <Gallery label={'Attachments'} value="" padding_right={'0'} />
+            <Gallery label={'Attachments'} values="" padding_right={'0'} />
           </form>
         </div>
       </div>
