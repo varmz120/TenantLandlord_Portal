@@ -54,7 +54,7 @@ const Buildings = () => {
   };
 
   const Buildingtable :React.FC=()=>{
-    return <BuildingsTable clicked={isClicked} handleClick={handleAccClick } data={buildingData}/>
+    return <BuildingsTable clicked={isClicked} handleClick={handleAccClick } data={buildingData} />
   }
 
   useEffect(() => {
