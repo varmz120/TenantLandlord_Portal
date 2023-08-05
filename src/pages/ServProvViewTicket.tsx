@@ -3,7 +3,7 @@ import LineField from '../components/LineField';
 import Gallery from '../components/Gallery';
 import Status from '../components/Status';
 import BackButton from '../components/BackButton';
-import Navbar from '../components/AdminNavbar';
+import Navbar from '../components/Navbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, MouseEvent, useContext, useEffect } from 'react';
 import ReactModal from 'react-modal';
