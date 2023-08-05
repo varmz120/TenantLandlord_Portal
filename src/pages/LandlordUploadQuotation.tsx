@@ -2,7 +2,8 @@ import LineField from '../components/LineField';
 import AttachQuotation from '../components/AttachQuotation';
 import LandlordNavbar from '../components/LandlordNavbar';
 import BackButton from '../components/BackButton';
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import Example_quote from '../images/example_quote.png';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import SubmitButton from '../components/SubmitButton';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Ticket } from '../esc-backend/src/client';
@@ -57,7 +58,7 @@ function UploadQuote() {
 
 
   const handleBack = () => {
-    navigate('/LandlordViewTicket');
+    navigate('/LandlordViewTicket', {state: ticket});
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -136,7 +137,7 @@ function UploadQuote() {
   
 
   // Mock static values
-  var quotationby = 'Tom';
+  var quotationby = user?._id;
 
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 

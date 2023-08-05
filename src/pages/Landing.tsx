@@ -15,25 +15,25 @@ function Landing() {
     if ('value' in event.target) {
       if (event.target.value === 'Login as Tenant') {
         login({
-          _id: '1',
+          id: '1',
           email: 'JamieDole@yahoo.com.sg',
           typ: 0, // Tenant
         });
       } else if (event.target.value === 'Login as Service Provider') {
         login({
-          _id: '4',
+          id: '4',
           email: 'Dian@yahoo.com.sg',
           typ: 1, // Service Provider
         });
       } else if (event.target.value === 'Login as Landlord') {
         login({
-          _id: '2',
+          id: '2',
           email: 'LimaRae@yahoo.com.sg',
           typ: 2, // Tenant
         });
       } else if (event.target.value === 'Login as Admin') {
         login({
-          _id: '3',
+          id: '3',
           email: 'Varmzz@yahoo.com.sg',
           typ: 3, // Admin
         });

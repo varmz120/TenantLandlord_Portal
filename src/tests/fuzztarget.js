@@ -1,45 +1,65 @@
 const { FuzzedDataProvider } = require('@jazzer.js/core');
 const axios = require('axios');
+const assert = require('assert');
+const fs = require('fs');
 
-const appUrl = 'http://localhost:3030/'
+const appUrl = 'http://localhost:3030';
+const extensions = ['png', 'jpg', 'pdf'];
+const notableEventsPath = './fuzzerlog-'+crypto.randomUUID()+'.txt';
 
-function brute_files(data){
-    const provider = new FuzzedDataProvider(data);
-    return provider.consumeString(25);
-}
+let invocationCount = 0;
 
-function random(data){
-    //const fuzzerData = data.toString(); -> return fuzzerData instead
-    return data;
-    //const provider = new FuzzedDataProvider(data);
-    return provider.consumeString(25);
-}
-
-function runTicket(data){
-    //return data;
-    const provider = new FuzzedDataProvider(data);
-    let fuzzedTicket = {
-        leaseId : provider.consumeString(10),
-        title: provider.consumeString(),
-        description: provider.consumeString(),
-        requestTyoe: provider.consumeString(),
-        contact: {
-            name: provider.consumeString(),
-            email: provider.consumeString(),
-
+const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return;
         }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
 
-    //     ticketForm.set('title', 'Test lease');
-    // ticketForm.set('description', 'Test description.');
-    // ticketForm.set('requestType', 'Cleaning');
-    // ticketForm.set('contact[name]', 'Tenant');
-    // ticketForm.set('contact[email]', 'tenant@email.com');
-    // ticketForm.set('contact[number]', '43120150');
-    // ticketForm.append('attachements', new File([test1], 'test1.png', { type: 'image/png' }));
-    // ticketForm.append('attachements', new File([test2], 'test2.png', { type: 'image/png' }));
+async function brute_files(data){
+    const provider = new FuzzedDataProvider(data);
+    const fuzzedData = provider.consumeString(25, "utf-8");
+    //var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
+
+    for (ext in extensions) {
+        try {
+            await axios.get(`${appUrl}/static/${fuzzedData}.${ext}`, {
+              responseType: 'json',
+            });
+            assert.fail('should not be here! crash fuzzer.');
+          } catch (error) {
+            const { response } = error;
+
+            var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
+            stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
+            stream.end();
+
+            // if (response === undefined) {
+            //     continue; // For purpose of running indefinitely
+            // } else {
+            //     //assert.ok([400, 404].includes(response.status));
+            //     // if not expected values, 
+            //     //if([400, 404].includes(response.status)) {
+          }
     }
+    invocationCount++;
 }
 
 module.exports.fuzz = function (data) {
     brute_files(data);
 }
+
+// function random(data){
+//     //const fuzzerData = data.toString(); -> return fuzzerData instead
+//     return data;
+//     //const provider = new FuzzedDataProvider(data);
+//     //return provider.consumeString(25);
+// }
+
+//     } 

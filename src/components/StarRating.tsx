@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { MouseEvent, FC, useState } from 'react';
 
 interface InputProps {
   label: string;
@@ -22,7 +22,7 @@ const StarRating: FC<InputProps> = ({ label, padding_right, rating, error, handl
       >
         {label}
       </label>
-      {[...Array(5)].map((index) => {
+      {[...Array(5)].map((star, index) => {
         index += 1;
         return (
           <button

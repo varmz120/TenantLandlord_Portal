@@ -5,6 +5,7 @@ import BackArrowIcon from '../images/back_arrow_icon.svg';
 import deleteIcon from '../images/delete.svg';
 import pencilIcon from '../images/pencil_edit_icon.svg';
 import { client } from '../client';
+import SuccessRedirect from './SuccessRedirect';
 
 const AdminAccManage = () => {
   const navigate = useNavigate();
@@ -94,7 +95,17 @@ const AdminAccManage = () => {
   };
 
   const handleDelete = () => {
-    navigate('/Accounts');
+
+    if(userType === "Landlord" || userType === "Admin"){
+      try {
+        client.service('users').remove(Id);
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+    }
+
+    navigate('/Accounts')
+
   };
 
   return (

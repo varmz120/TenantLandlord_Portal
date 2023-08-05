@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { client } from '../client';
 import { UserData } from '../esc-backend/src/client';
 // import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -12,9 +12,6 @@ export const AuthContext = createContext<IAuthContextType>({
   logout: async () => {},
   tempLogin: (IUserLogin) => {}
 });
-
-// IDK
-export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const user_update = localStorage.getItem('user');

@@ -132,19 +132,19 @@ const LandlordAccounts = ({ clicked, handleClick ,data}: Props) => {
   const loadLandlordData = () => {
     console.log('Loading Landlord Data...');
     // Perform actions specific to landlord data loading
-    // let landlordData = [
-    //   { ID: '1234', Email: 'john@example.com', BuildingID: 'XYZ789' },
-    //   { ID: '123456', Email: 'jane@example.com', BuildingID: 'UVW123' },
-    //   { ID: '18', Email: 'alex@example.com', BuildingID: 'LMN456' },
-    //   { ID: '19', Email: 'sam@example.com', BuildingID: 'PQR789' },
-    //   { ID: '20', Email: 'emily@example.com', BuildingID: 'STU012' },
-    //   { ID: '21', Email: 'chris@example.com', BuildingID: 'VWX345' },
-    //   { ID: '22', Email: 'lisa@example.com', BuildingID: 'YZA678' },
-    //   { ID: '23', Email: 'matt@example.com', BuildingID: 'BCD901' },
-    //   { ID: '24', Email: 'sarah@example.com', BuildingID: 'EFG234' },
-    //   { ID: '25', Email: 'alexander@example.com', BuildingID: 'HIJ567' },
-    //   { ID: '26', Email: 'olivia@example.com', BuildingID: 'KLM890' },
-    // ];
+    let landlordData = [
+      { ID: '1234', Email: 'john@example.com', BuildingID: 'XYZ789' },
+      { ID: '123456', Email: 'jane@example.com', BuildingID: 'UVW123' },
+      { ID: '18', Email: 'alex@example.com', BuildingID: 'LMN456' },
+      { ID: '19', Email: 'sam@example.com', BuildingID: 'PQR789' },
+      { ID: '20', Email: 'emily@example.com', BuildingID: 'STU012' },
+      { ID: '21', Email: 'chris@example.com', BuildingID: 'VWX345' },
+      { ID: '22', Email: 'lisa@example.com', BuildingID: 'YZA678' },
+      { ID: '23', Email: 'matt@example.com', BuildingID: 'BCD901' },
+      { ID: '24', Email: 'sarah@example.com', BuildingID: 'EFG234' },
+      { ID: '25', Email: 'alexander@example.com', BuildingID: 'HIJ567' },
+      { ID: '26', Email: 'olivia@example.com', BuildingID: 'KLM890' },
+    ];
     setTableData(data);
     setFilteredTableData(data);
   };

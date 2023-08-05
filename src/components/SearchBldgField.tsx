@@ -1,4 +1,4 @@
-import { FC, SetStateAction, useEffect, MouseEvent } from 'react';
+import { FC, SetStateAction, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { useState } from 'react';
 
 interface InputProps {
@@ -6,19 +6,29 @@ interface InputProps {
   layout: string;
   error: string;
   data: { value: string; label: string }[];
+  formValue: string;
   onClick: (event: MouseEvent<HTMLInputElement>) => void;
-  onBlur: (event: MouseEvent<HTMLInputElement>) => void; 
+  onBlur: (event: MouseEvent<HTMLInputElement>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SearchBldgField: FC<InputProps> = ({ onClick, onBlur, layout, error, data}) => {
-  const [options, setListData] = useState([
-    {value: '', label: ''}
-  ]);
+const SearchBldgField: FC<InputProps> = ({
+  formValue,
+  onChange,
+  onClick,
+  onBlur,
+  layout,
+  error,
+  data,
+}) => {
+  const [options, setListData] = useState([{ value: '', label: '' }]);
   const [value, setValue] = useState('');
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
-  const onChange = (event: { target: { value: SetStateAction<string> } }) => {
-    setValue(event.target.value);
+  const onChangeLocal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setValue(newValue);
+    // console.log(newValue);
     setIsOptionSelected(false);
   };
 
@@ -33,7 +43,7 @@ const SearchBldgField: FC<InputProps> = ({ onClick, onBlur, layout, error, data}
 
   useEffect(() => {
     loadData();
-  }, [loadData])
+  }, [loadData]);
 
   return (
     <div
@@ -50,36 +60,39 @@ const SearchBldgField: FC<InputProps> = ({ onClick, onBlur, layout, error, data}
           <input
             className="border border-gray rounded-lg"
             type="text"
-            value={value}
+            value={formValue}
             name="formBuildingID"
-            onChange={onChange}
+            onChange={(event) => {
+              onChange(event);
+              onChangeLocal(event);
+            }}
             onClick={onClick}
             onMouseDown={onBlur}
           />
         </div>
-        {!isOptionSelected ?
-        <div className="dropdown">
-          {options
-            .filter((options) => {
-              const searchTerm = value.toLowerCase();
-              const option = options.label.toLowerCase();
+        {!isOptionSelected ? (
+          <div className="dropdown">
+            {options
+              .filter((options) => {
+                const searchTerm = value.toLowerCase();
+                const option = options.label.toLowerCase();
 
-              return searchTerm && option.includes(searchTerm) && option !== searchTerm;
-            })
-            .slice(0, 10)
+                return searchTerm && option.includes(searchTerm) && option !== searchTerm;
+              })
+              .slice(0, 10)
 
-            .map((options) => (
-              <div
-                onClick={() => onSearch(options.label)}
-                className="dropdown-row"
-                key={options.label}
-                id="formBuildingID"
-              >
-                {options.label}
-              </div>
-            ))}
-        </div>
-        : null}
+              .map((options) => (
+                <div
+                  onClick={() => onSearch(options.label)}
+                  className="dropdown-row"
+                  key={options.label}
+                  id="formBuildingID"
+                >
+                  {options.label}
+                </div>
+              ))}
+          </div>
+        ) : null}
       </div>
       {error && !isOptionSelected && <p className="error text-red-500">{error}</p>}
     </div>

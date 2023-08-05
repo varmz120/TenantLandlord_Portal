@@ -10,7 +10,7 @@ import AddTenantButton from '../components/AddTenantButton';
 import AddBldgButton from '../components/AddBldgButton';
 import SubmitButton from '../components/SubmitButton';
 import TenantDetails from '../components/TenantDetails';
-import BuildingDetailsForm from '../components/BuildingDetails';
+import BuildingDetailsForm from '../components/BuildingDetailsForm';
 import UploadField from '../components/UploadField';
 
 import { client } from '../client';
@@ -32,14 +32,14 @@ const AddLease = () => {
     formMonthlyRent: '',
     formCommencement: '',
     formExpiry: '',
-    formAttachments: []
+    formAttachments: [],
   });
-  
+
   const [filenames, setFilenames] = useState<string[]>([]);
   const [isTenantPopupVisible, setTenantPopupVisible] = useState(false);
   const [isBldgPopupVisible, setBldgPopupVisible] = useState(false);
   const [tenantData, setTenantData] = useState([{ value: '', label: '' }]);
-  const [buildingData, setBuildingData] = useState([{ value: '', label: '' }]);  
+  const [buildingData, setBuildingData] = useState([{ value: '', label: '' }]);
 
   const handleTenantDeleteClick = () => {
     setTenantPopupVisible(false);
@@ -53,38 +53,36 @@ const AddLease = () => {
     navigate('/LandlordDashboard');
   };
 
-  const handleAddBuilding = (
-    event: MouseEvent<HTMLButtonElement>
-  ): void => {
+  const handleAddBuilding = (event: MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
 
     setBldgPopupVisible(!isBldgPopupVisible);
   };
 
-  const handleAddTenant = (
-    event: MouseEvent<HTMLButtonElement>
-  ): void => {
+  const handleAddTenant = (event: MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
 
     setTenantPopupVisible(!isTenantPopupVisible);
   };
 
   const handleValueChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement> | MouseEvent<HTMLInputElement>
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLDivElement>
+      | MouseEvent<HTMLInputElement>
   ): void => {
     if ('value' in event.target) {
       setFormState({
         ...formState,
-        [event.target.name] : event.target.value,
+        [event.target.name]: event.target.value,
       });
-      console.log(event.target.value);
+      console.log(event.target.name + ' ' + event.target.value);
     }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
       var data: File;
-      var name: string = "";
+      var name: string = '';
       if (!event.target.files || event.target.files.length === 0) {
         console.log('Select a file');
       } else {
@@ -101,18 +99,18 @@ const AddLease = () => {
 
   const getTenantData = async () => {
     try {
-      const tenantData = await client.service('tenants').find({ query: {$select: ['_id'] }});
+      const tenantData = await client.service('tenants').find({ query: { $select: ['_id'] } });
       const tenants = tenantData.data;
       const tenantsUpdated = tenants.map((tenant) => ({
         value: tenant._id,
-        label: tenant._id
+        label: tenant._id,
       }));
       return tenantsUpdated;
     } catch (error) {
       console.error('Error fetching tenants:', error);
       return null;
     }
-  }
+  };
 
   const fetchTenantData = async () => {
     try {
@@ -134,18 +132,18 @@ const AddLease = () => {
 
   const getBuildingData = async () => {
     try {
-      const buildingData = await client.service('building').find({ query: {$select: ['_id'] }});
+      const buildingData = await client.service('building').find({ query: { $select: ['_id'] } });
       const buildings = buildingData.data;
       const buildingsUpdated = buildings.map((building) => ({
         value: building._id,
-        label: building._id
+        label: building._id,
       }));
       return buildingsUpdated;
     } catch (error) {
       console.error('Error fetching buildings:', error);
       return null;
     }
-  }
+  };
 
   const fetchBuildingData = async () => {
     try {
@@ -168,12 +166,12 @@ const AddLease = () => {
   const handleBuilding = async () => {
     fetchBuildingData();
     console.log(buildingData);
-  }
+  };
 
   const handleTenant = async () => {
     fetchTenantData();
     console.log(tenantData);
-  }
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -191,7 +189,7 @@ const AddLease = () => {
     if (!formState.formTenantID) {
       errors.formTenant = 'Enter Tenant!';
     } else {
-      delete errors.formTenantID;
+      delete errors.formTenant;
     }
     if (!formState.formUnit) {
       errors.formUnit = 'Enter Unit Address!';
@@ -206,7 +204,11 @@ const AddLease = () => {
     if (!formState.formMonthlyRent) {
       errors.formMonthlyRent = 'Enter Monthly Rent!';
     } else {
-      delete errors.formMonthlyRent;
+      if (isNaN(formState.formMonthlyRent)) {
+        errors.formMonthlyRent = 'Numbers only!';
+      } else {
+        delete errors.formMonthlyRent;
+      }
     }
     if (!formState.formCommencement) {
       errors.formLeaseCommencement = 'Enter Lease Commencement Date!';
@@ -223,6 +225,15 @@ const AddLease = () => {
     } else {
       delete errors.formAttachments;
     }
+    const handleTenantChange = (value: string) => {
+      console.log('Tenant field value:', value);
+      // Further logic based on the new tenant value
+    };
+
+    const handleBuildingChange = (value: string) => {
+      console.log('Building field value:', value);
+      // Further logic based on the new building value
+    };
 
     setErrors({ ...errors });
 
@@ -231,7 +242,7 @@ const AddLease = () => {
     if (Object.keys(errors).length > 0) {
     } else {
       const leaseForm = new FormData();
-      
+
       leaseForm.set('_id', formLeaseID); // Change this
       leaseForm.set('userId', formUserID);
       leaseForm.set('tenantId', formTenantID); // formTenantID
@@ -262,7 +273,18 @@ const AddLease = () => {
     }
   }, [isSubmit, navigate]);
 
-const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, formExpiry, formTenantID, formBuildingID, formLeaseID, formAttachments } = formState;
+  const {
+    formUserID,
+    formEmail,
+    formUnit,
+    formMonthlyRent,
+    formCommencement,
+    formExpiry,
+    formTenantID,
+    formBuildingID,
+    formLeaseID,
+    formAttachments,
+  } = formState;
 
   return (
     <>
@@ -306,21 +328,24 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                 />
 
                 <div className="flex flex-center">
-                  <SearchTenantField 
-                    type={'text'} 
-                    layout={''} 
+                  <SearchTenantField
+                    type={'text'}
+                    layout={''}
                     error={errors.formTenant}
                     data={tenantData}
+                    formValue={formTenantID}
                     onClick={handleTenant}
                     onBlur={handleValueChange}
+                    onChange={handleValueChange}
                   />
                   <div>
                     <AddTenantButton
                       type="button"
                       label={'+ Create New Tenant'}
-                      handleClick={(event: { preventDefault: () => void; }) => { 
+                      handleClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
-                        setTenantPopupVisible(true)}}
+                        setTenantPopupVisible(true);
+                      }}
                     ></AddTenantButton>
                   </div>
                 </div>
@@ -340,20 +365,24 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
                 />
 
                 <div className="flex flex-center">
-                  <SearchBldgField 
-                    type={'text'} 
-                    layout={''} 
+                  <SearchBldgField
+                    type={'text'}
+                    layout={''}
                     error={errors.formBldgID}
                     data={buildingData}
+                    formValue={formBuildingID}
                     onClick={handleBuilding}
-                    onBlur={handleValueChange} />
+                    onBlur={handleValueChange}
+                    onChange={handleValueChange}
+                  />
                   <div>
                     <AddBldgButton
                       type="button"
                       label={'+ Add Building'}
-                      handleClick={(event: { preventDefault: () => void; }) => {
+                      handleClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
-                        setBldgPopupVisible(true)}}
+                        setBldgPopupVisible(true);
+                      }}
                     ></AddBldgButton>
                   </div>
                 </div>
@@ -400,29 +429,29 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
 
                 <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
 
-                <div className='flex flex-row'>
-                <CommencementExpiry
-                  label1="Commencement"
-                  padding_right="45"
-                  value={formCommencement}
-                  name="formCommencement"
-                  placeholder={''}
-                  error={''}
-                  layout={''}
-                  classnames={''}
-                  onChange={handleValueChange}
-                />
-                <CommencementExpiry
-                  label1="Expiry"
-                  padding_right="45"
-                  value={formExpiry}
-                  name="formExpiry"
-                  placeholder={''}
-                  error={''}
-                  layout={''}
-                  classnames={''}
-                  onChange={handleValueChange}
-                />
+                <div className="flex flex-row">
+                  <CommencementExpiry
+                    label1="Commencement"
+                    padding_right="45"
+                    value={formCommencement}
+                    name="formCommencement"
+                    placeholder={''}
+                    error={''}
+                    layout={''}
+                    classnames={''}
+                    onChange={handleValueChange}
+                  />
+                  <CommencementExpiry
+                    label1="Expiry"
+                    padding_right="45"
+                    value={formExpiry}
+                    name="formExpiry"
+                    placeholder={''}
+                    error={''}
+                    layout={''}
+                    classnames={''}
+                    onChange={handleValueChange}
+                  />
                 </div>
                 <SubmitButton
                   type="submit"
@@ -435,10 +464,10 @@ const { formUserID, formEmail, formUnit, formMonthlyRent, formCommencement, form
         </div>
       </div>
       <div className="absolute top-4 right-64">
-        {isTenantPopupVisible && <TenantDetails handleDelete={handleTenantDeleteClick}  />}
+        {isTenantPopupVisible && <TenantDetails handleDelete={handleTenantDeleteClick} />}
       </div>
       <div className="absolute top-4 right-64">
-        {isBldgPopupVisible && <BuildingDetailsForm handleDelete={handleBldgDeleteClick}  />}
+        {isBldgPopupVisible && <BuildingDetailsForm handleDelete={handleBldgDeleteClick} />}
       </div>
     </>
   );

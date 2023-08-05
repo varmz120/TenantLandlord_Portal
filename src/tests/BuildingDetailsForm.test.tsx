@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react';
-import BuildingDetailsForm from '../components/BuildingDetails';
+import BuildingDetailsForm from '../components/BuildingDetailsForm';
 
 describe('<BuildingDetailsForm />', () => {
   const handleDelClickMock = jest.fn();

@@ -43,7 +43,7 @@ describe('Initial render test for App', () => {
     const subtitleElement = screen.getByText(/Forgot your login details?/);
     const linkElement = screen.getByRole('button', { name: 'Click here' });
   
-    expect(titleElement);
+    expect(titleElement).toBeInTheDocument();
     expect(usernameInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
@@ -52,7 +52,4 @@ describe('Initial render test for App', () => {
   }
   
 );
-  
-  
-
 });

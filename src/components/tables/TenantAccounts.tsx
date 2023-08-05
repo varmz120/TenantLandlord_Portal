@@ -149,24 +149,24 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
 
   const loadTenantData = () => {
     console.log('Loading Tenant Data...');
-    // // Perform actions specific to tenants data loading
-    // let TenantData = [
-    //   { ID: '1', Email: 'john@example.com', LeaseID: 'XYZ789' },
-    //   { ID: '2', Email: 'jane@example.com', LeaseID: 'UVW123' },
-    //   { ID: '3', Email: 'alex@example.com', LeaseID: 'LMN456' },
-    //   { ID: '4', Email: 'sam@example.com', LeaseID: 'PQR789' },
-    //   { ID: '5', Email: 'emily@example.com', LeaseID: 'STU012' },
-    //   { ID: '6', Email: 'chris@example.com', LeaseID: 'VWX345' },
-    //   { ID: '7', Email: 'lisa@example.com', LeaseID: 'YZA678' },
-    //   { ID: '8', Email: 'matt@example.com', LeaseID: 'BCD901' },
-    //   { ID: '9', Email: 'sarah@example.com', LeaseID: 'EFG234' },
-    //   { ID: '10', Email: 'alexander@example.com', LeaseID: 'HIJ567' },
-    //   { ID: '11', Email: 'olivia@example.com', LeaseID: 'KLM890' },
-    //   { ID: '12', Email: 'ryan@example.com', LeaseID: 'NOP123' },
-    //   { ID: '13', Email: 'natalie@example.com', LeaseID: 'QRS456' },
-    //   { ID: '14', Email: 'daniel@example.com', LeaseID: 'TUV789' },
-    //   { ID: '15', Email: 'sophia@example.com', LeaseID: 'WXY012' },
-    // ];
+    // Perform actions specific to tenants data loading
+    let TenantData = [
+      { ID: '1', Email: 'john@example.com', LeaseID: 'XYZ789' },
+      { ID: '2', Email: 'jane@example.com', LeaseID: 'UVW123' },
+      { ID: '3', Email: 'alex@example.com', LeaseID: 'LMN456' },
+      { ID: '4', Email: 'sam@example.com', LeaseID: 'PQR789' },
+      { ID: '5', Email: 'emily@example.com', LeaseID: 'STU012' },
+      { ID: '6', Email: 'chris@example.com', LeaseID: 'VWX345' },
+      { ID: '7', Email: 'lisa@example.com', LeaseID: 'YZA678' },
+      { ID: '8', Email: 'matt@example.com', LeaseID: 'BCD901' },
+      { ID: '9', Email: 'sarah@example.com', LeaseID: 'EFG234' },
+      { ID: '10', Email: 'alexander@example.com', LeaseID: 'HIJ567' },
+      { ID: '11', Email: 'olivia@example.com', LeaseID: 'KLM890' },
+      { ID: '12', Email: 'ryan@example.com', LeaseID: 'NOP123' },
+      { ID: '13', Email: 'natalie@example.com', LeaseID: 'QRS456' },
+      { ID: '14', Email: 'daniel@example.com', LeaseID: 'TUV789' },
+      { ID: '15', Email: 'sophia@example.com', LeaseID: 'WXY012' },
+    ];
     setTableData(data);
     setFilteredTableData(data);
   };

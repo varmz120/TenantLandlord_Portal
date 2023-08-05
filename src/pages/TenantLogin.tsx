@@ -1,4 +1,4 @@
-import React, { useContext, useState, MouseEvent } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { client } from '../client';
@@ -8,7 +8,7 @@ const TenantLogin = () => {
   const navigate = useNavigate();
 
   // Context
-  const { tempLogin } = useContext(AuthContext);
+  const { user, temp_details, login, tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
   const [username, setUsername] = useState('');
@@ -76,7 +76,6 @@ const TenantLogin = () => {
         {/*login form below */}
         <form
           className="flex flex-col justify-start w-full p-4"
-          name="login-form"
           onSubmit={(event) => {
             event.preventDefault();
             handleLoginClick();

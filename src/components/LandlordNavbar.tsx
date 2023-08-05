@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import homeImage from '../images/home.svg';
+import userIcon from '../images/user_icon.svg';
+import userIconDark from '../images/user_icon_dark.svg';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { useContext } from 'react';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [usernameIsActive, setUsernameIsActive] = useState(false);
   const { user, logout } = useContext(AuthContext);
+
+  const handleUsernameActive = () => {
+    setUsernameIsActive(true);
+  };
 
   // const AddService = async () => {
   //   try {
@@ -19,6 +26,10 @@ const Navbar = () => {
   //   }
   // };
   // }
+
+  const handleUsernameInactive = () => {
+    setUsernameIsActive(false);
+  };
 
   const homeOnClick = () => {
     navigate('/LandlordDashboard');
