@@ -50,13 +50,9 @@ function ViewTicket() {
   };
 
   const handleUnassignClick = () => {
-    client
-      .service('ticket')
-      .unassignPersonnel({ ticketId: ticket?._id ?? 0 })
-      .then(() => {
-        setopenPopUp(true);
-      });
-
+    client.service('ticket').unassignPersonnel({ ticketId: ticket?._id ?? 0 })
+    .then(() => {setopenPopUp(true)})
+    
     console.log('unassign clicked');
   };
 
@@ -120,8 +116,8 @@ function ViewTicket() {
     event.preventDefault();
 
     navigate('/LandlordViewFeedback', { state: ticket });
-  };
-  // TODO: get contact details from assignedPerson
+  }
+    // TODO: get contact details from assignedPerson
 
   useEffect(() => {
     if (openPopUp) {
@@ -131,10 +127,6 @@ function ViewTicket() {
       }, 1000); // 1 second
     }
   }, [openPopUp]);
-
-  useEffect(() => {
-    console.log(ticket.attachments);
-  }, []);
 
   return (
     <div className="flex flex-col h-screen bg-[#ECEDED]">
@@ -174,11 +166,7 @@ function ViewTicket() {
                 placeholder="Please include any additional remarks here."
                 onChange={() => null}
               />
-              <Gallery
-                label={'Attachments'}
-                values={ticket.attachments ?? ticket.attachements ?? ''}
-                padding_right={'0'}
-              />
+              <Gallery label={'Attachments'} values={ticket?.attachements} padding_right={'0'} />
               <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
               <div className="grid grid-cols-2 pt-1">
                 <Status label={'Status'} value={ticket.status} padding_right={'0'} />
@@ -191,17 +179,17 @@ function ViewTicket() {
                   )}
                   <div className="flex flex-col gap-y-4">
                     {ticket.status === TicketStatus.Closed ? (
-                      <>
-                        <ActionButton
-                          value={'View Feedback'} // View Feedback
-                          padding_right={'30'}
-                          type=""
-                          firstViewState={false}
-                          toggle={false}
-                          onClick={handleViewFeedback}
-                        />
-                      </>
-                    ) : null}
+                        <>
+                          <ActionButton
+                            value={"View Feedback"} // View Feedback
+                            padding_right={'30'}
+                            type=""
+                            firstViewState={false}
+                            toggle={false}
+                            onClick={handleViewFeedback}
+                          />
+                        </>
+                      ) : null}
                     {ticket.status === TicketStatus.Opened ? (
                       <>
                         <ActionButton
@@ -313,8 +301,7 @@ function ViewTicket() {
                   contentLabel="Example Modal"
                   className="flex items-center justify-center mt-40"
                   overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75"
-                  onRequestClose={() => setopenPopUp(false)}
-                >
+                  onRequestClose={() => setopenPopUp(false)}>
                   <div className="bg-white p-4 rounded-lg max-w-sm">
                     <div className="text-2xl text-center">Personnel Unassigned</div>
                   </div>
