@@ -1,4 +1,9 @@
 const FuzzedDataProvider = require('@jazzer.js/core');
+const axios = require('axios');
+
+function brute_files(data){
+    return data;
+}
 
 function random(data){
     return data;
@@ -31,6 +36,5 @@ function runTicket(data){
 
 module.exports.fuzz = function (data) {
     const fuzzerData = data.toString();
-    random(fuzzerData);
-    //runTicket(data);
+    brute_files(fuzzerData);
 }

@@ -32,7 +32,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "fuzz": "npx jazzer \"./src/tests/fuzztarget\" ",
+    "fuzz": "npx jazzer \"./src/tests/fuzztarget\" --sync",
     "prettier": "npx prettier \"**/*.(js|jsx|ts|tsx)\" --write",
     "eject": "react-scripts eject"
   },
