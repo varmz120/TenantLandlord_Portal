@@ -1,17 +1,18 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import LineField from '../components/LineField';
 import DeleteIcon from '../images/delete.svg';
 import SubmitButton from './SubmitButton';
 import { client } from '../client';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 interface Props {
   userType: string;
   handleDelClick: () => void;
-  
 }
 
 const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
+  const { user } = useContext(AuthContext);
   type FeathersError = {
     code?: number;
     message?: string;
@@ -41,16 +42,14 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     setBuildingIDError(newValue.trim() ? '' : 'Building ID is required');
   };
   const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setUserIDError("");
+    setUserIDError('');
     const newValue = event.target.value;
     setUserId(newValue);
   };
   const handleLeaseIdChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    
     const newValue = event.target.value;
     setLeaseID(newValue);
   };
-  
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -62,8 +61,8 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
       errored ||= email.trim() === '';
     }
     if (userType === 'Landlord' || userType === 'Service Provider') {
-      console.log("come on why is not working")
-      setBuildingIDError(buildingID!== '' ? "" : 'Building ID is required');
+      console.log('come on why is not working');
+      setBuildingIDError(buildingID !== '' ? '' : 'Building ID is required');
       errored ||= buildingID === '';
       console.log(buildingIDError);
     }
@@ -77,14 +76,16 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             _id: userId,
             typ: 2,
             email: email,
-            buildingId: buildingID,
+            buildingId: user?.typ == 2 ? user.buildingId : buildingID,
           });
           handleDelClick();
-          
         } catch (error) {
           console.error('Failed to create account', error);
           const feathersError = error as FeathersError;
-          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+          if (
+            feathersError?.code === 11000 ||
+            feathersError?.message?.includes('duplicate key error collection')
+          ) {
             setUserIDError('ID already exists');
           } else {
             setUserIDError('');
@@ -101,11 +102,13 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             buildingId: buildingID,
           });
           handleDelClick();
-          
         } catch (error) {
           console.error('Failed to create account', error);
           const feathersError = error as FeathersError;
-          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+          if (
+            feathersError?.code === 11000 ||
+            feathersError?.message?.includes('duplicate key error collection')
+          ) {
             setUserIDError('ID already exists');
           } else {
             setUserIDError('');
@@ -122,16 +125,17 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             buildingId: buildingID,
           });
           handleDelClick();
-          
         } catch (error) {
           console.error('Failed to create account', error);
           const feathersError = error as FeathersError;
-          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+          if (
+            feathersError?.code === 11000 ||
+            feathersError?.message?.includes('duplicate key error collection')
+          ) {
             setUserIDError('ID already exists');
           } else {
             setUserIDError('');
           }
-          
         }
       }
       if (userType === 'Tenant') {
@@ -141,27 +145,31 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             typ: 0,
             email: email,
             leaseId: leaseID,
-            
           });
           handleDelClick();
-          
         } catch (error) {
           console.error('Failed to create account', error);
           const feathersError = error as FeathersError;
-          if (feathersError?.code === 11000 || feathersError?.message?.includes('duplicate key error collection')) {
+          if (
+            feathersError?.code === 11000 ||
+            feathersError?.message?.includes('duplicate key error collection')
+          ) {
             setUserIDError('ID already exists');
           } else {
             setUserIDError('');
           }
-          
         }
       }
-
-      
     } else {
       console.log('Please fill in all required fields and correct the errors.');
     }
   };
+
+  useEffect(() => {
+    if (user?.typ == 2) {
+      setBuildingID(user.buildingId ?? '');
+    }
+  });
 
   return (
     <>
@@ -214,13 +222,13 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                   name="category"
                   placeholder=""
                   error={buildingIDError}
-                  disabled={false}
+                  disabled={user?.typ == 2 ? true : false}
                   layout="vertical"
                   classnames=""
                   onChange={handleBuildingChange}
                 />
               ) : null}
-              {userType === 'Tenant'  ? (
+              {userType === 'Tenant' ? (
                 <LineField
                   type="text"
                   label="LeaseID"
