@@ -47,7 +47,7 @@ const NotificationComponent = () => {
             Time_elapsed: timeElapsed(notification.timestamp),
             Seen: false,
             Background: '#EDFDFF',
-          }));
+          })).reverse();
           setFormattedNotifications(formattedNotifications);
         } catch (error) {
           console.error('Error fetching notifications:', error);
