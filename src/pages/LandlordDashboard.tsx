@@ -433,6 +433,17 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
+                    Personnel Assigned
+                    <input
+                      type="text"
+                      value={searchInputs.PersonnelAssigned}
+                      onChange={(e) => handleSearchInputChange('PersonnelAssigned', e.target.value)}
+                      placeholder="Search Personnel Assigned"
+                      style={{ color: 'gray' }}
+                    />
+                  </th>
+
+                  <th className="border px-4 py-2 bg-[gray] text-white">
                     Date
                     <input
                       type="text"
