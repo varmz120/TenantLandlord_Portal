@@ -6,13 +6,10 @@ import BackButton from '../components/BackButton';
 import Navbar from '../components/Navbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, MouseEvent, useContext, useEffect } from 'react';
-import ReactModal from 'react-modal';
-import ActionRequired from '../components/ActionRequired';
 import ActionButton from '../components/ActionButton';
 import { AuthContext } from '../contexts/AuthContext';
 import { Ticket } from '../esc-backend/src/client';
 import { client } from '../client';
-import ActionUnassignButton from '../components/ActionUnassignButtonp';
 
 
 export enum TicketStatus {
@@ -41,13 +38,6 @@ function ViewTicket() {
   const handleBack = () => {
     navigate('/ServProvDashboard')
   }
-
-  const handleUserActive = () => {
-    setUserIsActive(true);
-  };
-  const handleUserInactive = () => {
-    setUserIsActive(false);
-  };
 
   const closePopUp = () => {
     setopenPopUp(false);
