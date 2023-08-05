@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import {client} from '../client';
+import { client } from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
@@ -11,13 +11,17 @@ const TenantLogin = () => {
   const { user, temp_details, login, tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
-  const [username, setUsername] = useState<any>();
-  const [password, setPassword] = useState<any>();
-  // const [isSubmit, setSubmit] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [invalidLogin, setInvalidLogin] = useState(false);
+  const [submitClicked, setSubmitClicked] = useState(false);
+  const [usernameEmpty, setUsernameEmpty] = useState(false);
+  const [passwordEmpty, setPasswordEmpty] = useState(false);
 
   // Event handler for change in username field
   const handleUsernameFieldChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);  };
+    setUsername(event.target.value);
+  };
 
   // Event handler for change in password field
   const handlePasswordFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,21 +30,40 @@ const TenantLogin = () => {
 
   // Event handler for clicking login button
   const handleLoginClick = async () => {
-    
-    try{
-    await client.get2FA({
-      strategy: 'local',
-      _id: username,
-      password: password,
-    });
-    console.log('Here')}
-    catch{
+    setSubmitClicked(true);
+    if (username.length == 0 || password.length == 0) {
+      setUsernameEmpty(username.length == 0);
+      setPasswordEmpty(password.length == 0);
+      setInvalidLogin(false);
+      return;
+    } else {
+      setUsernameEmpty(false);
+      setPasswordEmpty(false);
+    }
     tempLogin({
       id: username,
       password: password,
     });
-    navigate('/Tenant2FA');
-  };}
+
+    await client
+      .get2FA({
+        strategy: 'local',
+        _id: username,
+        password: password,
+      })
+      .then()
+      .catch((error) => {
+        console.log(error.message);
+        if (error.message == 'Invalid login') {
+          console.log('here');
+          setInvalidLogin(true);
+          return;
+        }
+        if (error.message == 'Sent 2FA') {
+          navigate('/login2FA');
+        }
+      });
+  };
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
@@ -72,6 +95,7 @@ const TenantLogin = () => {
             onChange={handleUsernameFieldChange}
             placeholder="Username"
           />
+          {submitClicked && usernameEmpty && <p className="flex text-red-500">Enter username!</p>}
           <input
             className={
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500 '
@@ -81,6 +105,10 @@ const TenantLogin = () => {
             onChange={handlePasswordFieldChange}
             placeholder="Password"
           />
+          {submitClicked && passwordEmpty && <p className="flex text-red-500">Enter password!</p>}
+          {submitClicked && invalidLogin && (
+            <p className="flex text-red-500">Invalid username or password!</p>
+          )}
           <button
             type="submit"
             className="bg-[#335B77] rounded-lg mt-24 text-2xl font-bold text-white p-1"
