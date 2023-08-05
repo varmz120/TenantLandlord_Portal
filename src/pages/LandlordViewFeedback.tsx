@@ -25,7 +25,11 @@ function ViewTicket() {
   const ticket: Ticket = locate.state;
 
   const handleBack = () => {
-    navigate('/LandlordDashboard');
+
+    if (user?.typ === 1)
+      navigate('/ServProvDashboard');
+    else
+      navigate('/LandlordDashboard');
   };
 
   const ticket_id = ticket._id;

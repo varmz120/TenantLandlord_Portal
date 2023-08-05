@@ -57,7 +57,7 @@ function ViewTicket() {
   const handleViewFeedback = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
     event.preventDefault();
 
-    navigate('/ViewFeedback', { state: ticket });
+    navigate('/LandlordViewFeedback', { state: ticket });
   }
     // TODO: get contact details from assignedPerson
 

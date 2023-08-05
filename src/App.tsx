@@ -450,7 +450,7 @@ function LandlordViewFeedbackPage() {
     if (user === null) {
       // If the user is not logged in, navigate to 401
       navigate('/401');
-    } else if (user.typ !== 2) {
+    } else if (user.typ !== 1 && user.typ !== 2) {
       // If the user type is not 3 (not an admin), navigate to 403
       navigate('/403');
     }
@@ -542,18 +542,6 @@ function LandlordAddServicePage() {
 }
 
 function SuccessRedirectPage() {
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user === null) {
-      // If the user is not logged in, navigate to 401
-      navigate('/401');
-    } else if (user.typ !== 2) {
-      // If the user type is not 3 (not an admin), navigate to 403
-      navigate('/403');
-    }
-  }, [user, navigate]);
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <ErrorBoundary>
@@ -571,8 +559,8 @@ function ServProvDashboardPage() {
     if (user === null) {
       // If the user is not logged in, navigate to 401
       navigate('/401');
-    } else if (user.typ !== 2) {
-      // If the user type is not 3 (not an admin), navigate to 403
+    } else if (user.typ !== 1) {
+      // If the user type is not 1 (not an SP), navigate to 403
       navigate('/403');
     }
   }, [user, navigate]);
@@ -587,8 +575,8 @@ function ServProvViewTicketPage() {
     if (user === null) {
       // If the user is not logged in, navigate to 401
       navigate('/401');
-    } else if (user.typ !== 2) {
-      // If the user type is not 3 (not an admin), navigate to 403
+    } else if (user.typ !== 1) {
+      // If the user type is not 1 (not an SP), navigate to 403
       navigate('/403');
     }
   }, [user, navigate]);

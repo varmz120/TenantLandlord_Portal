@@ -6,6 +6,7 @@ interface InputProps {
   layout: string;
   error: string;
   data: { value: string; label: string }[];
+  value: string;
   onClick: (event: MouseEvent<HTMLInputElement>) => void;
   onBlur: (event: MouseEvent<HTMLInputElement>) => void;
 }
