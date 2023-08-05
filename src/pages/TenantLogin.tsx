@@ -53,9 +53,7 @@ const TenantLogin = () => {
       })
       .then()
       .catch((error) => {
-        console.log(error.message);
         if (error.message == 'Invalid login') {
-          console.log('here');
           setInvalidLogin(true);
           return;
         }
