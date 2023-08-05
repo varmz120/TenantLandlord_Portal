@@ -1,4 +1,3 @@
-import { client } from '../client';
 const FuzzedDataProvider = require('@jazzer.js/core');
 
 function random(data){

@@ -1,5 +1,4 @@
 import { MouseEvent, FC } from 'react';
-import { TicketStatus } from '../pages/LandlordViewTicket';
 
 interface InputProps {
   value: string;

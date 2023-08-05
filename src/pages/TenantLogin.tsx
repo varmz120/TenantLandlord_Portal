@@ -1,19 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import {client} from '../client';
+import { client } from '../client';
 
 const TenantLogin = () => {
   //creating variable for navigation
   const navigate = useNavigate();
 
   // Context
-  const { user, temp_details, login, tempLogin } = useContext(AuthContext);
+  const { tempLogin } = useContext(AuthContext);
 
   // Creating state variables for username and password
   const [username, setUsername] = useState<any>();
   const [password, setPassword] = useState<any>();
-  // const [isSubmit, setSubmit] = useState(false);
 
   // Event handler for change in username field
   const handleUsernameFieldChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,19 +27,21 @@ const TenantLogin = () => {
   const handleLoginClick = async () => {
     
     try{
-    await client.get2FA({
-      strategy: 'local',
-      _id: username,
-      password: password,
-    });
-    console.log('Here')}
-    catch{
+      await client.get2FA({
+        strategy: 'local',
+        _id: username,
+        password: password,
+      });
+    console.log('Here')
+  } catch{
     tempLogin({
       id: username,
       password: password,
     });
     navigate('/Tenant2FA');
-  };}
+  };
+
+}
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
@@ -55,6 +56,7 @@ const TenantLogin = () => {
         {/*login form below */}
         <form
           className="flex flex-col justify-start w-full p-4"
+          name="login-form"
           onSubmit={(event) => {
             event.preventDefault();
             handleLoginClick();

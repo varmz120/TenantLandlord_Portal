@@ -7,7 +7,6 @@ import ServiceProvidersAccounts from '../components/tables/ServiceProvidersAccou
 import TenantAccounts from '../components/tables/TenantAccounts';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 import { client } from '../client';
-import { Type, getValidator, querySyntax } from '@feathersjs/typebox';
 const ViewAllAccounts = () => {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState([{ ID: '', Email: '' }]);

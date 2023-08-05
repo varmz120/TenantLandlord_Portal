@@ -10,7 +10,7 @@ interface Props {
   handleDelClick: () => void;
 }
 
-const BuildingDetailsForm = ({ handleDelete }: Props) => {
+const BuildingDetailsForm = ({ handleDelClick }: Props) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');

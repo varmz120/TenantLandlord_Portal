@@ -132,12 +132,12 @@ const AdminAccounts = ({ clicked, handleClick, data }: Props) => {
   const loadAdminData = () => {
     console.log('Loading Admin Data...');
     // Perform actions specific to admin data loading
-    let adminData = [
-      { ID: '54', Email: 'evelyn@example.com' },
-      { ID: '55', Email: 'james@example.com' },
-      { ID: '56', Email: 'abigail@example.com' },
-      { ID: '57', Email: 'logan@example.com' },
-    ];
+    // let adminData = [
+    //   { ID: '54', Email: 'evelyn@example.com' },
+    //   { ID: '55', Email: 'james@example.com' },
+    //   { ID: '56', Email: 'abigail@example.com' },
+    //   { ID: '57', Email: 'logan@example.com' },
+    // ];
     setTableData(data);
     setFilteredTableData(data);
   };

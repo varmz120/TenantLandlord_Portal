@@ -131,19 +131,19 @@ const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
   const loadLandlordData = () => {
     console.log('Loading Landlord Data...');
     // Perform actions specific to landlord data loading
-    let landlordData = [
-      { ID: '16', Name: 'john@example.com', Address: 'XYZ789' },
-      { ID: '17', Name: 'jane@example.com', Address: 'UVW123' },
-      { ID: '18', Name: 'alex@example.com', Address: 'LMN456' },
-      { ID: '19', Name: 'sam@example.com', Address: 'PQR789' },
-      { ID: '20', Name: 'emily@example.com', Address: 'STU012' },
-      { ID: '21', Name: 'chris@example.com', Address: 'VWX345' },
-      { ID: '22', Name: 'lisa@example.com', Address: 'YZA678' },
-      { ID: '23', Name: 'matt@example.com', Address: 'BCD901' },
-      { ID: '24', Name: 'sarah@example.com', Address: 'EFG234' },
-      { ID: '25', Name: 'alexander@example.com', Address: 'HIJ567' },
-      { ID: '26', Name: 'olivia@example.com', Address: 'KLM890' },
-    ];
+    // let landlordData = [
+    //   { ID: '16', Name: 'john@example.com', Address: 'XYZ789' },
+    //   { ID: '17', Name: 'jane@example.com', Address: 'UVW123' },
+    //   { ID: '18', Name: 'alex@example.com', Address: 'LMN456' },
+    //   { ID: '19', Name: 'sam@example.com', Address: 'PQR789' },
+    //   { ID: '20', Name: 'emily@example.com', Address: 'STU012' },
+    //   { ID: '21', Name: 'chris@example.com', Address: 'VWX345' },
+    //   { ID: '22', Name: 'lisa@example.com', Address: 'YZA678' },
+    //   { ID: '23', Name: 'matt@example.com', Address: 'BCD901' },
+    //   { ID: '24', Name: 'sarah@example.com', Address: 'EFG234' },
+    //   { ID: '25', Name: 'alexander@example.com', Address: 'HIJ567' },
+    //   { ID: '26', Name: 'olivia@example.com', Address: 'KLM890' },
+    // ];
     setTableData(data);
     setFilteredTableData(data);
     

@@ -6,7 +6,7 @@ describe('<BuildingDetailsForm />', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
-    const result = render(<BuildingDetailsForm handleDelete={handleDelClickMock} />);
+    const result = render(<BuildingDetailsForm handleDelClick={handleDelClickMock} />);
     container = result.container;
   });
 

@@ -53,9 +53,6 @@ function RateTicket() {
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
-  // Mock static values
-  var location = 'Sunplaza';
-  var unit = '01-35';
 
   // Handlers
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {

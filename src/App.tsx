@@ -5,7 +5,6 @@ import { client } from './client';
 
 // Routing library and auth context
 import { Routes, Route, redirect, useNavigate, Navigate } from 'react-router-dom';
-import { AuthContextProvider } from './contexts/AuthContext.tsx';
 
 import Navbar from './components/Navbar.tsx';
 import TenantNavbar from './components/TenantNavbar.tsx';
@@ -40,7 +39,6 @@ import ViewTicket from './pages/ViewTicket.tsx';
 import TenantDashboard from './pages/TenantDashboard.tsx';
 import ViewQuote from './pages/ViewQuote.tsx';
 import RateTicket from './pages/RateTicket.tsx';
-import Landing from './pages/Landing.tsx';
 import Notification from './pages/Notification.tsx';
 
 // Landlord-specific pages
@@ -61,7 +59,7 @@ import { AuthContext } from './contexts/AuthContext';
 
 function App() {
   const [isLoading, setLoading] = useState(true);
-  const { user, login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     client.reAuthenticate()

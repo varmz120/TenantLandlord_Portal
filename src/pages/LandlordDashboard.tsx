@@ -54,7 +54,7 @@ const Dashboard = () => {
     }
   };
 
-  const [ticket_ID, setTicketID] = useState(0);
+  // const [ticket_ID, setTicketID] = useState(0);
 
   // useStates
   const navigate = useNavigate();

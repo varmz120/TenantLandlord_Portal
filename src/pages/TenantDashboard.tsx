@@ -1,6 +1,5 @@
 import React, { useState, useContext, MouseEvent, useEffect } from 'react';
 import filterIcon from '../images/filter_icon.svg';
-import filterDarkIcon from '../images/filter_icon_dark.svg';
 import ActionButton from '../components/ActionButton';
 
 import { useNavigate, Navigate } from 'react-router-dom';
@@ -138,14 +137,15 @@ const TenantDashboard = () => {
   useEffect(() => {
     client.service('ticket').find().then(tickets => {
       setTickets(tickets.data);
-      setFilteredTableData(tickets.data.map(t => ({
+
+      setFilteredTableData(tickets.data.map((t) => ({
           ID: t._id,
           Item: t.title,
           Category: t.requestType,
           Date: new Date(t.openedOn).toLocaleDateString(),
           Status: statusMap[t.status],
           Landlord: t.personnelAssigned,
-        })));
+        }) as TableDataItem));
     });
   }, []);
 

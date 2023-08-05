@@ -31,7 +31,7 @@ describe('Initial render test for App', () => {
     // Render a component
     await act(async() => {
       render(
-        <MemoryRouter initialEntries={['/']}>
+        <MemoryRouter initialEntries={['/login']}>
              <App/>
         </MemoryRouter>);
     });

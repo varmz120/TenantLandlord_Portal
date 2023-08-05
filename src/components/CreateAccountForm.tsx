@@ -16,7 +16,6 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
     code?: number;
     message?: string;
   };
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [buildingID, setBuildingID] = useState('');
