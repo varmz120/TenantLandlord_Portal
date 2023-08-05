@@ -84,7 +84,7 @@ function App() {
       {/*Routing for login pages */}
       <Route path="/login" element={<TenantLoginPage />} />
       {/*Routing for password reset */}
-      <Route path="/reset1" element={<PasswordResetPage1 />} />
+      <Route path="/reset" element={<PasswordResetPage1 />} />
       <Route path="/login2FA" element={<Tenant2FAPage />} />
       <Route path="/reset-password" element={<PasswordResetPage2 />} />
       <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
