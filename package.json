@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.2.5",
     "history": "^5.3.0",
     "jest": "^29.6.2",
+    "axios": "^1.4.0",
     "mongodb": "^5.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -32,7 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "fuzz": "npx jazzer \"./src/tests/fuzztarget\" --sync",
+    "fuzz": "npx jazzer \"./src/tests/fuzzing/target\" -f \"fuzz\" --detect_leaks ",
     "prettier": "npx prettier \"**/*.(js|jsx|ts|tsx)\" --write",
     "eject": "react-scripts eject"
   },
@@ -58,10 +59,10 @@
     ]
   },
   "devDependencies": {
+    "@types/react-modal": "^3.16.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@jazzer.js/core": "^1.5.1",
     "@jest/globals": "^29.6.2",
-    "@types/react-modal": "^3.16.0",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "husky": "^8.0.3",
