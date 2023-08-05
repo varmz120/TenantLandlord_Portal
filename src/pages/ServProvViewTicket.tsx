@@ -3,49 +3,105 @@ import LineField from '../components/LineField';
 import Gallery from '../components/Gallery';
 import Status from '../components/Status';
 import BackButton from '../components/BackButton';
-import ServProvNavbar from '../components/ServProvNavbar';
-import { useNavigate } from "react-router-dom";
+import Navbar from '../components/AdminNavbar';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, MouseEvent, useContext, useEffect } from 'react';
+import ReactModal from 'react-modal';
+import ActionRequired from '../components/ActionRequired';
+import ActionButton from '../components/ActionButton';
+import { AuthContext } from '../contexts/AuthContext';
+import { Ticket } from '../esc-backend/src/client';
+import { client } from '../client';
+import ActionUnassignButton from '../components/ActionUnassignButtonp';
+
+
+export enum TicketStatus {
+  Opened,
+  WaitingForQuotApproval,
+  InQueue,
+  InProgress,
+  PendingCompletionApproval,
+  Rejected,
+  Closed,
+}
 
 function ViewTicket() {
   const navigate = useNavigate();
 
+  const locate = useLocation();
+  const ticket: Ticket = locate.state;
+
   //console.log(locate.state);
+
+  const { user } = useContext(AuthContext);
+
+  const [, setUserIsActive] = useState(false);
+  const [openPopUp, setopenPopUp] = useState(false);
 
   const handleBack = () => {
     navigate('/ServProvDashboard')
   }
 
-  // Mock static values
-  var ticket_id = "007";
-  var building = "SunPlaza";
-  var unit = "01-42";
-  //var isSubmit = locate.state? locate.state.isSubmit : false;
-  var title = "Ticket Details";
-  var category = "Pest Control";
-  var description= "Too many ants in the pantry! Please send help!";
-  //var isClosed = locate.state? locate.state.isClosed : false;
+  const handleUserActive = () => {
+    setUserIsActive(true);
+  };
+  const handleUserInactive = () => {
+    setUserIsActive(false);
+  };
+
+  const closePopUp = () => {
+    setopenPopUp(false);
+  };
+
+  const handleFinishWorks = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
+    event.preventDefault();
+
+    client
+      .service('ticket')
+      .registerWorkFinished({ ticketId: ticket._id })
+      .then(() => {
+        navigate('/ServProvDashboard');
+      });
+  };
+
+  const handleViewFeedback = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
+    event.preventDefault();
+
+    navigate('/ViewFeedback', { state: ticket });
+  }
+    // TODO: get contact details from assignedPerson
+
+  useEffect(() => {
+    if (openPopUp) {
+      setTimeout(() => {
+        closePopUp();
+        navigate('/ServProvDashboard');
+      }, 1000); // 1 second
+    }
+  }, [openPopUp]);
+
 
   return (
     <div className="flex flex-col h-screen bg-[#ECEDED]">
-    <ServProvNavbar />
+    <Navbar />
       <div className="flex flex-col font-3xl" id="viewTicket">
             <BackButton
               type="button"
               label={"all tickets"}
               handleClick={handleBack}/>
             <div className='flex justify-center'>
-                <p className='text-headerText pb-5 text-2xl font-medium'>Service Ticket #{ticket_id} : {building} Unit {unit}</p>
+                <p className='text-headerText pb-5 text-2xl font-medium'>{ticket._id}</p>
             </div>
             <div className='flex flex-row justify-center'>
             <div className="flex w-fit bg-white border-gray-200 rounded-lg shadow sm:p-7">
                 <form className="space-y-4">
-                    <p className="text-lg text-left font-medium">{title}</p>
+                    <p className="text-lg text-left font-medium">{ticket.title}</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <LineField
                       type={"text"}
                       label="Category"
                       padding_right="50"
-                      value={category}
+                      value={ticket.requestType}
                       name="category"
                       placeholder={""}
                       error={""}
@@ -57,7 +113,7 @@ function ViewTicket() {
                         label={"Description"}
                         classnames="w-4/5"
                         padding_right={"32"}
-                        value={description}
+                        value={ticket.description}
                         id="description"
                         disabled={true}
                         layout=''
@@ -66,14 +122,40 @@ function ViewTicket() {
                         onChange={()=>null} />
                     <Gallery
                         label={"Attachments"}
-                        value=''
+                        values={ticket?.attachements}
                         padding_right={"0"}/>
                     <hr className="h-[2px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className="grid grid-cols-2 pt-1">
                       <Status
                         label={"Status"}
-                        value={"Opened"}
+                        value={ticket.status}
                         padding_right={"0"}/>
+                      <div className='flex flex-col pt-1'>
+                        {ticket.status === TicketStatus.InProgress ? (
+                          <>
+                          <ActionButton
+                          value={'Finish Works'}
+                          padding_right={'30'}
+                          type=""
+                          firstViewState={false}
+                          toggle={false}
+                          onClick={handleFinishWorks}
+                          />
+                          </>
+                        ) : null}
+                        {ticket.status === TicketStatus.Closed ? (
+                        <>
+                          <ActionButton
+                            value={"View Feedback"} // View Feedback
+                            padding_right={'30'}
+                            type=""
+                            firstViewState={false}
+                            toggle={false}
+                            onClick={handleViewFeedback}
+                          />
+                        </>
+                      ) : null}
+                      </div>
                     </div>
                 </form>
             </div>
