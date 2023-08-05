@@ -151,14 +151,6 @@ const Dashboard = () => {
         // Find the updated ticket by its ID from the tickets state array
         const updatedTicket = tickets.find((ticket) => ticket._id.toString() === updatedRowId);
         if (updatedTicket) {
-          // Get the personnel ID from the updated ticket
-          const personnelID = updatedTicket.personnelAssigned ?? 'None';
-
-          // Call the API to update the ticket using the assignPersonnel method
-          await client
-            .service('ticket')
-            .assignPersonnel({ ticketId: Number(updatedRowId), personnelId: personnelID });
-          console.log(`Ticket with ID ${updatedRowId} updated successfully!`);
           // Perform any additional actions or update the local state as needed
         } else {
           console.error(`Ticket with ID ${updatedRowId} not found in the tickets array.`);
@@ -311,12 +303,23 @@ const Dashboard = () => {
                   </th>
 
                   <th className="border px-4 py-2 bg-[gray] text-white">
-                    Personnel Assigned
+                    Category
                     <input
                       type="text"
                       value={searchInputs.Category}
                       onChange={(e) => handleSearchInputChange('Category', e.target.value)}
                       placeholder="Search Category"
+                      style={{ color: 'gray' }}
+                    />
+                  </th>
+
+                  <th className="border px-4 py-2 bg-[gray] text-white">
+                    Personnel Assigned
+                    <input
+                      type="text"
+                      value={searchInputs.PersonnelAssigned}
+                      onChange={(e) => handleSearchInputChange('PersonnelAssigned', e.target.value)}
+                      placeholder="Search Personnel Assigned"
                       style={{ color: 'gray' }}
                     />
                   </th>
