@@ -145,6 +145,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
             typ: 0,
             email: email,
             leaseId: leaseID,
+            buildingId: buildingID,
           });
           handleDelClick();
         } catch (error) {
@@ -213,7 +214,7 @@ const CreateAccountForm = ({ userType, handleDelClick }: Props) => {
                 classnames=""
                 onChange={handleEmailChange}
               />
-              {userType === 'Landlord' || userType === 'Service Provider' ? (
+              {userType === 'Landlord' || userType === 'Service Provider' || userType === 'Tenant'  ? (
                 <LineField
                   type="text"
                   label="Building ID"

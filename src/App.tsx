@@ -411,25 +411,97 @@ function BuildingsPage() {
 }
 
 function LandlordDashboardPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordDashboard />;
 }
 
 function LandlordViewTicketPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordViewTicket />;
 }
 
 function LandlordViewFeedbackPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 1 && user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordViewFeedback />;
 }
 
 function LandlordUploadQuotationPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordUploadQuotation />;
 }
 
 function LandlordAddLeasePage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordAddLease />;
 }
 function TenantAddAccPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return (
     <div className="App h-screen bg-content">
       <TenantAddAcc />
@@ -438,10 +510,34 @@ function TenantAddAccPage() {
 }
 
 function LandlordAccountCreationPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordAccountCreation />;
 }
 
 function LandlordAddServicePage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 2) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <LandlordAddService />;
 }
 
@@ -456,10 +552,34 @@ function SuccessRedirectPage() {
 }
 
 function ServProvDashboardPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 1) {
+      // If the user type is not 1 (not an SP), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <ServProvDashboard />;
 }
 
 function ServProvViewTicketPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 1) {
+      // If the user type is not 1 (not an SP), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return <ServProvViewTicket />;
 }
 

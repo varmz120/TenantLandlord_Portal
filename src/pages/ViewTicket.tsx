@@ -110,7 +110,7 @@ function ViewTicket() {
                     <div className="grid grid-cols-2 pt-1">
                       <Status label={'Status'} value={ticket.status} padding_right={'0'} />
                       <div className="flex flex-col pt-1">
-                        {ticket.status === TicketStatus.Closed ? (
+                        {ticket.status === TicketStatus.Closed || ticket.status === TicketStatus.InProgress ? (
                           <ActionRequired
                             label={'Action Required'}
                             padding_right={'32'}

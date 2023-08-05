@@ -58,7 +58,7 @@ function UploadQuote() {
 
 
   const handleBack = () => {
-    navigate('/LandlordViewTicket');
+    navigate('/LandlordViewTicket', {state: ticket});
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -137,7 +137,7 @@ function UploadQuote() {
   
 
   // Mock static values
-  var quotationby = 'Tom';
+  var quotationby = user?._id;
 
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 
