@@ -1,12 +1,18 @@
-const FuzzedDataProvider = require('@jazzer.js/core');
+const { FuzzedDataProvider } = require('@jazzer.js/core');
 const axios = require('axios');
 
+const appUrl = 'http://localhost:3030/'
+
 function brute_files(data){
-    return data;
+    const provider = new FuzzedDataProvider(data);
+    return provider.consumeString(25);
 }
 
 function random(data){
+    //const fuzzerData = data.toString(); -> return fuzzerData instead
     return data;
+    //const provider = new FuzzedDataProvider(data);
+    return provider.consumeString(25);
 }
 
 function runTicket(data){
@@ -35,6 +41,5 @@ function runTicket(data){
 }
 
 module.exports.fuzz = function (data) {
-    const fuzzerData = data.toString();
-    brute_files(fuzzerData);
+    brute_files(data);
 }
