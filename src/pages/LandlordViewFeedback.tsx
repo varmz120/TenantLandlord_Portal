@@ -35,21 +35,23 @@ function ViewTicket() {
   const title = ticket.title;
 
   const getUnitNo = async () => {
-    const lease = await client.service('lease').get(user?.leaseId ?? '');
+    console.log(await client.service('users').find());
+    // const userId = await client.service('users').get(ticket.userId.toString());
+    const lease = await client.service('lease').get(userId.leaseId ?? '');
     const units = lease.units.filter((unit) => unit.buildingId == user?.buildingId);
     return units[0];
   };
 
   const getBuildingAddress = async () => {
-    const building = client.service('building').get(unit?.buildingId ?? '');
+    const building = client.service('building').get(user?.buildingId ?? '');
     return (await building).address;
   };
 
   useEffect(() => {
     getBuildingAddress().then((address) => setAddress(address));
-    getUnitNo().then((unit) => {
-      setUnit(unit);
-    });
+    // getUnitNo().then((unit) => {
+    //   setUnit(unit);
+    // });
   }, []);
 
   return (
@@ -59,7 +61,8 @@ function ViewTicket() {
         <BackButton type="button" label={'ticket details'} handleClick={handleBack} />
         <div className="flex justify-center">
           <p className="text-headerText pb-5 text-2xl font-medium">
-            Feedback for #00{ticket_id} : {address} Unit {unit?.number}
+            {/* Feedback for #00{ticket_id} : {address} Unit {unit?.number} */}
+            Feedback for #00{ticket_id} : {address}
           </p>
         </div>
         <div className="flex mx-auto w-fit bg-white border-gray-200 rounded-lg shadow sm:p-7">
