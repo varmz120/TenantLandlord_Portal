@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from '../App';
@@ -33,7 +33,7 @@ const testAdminUser = {
 
 
 // ROUTING TESTS
-describe('Routing Tests\nRoute: \'/\'', () => {
+describe('Routing Tests\n    Route: \'/\'', () => {
 
   afterEach(() => {
     mockUseNavigate.mockReset();
@@ -55,6 +55,7 @@ describe('Routing Tests\nRoute: \'/\'', () => {
              <App/>
         </MemoryRouter>);
 
+    // To resolve the loading
     await act(async() => {
       Promise.resolve();
     });
@@ -76,13 +77,14 @@ describe('Routing Tests\nRoute: \'/\'', () => {
   });
 })
 
-describe('Route: \'/login\'', () => {
+describe('  Route: \'/login\'', () => {
   test('renders login page (direct)', async() => {
     render(
       <MemoryRouter initialEntries={['/login']}>
            <App/>
       </MemoryRouter>);
 
+    // To resolve the loading
     await act(async() => {
       Promise.resolve();
     });
@@ -102,60 +104,31 @@ describe('Route: \'/login\'', () => {
     expect(linkElement).toBeInTheDocument();
 
   });
-})
 
-// NOTE: uhh dont think this is supposed to be allowed direct(?) but for rendering purposes, include
-describe('Route: \'/Tenant2FA\'', () => {
-  test('renders 2FA page (direct)', async() => {
+  // TODO: Find out why the navigate event is not firing after form submission
+  test('renders 2fa page (navigate)', async() => {
     render(
-      <MemoryRouter initialEntries={['/Tenant2FA']}>
+      <MemoryRouter initialEntries={['/login']}>
            <App/>
       </MemoryRouter>);
 
+    // To resolve the loading
     await act(async() => {
       Promise.resolve();
     });
+    
+    const usernameInput = screen.getByPlaceholderText('Username');
+    const passwordInput = screen.getByPlaceholderText('Password');
+    const form = screen.getByRole('form');
 
-    const titleElement = screen.getByText(/Anacle/);
-    const paragraph1Element = screen.getByText(/Two-Factor/);
-    const paragraph2Element = screen.getByText(/Authentication/);
-    const authInput = screen.getByPlaceholderText('Enter authentication code');
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
-
-    expect(titleElement).toBeInTheDocument();
-    expect(paragraph1Element).toBeInTheDocument();
-    expect(paragraph2Element).toBeInTheDocument();
-    expect(authInput).toBeInTheDocument();
-    expect(submitButton).toBeInTheDocument();
-
+    // NOTE: There is an error with form submission during Jest testing but npm run start is working... 
+    waitFor(()=> userEvent.type(usernameInput, testAdminUser._id));
+    waitFor(()=> userEvent.type(passwordInput, testAdminUser.password));
+    waitFor(()=> fireEvent.submit(form));
+    
+    // ERROR
+    expect(mockUseNavigate).toHaveBeenCalledTimes(1);
+    expect(mockUseNavigate).toHaveBeenCalledWith('/login2FA');
     console.log(screen.debug());
   });
-})
-
-describe('Route: \'/TenantDashboard\'', () => {
-  test('renders dashboard ', async() => {
-    render(
-      <MemoryRouter initialEntries={['/Tenant2FA']}>
-           <App/>
-      </MemoryRouter>);
-
-    await act(async() => {
-      Promise.resolve();
-    });
-
-    const titleElement = screen.getByText(/Anacle/);
-    const paragraph1Element = screen.getByText(/Two-Factor/);
-    const paragraph2Element = screen.getByText(/Authentication/);
-    const authInput = screen.getByPlaceholderText('Enter authentication code');
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
-
-    expect(titleElement).toBeInTheDocument();
-    expect(paragraph1Element).toBeInTheDocument();
-    expect(paragraph2Element).toBeInTheDocument();
-    expect(authInput).toBeInTheDocument();
-    expect(submitButton).toBeInTheDocument();
-
-    console.log(screen.debug());
-  });
-
 })

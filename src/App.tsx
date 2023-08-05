@@ -53,7 +53,7 @@ import TenantAddAcc from './pages/TenantAddAcc.tsx';
 
 //Service Provider Pages
 import ServProvDashboard from './pages/ServProvDashboard.tsx';
-import ServProvViewTicket from './pages/ServProvViewTicket.tsx'
+import ServProvViewTicket from './pages/ServProvViewTicket.tsx';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './contexts/AuthContext';
 
@@ -62,7 +62,8 @@ function App() {
   const { login } = useContext(AuthContext);
 
   useEffect(() => {
-    client.reAuthenticate()
+    client
+      .reAuthenticate()
       .then(({ user }) => {
         login(user);
         setLoading(false);
@@ -70,56 +71,56 @@ function App() {
       .catch(() => {
         setLoading(false);
       });
-
   }, []);
 
-  return (
-    isLoading ? "Loading..." :
-
-      <Routes>
-        {/*Routing for login pages */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<TenantLoginPage />} />
-        {/*Routing for password reset */}
-        <Route path="/reset1" element={<PasswordResetPage1 />} />
-        <Route path="/Tenant2FA" element={<Tenant2FAPage />} />
-        <Route path="/reset-password" element={<PasswordResetPage2 />} />
-        <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
-        <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
-        <Route path="/resetrequestsuccess" element={<PasswordResetRequestSuccessPage />} />
-        <Route path="/resetrequestfailure" element={<PasswordResetRequestFailedPage />} />
-        {/*Routing for tenant */}
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/tenantDashboard" element={<DashboardPage />} />
-        <Route path="/newRequest" element={<RequestTicketPage />} />
-        <Route path="/viewDetails" element={<ViewTicketPage />} />
-        <Route path="/viewQuote" element={<ViewQuotePage />} />
-        <Route path="/feedbackSurvey" element={<RateTicketPage />} />
-        <Route path="/notification" element={<NotificationPage />} />
-        {/*Routing for admin */}
-        <Route path="/adminDashboard" element={<AdminHomePage />} />
-        <Route path="/Accounts" element={<AccountsPage />} />
-        <Route path="/Buildings" element={<BuildingsPage />} />
-        <Route path="/AccountManagement" element={<AdminAccManagePage />} />
-        <Route path="/Buildings" element={<BuildingsPage />} />{' '}
-        <Route path="/LandlordDashboard" element={<LandlordDashboardPage />} />
-        <Route path="/LandlordViewTicket" element={<LandlordViewTicketPage />} />
-        <Route path="/LandlordViewFeedback" element={<LandlordViewFeedbackPage />} />
-        <Route path="/LandlordUploadQuotation" element={<LandlordUploadQuotationPage />} />
-        <Route path="/LandlordAddLease" element={<LandlordAddLeasePage />} />
-        <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
-        <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
-        <Route path="/ServProvDashboard" element={<ServProvDashboardPage />} />
-        <Route path="/ServProvViewTicket" element={<ServProvViewTicketPage />} />
-        <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
-        {/*Routing for errors */}
-        <Route path="/*" element={<ErrorPage404 />} />
-        <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
-        <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
-        <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
-        {/*Routing for misc */}
-        <Route path="/Success" element={<SuccessRedirectPage />} />
-      </Routes>
+  return isLoading ? (
+    'Loading...'
+  ) : (
+    <Routes>
+      {/*Routing for app */}
+      <Route path="/" element={<LandingPage />} />
+      {/*Routing for login pages */}
+      <Route path="/login" element={<TenantLoginPage />} />
+      {/*Routing for password reset */}
+      <Route path="/reset" element={<PasswordResetPage1 />} />
+      <Route path="/login2FA" element={<Tenant2FAPage />} />
+      <Route path="/reset-password" element={<PasswordResetPage2 />} />
+      <Route path="/resetsuccessful" element={<PasswordResetSuccessfulPage />} />
+      <Route path="/resetunsuccessful" element={<PasswordResetUnsuccessfulPage />} />
+      <Route path="/resetrequestsuccess" element={<PasswordResetRequestSuccessPage />} />
+      <Route path="/resetrequestfailure" element={<PasswordResetRequestFailedPage />} />
+      {/*Routing for tenant */}
+      <Route path="/landing" element={<LandingPage />} />
+      <Route path="/tenantDashboard" element={<DashboardPage />} />
+      <Route path="/newRequest" element={<RequestTicketPage />} />
+      <Route path="/viewDetails" element={<ViewTicketPage />} />
+      <Route path="/viewQuote" element={<ViewQuotePage />} />
+      <Route path="/feedbackSurvey" element={<RateTicketPage />} />
+      <Route path="/notification" element={<NotificationPage />} />
+      {/*Routing for admin */}
+      <Route path="/adminDashboard" element={<AdminHomePage />} />
+      <Route path="/Accounts" element={<AccountsPage />} />
+      <Route path="/Buildings" element={<BuildingsPage />} />
+      <Route path="/AccountManagement" element={<AdminAccManagePage />} />
+      {/*Routing for landlord */}
+      <Route path="/LandlordDashboard" element={<LandlordDashboardPage />} />
+      <Route path="/LandlordViewTicket" element={<LandlordViewTicketPage />} />
+      <Route path="/LandlordViewFeedback" element={<LandlordViewFeedbackPage />} />
+      <Route path="/LandlordUploadQuotation" element={<LandlordUploadQuotationPage />} />
+      <Route path="/LandlordAddLease" element={<LandlordAddLeasePage />} />
+      <Route path="/LandlordAccountCreation" element={<LandlordAccountCreationPage />} />
+      <Route path="/LandlordAddService" element={<LandlordAddServicePage />} />
+      <Route path="/ServProvDashboard" element={<ServProvDashboardPage />} />
+      <Route path="/ServProvViewTicket" element={<ServProvViewTicketPage />} />
+      <Route path="/TenantAddAcc" element={<TenantAddAccPage />} />
+      {/*Routing for errors */}
+      <Route path="/*" element={<ErrorPage404 />} />
+      <Route path="/401" element={<ErrorPage401 />} /> {/* To add proper auth routing */}
+      <Route path="/403" element={<ErrorPage403 />} /> {/* To add proper auth routing */}
+      <Route path="/Error" element={<ErrorPageRunTime />} /> {/* To add proper routing.*/}
+      {/*Routing for misc */}
+      <Route path="/Success" element={<SuccessRedirectPage />} />
+    </Routes>
   );
 }
 
@@ -265,41 +266,44 @@ function LandingPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    client.reAuthenticate()
+    client
+      .reAuthenticate()
       .then(({ user }) => {
         login(user);
       })
       .catch(() => redirect('/login'));
   }, []);
 
-        if (user?.typ == 0) {
-          console.log('User is a tenant');
-          let redirect = '/tenantDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-        else if (user?.typ == 1) {
-          console.log('User is a landlord');
-          let redirect = '/ServProvDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-        else if (user?.typ == 2) {
-          console.log('User is a landlord');
-          let redirect = '/landlordDashboard';
-          navigate('/Success', { state: { redirect } });
-        }
-         else if (user?.typ == 3) {
-          console.log('User is a admin');
-          let redirect = '/adminDashboard';
-          navigate('/Success', { state: { redirect } });
-        } else {
-          navigate('/401');
-        }
+  if (user?.typ == 0) {
+    console.log('User is a tenant');
+    let redirect = '/tenantDashboard';
+    navigate('/Success', { state: { redirect } });
+  } else if (user?.typ == 1) {
+    console.log('User is a landlord');
+    let redirect = '/ServProvDashboard';
+    navigate('/Success', { state: { redirect } });
+  } else if (user?.typ == 2) {
+    console.log('User is a landlord');
+    let redirect = '/landlordDashboard';
+    navigate('/Success', { state: { redirect } });
+  } else if (user?.typ == 3) {
+    console.log('User is a admin');
+    let redirect = '/adminDashboard';
+    navigate('/Success', { state: { redirect } });
+  } else {
+    navigate('/401');
+  }
 
-  const to = user === null ? '/login'
-          : user.typ === 0 ? '/tenantDashboard'
-          : user.typ === 1 ? '/ServProvDashboard'
-          : user.typ === 2 ? '/landlordDashboard'
-          : '/adminDashboard';
+  const to =
+    user === null
+      ? '/login'
+      : user.typ === 0
+      ? '/tenantDashboard'
+      : user.typ === 1
+      ? '/ServProvDashboard'
+      : user.typ === 2
+      ? '/landlordDashboard'
+      : '/adminDashboard';
 
   return (
     <div className="App h-screen overflow-y-auto bg-content">
@@ -321,6 +325,18 @@ function NotificationPage() {
 }
 
 function AdminAccManagePage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 3) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
@@ -330,6 +346,18 @@ function AdminAccManagePage() {
 }
 
 function AdminHomePage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 3) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
@@ -339,6 +367,18 @@ function AdminHomePage() {
 }
 
 function AccountsPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 3) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
@@ -348,6 +388,18 @@ function AccountsPage() {
 }
 
 function BuildingsPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      // If the user is not logged in, navigate to 401
+      navigate('/401');
+    } else if (user.typ !== 3) {
+      // If the user type is not 3 (not an admin), navigate to 403
+      navigate('/403');
+    }
+  }, [user, navigate]);
   return (
     <div className="App h-screen overflow-y-auto bg-content">
       <Navbar />
@@ -400,7 +452,6 @@ function SuccessRedirectPage() {
     </div>
   );
 }
-
 
 function ServProvDashboardPage() {
   return <ServProvDashboard />;
