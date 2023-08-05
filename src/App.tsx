@@ -352,7 +352,6 @@ function AdminHomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
     if (user === null) {
       // If the user is not logged in, navigate to 401
       navigate('/401');
