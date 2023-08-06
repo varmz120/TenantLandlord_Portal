@@ -162,7 +162,7 @@ function ViewTicket() {
                 <LineField
                   type={'text'}
                   label="Name"
-                  padding_right="65"
+                  padding_right="85"
                   value={ticket.personnelAssigned}
                   name="landlord"
                   placeholder={''}
@@ -178,8 +178,8 @@ function ViewTicket() {
               {ticket.contact ? (
                 <LineField
                   type={'text'}
-                  label="Contact"
-                  padding_right="50"
+                  label="Tenant Contact"
+                  padding_right="20"
                   value={ticket.contact.number + ' (' + ticket.contact.email + ')'}
                   name="landlordCtc"
                   placeholder={''}
