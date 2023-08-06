@@ -30,7 +30,7 @@ describe('PasswordResetUnsuccessful', () => {
 
   test('navigates back to reset password page', () => {
     setTimeout(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/reset1');
+      expect(mockNavigate).toHaveBeenCalledWith('/reset');
     }, 3000);
   });
 });

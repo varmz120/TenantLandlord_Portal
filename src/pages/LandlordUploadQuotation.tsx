@@ -20,11 +20,12 @@ function UploadQuote() {
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState('');
   const [errors, setErrors] = useState<string | any>({});
+  const [uploadedQuote, setUploadedQuote] = useState(false);
   const [formState, setFormState] = useState<string | any>({
-    totalAmount: ticket?.quotation?.amount,
-    formRemarks: ticket?.quotation?.remarks,
+    totalAmount: ticket?.quotation?.amount || 0,
+    formRemarks: ticket?.quotation?.remarks || '',
     formId: ticket?._id,
-    formAttachments: ticket?.quotation?.uri || null,
+    formAttachments: ticket?.quotation?.uri || '',
     //isSubmitted: false
   });
 
@@ -70,6 +71,7 @@ function UploadQuote() {
           [event.target.name]: event.target.files[0],
         });
         setFilenames(event.target.files[0].name);
+        setUploadedQuote(true);
       }
     }
   };
@@ -106,17 +108,28 @@ function UploadQuote() {
 
       console.log(formState); 
 
+
       const quotation = new FormData();
       quotation.set('ticketId', (ticket?._id?? 0).toString());
       quotation.set('remarks', formState.formRemarks);
       quotation.set('amount', formState.totalAmount);
       quotation.set('uri', formState.formAttachments);
 
+      if (noQuotationNeeded === true){
+        console.log("No Quotation: " + formState);
+        await client.service('ticket').moveInProgress({
+          ticketId: ticket?._id?? 0,
+        }
+        );
+      } else {
       await client.service('ticket').uploadQuotation(quotation as any, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      }
+
       console.log("This is after.then: " + formState);
       console.log('Success');
       setSubmit(true);
@@ -138,10 +151,14 @@ function UploadQuote() {
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (formAttachments) {
+    if (formAttachments && uploadedQuote) {
       console.log(formAttachments);
       setIframeSrc(URL.createObjectURL(formAttachments)); // Use the first attachment URL as iframe src
-    } else if (ticket?.quotation?.uri) {
+    } else if (ticket?.quotation?.uri && !uploadedQuote) {
+      // Use the URI from the ticket if available (when editing existing quote)
+      setIframeSrc(undefined);
+    }
+    else if (ticket?.quotation?.uri) {
       // Use the URI from the ticket if available (when editing existing quote)
       setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);
     } else {

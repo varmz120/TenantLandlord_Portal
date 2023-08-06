@@ -210,6 +210,11 @@ const AddLease = () => {
         delete errors.formMonthlyRent;
       }
     }
+    if (!formState.formLeaseID){
+      errors.formLeaseID = 'Enter Lease ID!';
+    } else {
+      delete errors.formLeaseID;
+    }
     if (!formState.formCommencement) {
       errors.formLeaseCommencement = 'Enter Lease Commencement Date!';
     } else {
@@ -329,6 +334,7 @@ const AddLease = () => {
 
                 <div className="flex flex-center">
                   <SearchTenantField
+                    data-testid="search-tenant-field"
                     type={'text'}
                     layout={''}
                     error={errors.formTenant}
@@ -341,6 +347,7 @@ const AddLease = () => {
                   <div>
                     <AddTenantButton
                       type="button"
+                      data-testid="add-tenant-button"
                       label={'+ Create New Tenant'}
                       handleClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
@@ -366,6 +373,7 @@ const AddLease = () => {
 
                 <div className="flex flex-center">
                   <SearchBldgField
+                    data-testid="search-bldg-field"
                     type={'text'}
                     layout={''}
                     error={errors.formBldgID}
@@ -377,6 +385,7 @@ const AddLease = () => {
                   />
                   <div>
                     <AddBldgButton
+                      data-testid="add-blgd-button"
                       type="button"
                       label={'+ Add Building'}
                       handleClick={(event: { preventDefault: () => void }) => {
@@ -420,7 +429,7 @@ const AddLease = () => {
                   value={formLeaseID}
                   name="formLeaseID"
                   placeholder={'lease id'}
-                  error={''}
+                  error={errors.formLeaseID}
                   disabled={false}
                   layout=""
                   classnames=""
@@ -431,6 +440,7 @@ const AddLease = () => {
 
                 <div className="flex flex-row">
                   <CommencementExpiry
+                    data-testid="commencement-start-field"
                     label1="Commencement"
                     padding_right="45"
                     value={formCommencement}
@@ -442,6 +452,7 @@ const AddLease = () => {
                     onChange={handleValueChange}
                   />
                   <CommencementExpiry
+                    data-testid="commencement-end-field"
                     label1="Expiry"
                     padding_right="45"
                     value={formExpiry}
@@ -467,7 +478,7 @@ const AddLease = () => {
         {isTenantPopupVisible && <TenantDetails handleDelete={handleTenantDeleteClick} />}
       </div>
       <div className="absolute top-4 right-64">
-        {isBldgPopupVisible && <BuildingDetailsForm handleDelete={handleBldgDeleteClick} />}
+        {isBldgPopupVisible && <BuildingDetailsForm handleDelClick={handleBldgDeleteClick} />}
       </div>
     </>
   );

@@ -102,32 +102,6 @@ const AdminHome = () => {
               className="mt-3 w-auto h-auto max-w-full max-h-full"
             />
           </div>
-          <div
-            className="flex flex-col w-40 h-40 bg-white hover:bg-[#31556F] cursor-pointer mr-2 items-center justify-center rounded-xl"
-            onMouseEnter={handleWebAppActive}
-            onMouseLeave={handleWebAppInactive}
-            onClick={webAppOnClick}
-          >
-            <p className={webAppIsActive ? 'text-white' : 'text-black'}>Web App</p>
-            <img
-              src={webAppIsActive ? webAppIconDark : webAppIcon}
-              alt="Web App Icon"
-              className="mt-3 w-auto h-auto max-w-full max-h-full"
-            />
-          </div>
-          <div
-            className="flex flex-col w-40 h-40 bg-white hover:bg-[#31556F] cursor-pointer items-center justify-center rounded-xl"
-            onMouseEnter={handleDatabaseActive}
-            onMouseLeave={handleDatabaseInactive}
-            onClick={databaseOnClick}
-          >
-            <p className={databaseIsActive ? 'text-white' : 'text-black'}>Database</p>
-            <img
-              src={databaseIsActive ? databaseIconDark : databaseIcon}
-              alt="Database Icon"
-              className="mt-3 w-auto h-auto max-w-full max-h-full"
-            />
-          </div>
         </div>
       </div>
     </div>
