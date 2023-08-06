@@ -72,9 +72,9 @@ function ViewQuote() {
   return (
     <React.Fragment>
       {/* // When user is not logged in */}
-      {user === null ? (
+      {/* {user === null ? (
         <Navigate to="/401" replace={true} />
-      ) : (
+      ) : ( */}
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 && ticket && ticket.quotation ? (
@@ -181,11 +181,12 @@ function ViewQuote() {
               </div>
             </div>
           ) : (
-            // When user is logged in but NOT a tenant OR in this case of demo, no submission of tenant ticket was made...
+            
+            // // When user is logged in but NOT a tenant OR in this case of demo, no submission of tenant ticket was made...
             <Navigate to="/403" replace={true} />
           )}
         </React.Fragment>
-      )}
+      {/* )} */}
     </React.Fragment>
   );
 }
