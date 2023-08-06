@@ -50,7 +50,7 @@ const mockTicket = {
   _id: '123',
   title: 'Test Ticket Title',
   feedback: {
-    rating: 4,
+    rating: 5,
     description: 'Test remarks',
   },
   completedOn: '2023-08-07T00:00:00.000Z',
