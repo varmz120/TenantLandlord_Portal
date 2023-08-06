@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, act, waitFor } from '@testing-library/react';
 import PasswordResetTwo from '../pages/PasswordResetTwo';
+import { MemoryRouter } from 'react-router-dom';
 
 // Mock useNavigate
 let mockNavigate = jest.fn();
@@ -10,17 +11,22 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
+//user_id
 describe('PasswordResetTwo', () => {
-  beforeEach(() => {
+  beforeEach(async() => {
     // Reset mockNavigate before each test to clean up previous interactions.
     mockNavigate.mockReset();
 
     // eslint-disable-next-line
-    render(<PasswordResetTwo />);
+    await act(async() => {
+      render(
+      <PasswordResetTwo/>)
+    });
   });
+  
 
   test('renders without crashing', () => {
-    const passwordResetElement = screen.getByText(/Tenant Portal/i);
+    const passwordResetElement = screen.getByText(/Anacle/i);
     expect(passwordResetElement).toBeInTheDocument();
   });
 
@@ -40,13 +46,13 @@ describe('PasswordResetTwo', () => {
     );
   });
 
-  test('navigates to /resetsuccessful when Confirm New Password button is clicked', () => {
-    fireEvent.click(screen.getByText(/Confirm New Password/i));
-    expect(mockNavigate).toHaveBeenCalledWith('/resetsuccessful');
+  test('navigates to /resetunsuccessful when Confirm New Password button is clicked (user not logged in)', async() => {
+    waitFor(()=>fireEvent.click(screen.getByText(/Confirm New Password/i)));
+    expect(mockNavigate).toHaveBeenCalledWith('/resetunsuccessful');
   });
 
   test('navigates to / when Back to Login button is clicked', () => {
-    fireEvent.click(screen.getByText(/Back to Login/i));
+    waitFor(()=> fireEvent.click(screen.getByText(/Back to Login/i)));
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TenantLogin from '../pages/TenantLogin';
 import { AuthContext } from '../contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
+import { IAuthContextType } from '../interfaces/Auth';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -24,10 +25,12 @@ describe('TenantLogin', () => {
     const loginMock = jest.fn((user) => {});
 
     // Define the initial context state
-    const contextState = {
+    const contextState : IAuthContextType = {
       user: null,
+      temp_details: null,
       login: loginMock,
-      logout: () => {},
+      logout: async () => {},
+      tempLogin: () => {}
     };
 
     // Render the component under test

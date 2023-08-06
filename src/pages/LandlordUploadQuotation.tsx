@@ -18,13 +18,13 @@ function UploadQuote() {
   const { user } = useContext(AuthContext);
 
   const [isSubmit, setSubmit] = useState(false);
-  const [filenames, setFilenames] = useState<string[]>([]);
+  const [filenames, setFilenames] = useState('');
   const [errors, setErrors] = useState<string | any>({});
   const [formState, setFormState] = useState<string | any>({
     totalAmount: ticket?.quotation?.amount,
     formRemarks: ticket?.quotation?.remarks,
     formId: ticket?._id,
-    formAttachments: ticket?.quotation?.uri || "",
+    formAttachments: ticket?.quotation?.uri || null,
     //isSubmitted: false
   });
 
@@ -49,6 +49,7 @@ function UploadQuote() {
     const target = event.target;
   
     if ('value' in target) {
+      
       setFormState({
         ...formState,
         totalAmount: target.value, // Use target.value instead of target.textContent
@@ -63,21 +64,12 @@ function UploadQuote() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
-      const data: string[] = [];
-      const names: string[] = [];
-      if (!event.target.files || event.target.files.length === 0) {
-        console.log('Select a file');
-      } else {
-        for (let i = 0; i < event.target.files.length; i++) {
-          data.push(URL.createObjectURL(event.target.files[i]));
-          names.push(event.target.files[i].name);
-        }
-        const updatedAttachments = formState['formAttachments'].concat(data);
+      if (event.target.files) {
         setFormState({
           ...formState,
-          [event.target.name]: updatedAttachments,
+          [event.target.name]: event.target.files[0],
         });
-        setFilenames(names);
+        setFilenames(event.target.files[0].name);
       }
     }
   };
@@ -113,17 +105,21 @@ function UploadQuote() {
       console.log(user?._id == ticket?.personnelAssigned)
 
       console.log(formState); 
-      await client.service('ticket').uploadQuotation({
-        ticketId: ticket?._id || 0,
-        remarks: formState.formRemarks,
-        amount: parseInt(formState.totalAmount),
-        uri: formState.formAttachments,
+
+      const quotation = new FormData();
+      quotation.set('ticketId', (ticket?._id?? 0).toString());
+      quotation.set('remarks', formState.formRemarks);
+      quotation.set('amount', formState.totalAmount);
+      quotation.set('uri', formState.formAttachments);
+
+      await client.service('ticket').uploadQuotation(quotation as any, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      .then(() => {
-        console.log("This is after.then: " + formState);
-        console.log('Success');
-        setSubmit(true);
-      });
+      console.log("This is after.then: " + formState);
+      console.log('Success');
+      setSubmit(true);
     }
   };
 
@@ -137,13 +133,14 @@ function UploadQuote() {
   
 
   // Mock static values
-  var quotationby = user?._id;
+  var quotationby = user?._id?? '';
 
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (formAttachments.length > 0) {
-      setIframeSrc(formAttachments[0]); // Use the first attachment URL as iframe src
+    if (formAttachments) {
+      console.log(formAttachments);
+      setIframeSrc(URL.createObjectURL(formAttachments)); // Use the first attachment URL as iframe src
     } else if (ticket?.quotation?.uri) {
       // Use the URI from the ticket if available (when editing existing quote)
       setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);
@@ -219,9 +216,9 @@ function UploadQuote() {
                   className="flex mx-auto mt-3 h-4/5 w-2/3"
                   alt="Quote PDF"
                 /> */}
-            <div className='flex flex-col items-center'>
+            <div className='flex flex-col items-center w-full'>
               {iframeSrc && (
-                 <iframe src={iframeSrc} title="Quotation Document" className="flex mx-auto mt-3 h-4/5 w-1/3" />
+                 <iframe src={iframeSrc} title="Quotation Document" className="flex mx-auto mt-3 w-2/3" />
               )}
                 <div style={{ paddingBottom: 100 + 'px' }} className="flex flex-col items-center">
                   <AttachQuotation
