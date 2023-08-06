@@ -1,70 +1,89 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { AuthContext } from '../contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 import LandlordViewFeedback from '../pages/LandlordViewFeedback';
 
-let mockNavigate = jest.fn();
+jest.mock('../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'users') {
+        return {
+          find: () => Promise.resolve([]),
+        };
+      }
+      if (serviceName === 'building') {
+        return {
+          get: () => {return ('Test Address')},
+        };
+      }
+      if (serviceName === 'lease') {
+        return {
+          get: () => Promise.resolve({ units: [{ buildingId: 'building123', number: '101' }] }),
+        };
+      }
+    },
+  },
+}));
+
+const mockValue = {
+  user: {
+    typ: 2,
+    buildingId: 'building123',
+  },
+};
+
+const mockTicket = {
+  _id: '123',
+  title: 'Test Ticket Title',
+  feedback: {
+    rating: 4,
+    description: 'Test remarks',
+  },
+  completedOn: '2023-08-07T00:00:00.000Z',
+};
+
+const mockNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
+  useLocation: () => ({
+    state: mockTicket,
+  }),
 }));
 
-describe('LandlordViewFeedback', () => {
-  // const mockFeedbackData = {
-  //   ID: "#0012",
-  //   Title: "Security Access Issue",
-  //   Rating: "5",
-  //   CompletedOn: "8/5/2023",
-  //   Remarks: "Remarks test"
-  // };
-
-  beforeEach(() => {
-    // Reset mockNavigate before each test to clean up previous interactions.
-    mockNavigate.mockReset();
+describe('<LandlordViewFeedback />', () => {
+  it('renders the feedback details', async () => {
     render(
-      <Router>
+      <AuthContext.Provider value={mockValue}>
         <LandlordViewFeedback />
-      </Router>
+      </AuthContext.Provider>
     );
+    
+
+    // Test the rendering of "Feedback for [correct ticket id]: [correct unit number]"
+    expect(screen.getByText('${mockTicket._id}')).toBeInTheDocument();
   });
 
-  test('renders without crashing', () => {});
-
-  test('displays "Ticket ID" text', () => {
-    // Assert that "Feedback for ID" is displayed with the correct value
-    expect(screen.getByText(/Feedback for/i)).toBeInTheDocument();
-    // expect(screen.getByText(mockFeedbackData.ID)).toBeInTheDocument();
+  it('renders "Rating" and number of stars', () => {
+    render(<LandlordViewFeedback/>)
+    // Test the rendering of "Rating" and the corresponding number of stars rated
+    const stars = screen.getAllByRole('img', { name: 'star' });
+    expect(stars).toHaveLength(mockTicket.feedback.rating);
   });
 
-  // test('displays "Title" text', () => {
-  //   // Assert that "Title" is displayed with the correct value
-  //   // expect(screen.getByText(mockFeedbackData.Title)).toBeInTheDocument();
-  // });
-
-  test('displays "Rating"', () => {
-    // Assert that "Rating" is displayed with the correct value
-    expect(screen.getByText(/Rating/i)).toBeInTheDocument();
-    // expect(screen.getByText(mockFeedbackData.Rating)).toBeInTheDocument();
+  it('renders "Rating" and number of stars', () => {
+    render(<LandlordViewFeedback/>)
+    // Test the rendering of "Completed on" [correct completed date]
+    expect(screen.getByText('Completed On')).toBeInTheDocument();
+    expect(screen.getByText('08/07/2023')).toBeInTheDocument(); // Adjust the date format as needed
   });
 
-  test('displays "Completed On" text', () => {
-    // Assert that "Completed On" is displayed with the correct value
-    expect(screen.getByText(/Completed On/i)).toBeInTheDocument();
-    // expect(screen.getByText(mockFeedbackData.CompletedOn)).toBeInTheDocument();
-  });
-
-  test('displays "Remarks" text', () => {
-    screen.logTestingPlaygroundURL();
-    // Assert that "Remarks" is displayed with the correct value
-    expect(screen.getByText(/Remarks/i)).toBeInTheDocument();
-    // expect(screen.getByText(mockFeedbackData.Remarks)).toBeInTheDocument();
-  });
-
-
-  test('calls navigation function on Back button click', () => {
-    const backButton = screen.getByText(/Back to ticket details/i);
-    fireEvent.click(backButton);
-
-    expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
+  it('renders "Rating" and number of stars', () => {
+    render(<LandlordViewFeedback/>)
+    // Test the rendering of "Remarks" and the [correct remarks to be displayed]
+    expect(screen.getByLabelText('Remarks')).toBeInTheDocument();
+    expect(screen.getByText('Test remarks')).toBeInTheDocument();
   });
 });

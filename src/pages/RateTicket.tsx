@@ -262,6 +262,7 @@ function RateTicket() {
                           label={'Rating'}
                           padding_right="24"
                           rating={formFeedback.rating}
+                          disabled={false}
                           error={errors.formFeedback.rating}
                           handleClick={handleRatingChange}
                         />

@@ -79,6 +79,7 @@ function ViewTicket() {
               label="Rating"
               padding_right="106"
               rating={rating}
+              disabled={true}
               error=""
               handleClick={() => null}
             />
