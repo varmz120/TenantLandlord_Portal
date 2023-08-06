@@ -6,6 +6,7 @@ const fs = require('fs');
 const appUrl = 'http://localhost:3030';
 const extensions = ['png', 'jpg', 'pdf'];
 const notableEventsPath = './fuzzerlog-'+crypto.randomUUID()+'.txt';
+const keep_going = 10;
 
 let invocationCount = 0;
 
@@ -37,7 +38,15 @@ async function brute_files(data){
             const { response } = error;
 
             var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
-            stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
+              //stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
+              //stream.end();
+
+            //Log notable events
+            if ([302, 200, 400].includes(response?.status)) {
+              //var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
+              stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
+              //stream.end();
+            }
             stream.end();
 
             // if (response === undefined) {
@@ -50,6 +59,8 @@ async function brute_files(data){
     }
     invocationCount++;
 }
+
+console.log("Logging on ", notableEventsPath);
 
 module.exports.fuzz = function (data) {
     brute_files(data);

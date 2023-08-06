@@ -21,7 +21,7 @@ const PasswordResetOne = () => {
       await client.service('reset-password').create({ user_id: userID });
       navigate('/resetrequestsuccess');
     } catch (error) {
-      console.error('Failed to send password reset email', error);
+      //console.error('Failed to send password reset email', error);
       navigate('/resetrequestfailure');
     }
   };

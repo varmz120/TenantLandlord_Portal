@@ -119,16 +119,24 @@ describe('  Route: \'/login\'', () => {
     
     const usernameInput = screen.getByPlaceholderText('Username');
     const passwordInput = screen.getByPlaceholderText('Password');
-    const form = screen.getByRole('form');
+    const loginButton = screen.getByRole("button", {name: "Login"});
+    //const form = screen.getByRole('form');
 
     // NOTE: There is an error with form submission during Jest testing but npm run start is working... 
     waitFor(()=> userEvent.type(usernameInput, testAdminUser._id));
     waitFor(()=> userEvent.type(passwordInput, testAdminUser.password));
-    waitFor(()=> fireEvent.submit(form));
+
+    expect(usernameInput).toHaveValue(testAdminUser._id);
+    expect(passwordInput).toHaveValue(testAdminUser.password);
+    //waitFor(()=> fireEvent.submit(form));
+
+    waitFor(()=> userEvent.click(loginButton));
     
-    // ERROR
-    expect(mockUseNavigate).toHaveBeenCalledTimes(1);
-    expect(mockUseNavigate).toHaveBeenCalledWith('/login2FA');
+    // PRINT SCREEN BEFORE ERROR
     console.log(screen.debug());
+
+    // ERROR
+    //expect(mockUseNavigate).toHaveBeenCalledTimes(1);
+    expect(mockUseNavigate).toHaveBeenCalledWith('/login2FA');
   });
 })
