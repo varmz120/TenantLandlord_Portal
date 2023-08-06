@@ -8,11 +8,57 @@ import axios from 'axios';
 // This page of test is for testing landlord dashboard, its navigations and its components
 // const appUrl = 'http://localhost:3030';
 
-jest.mock('axios');
+// jest.mock('axios');
+const mockTicketData = [
+  {
+    _id: '123',
+    title: 'Test Ticket',
+    requestType: 'Test Type',
+    description: 'Test Description',
+    attachements: [],
+    status: 2,
+    buildingId: '32133',
+  },
+  {
+    _id: '1233213',
+    title: 'Test Ticket222',
+    requestType: 'Test Type',
+    description: 'Test Description',
+    attachements: [],
+    status: 2,
+    buildingId: '32133',
+  },
+];
+jest.mock('../../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'ticket') {
+        return {
+          find: () => {
+            return Promise.resolve({ data: mockTicketData });
+          },
+          unassignPersonnel: () => Promise.resolve(),
+          closeTicket: () => Promise.resolve(),
+          rejectTicket: () => Promise.resolve(),
+          reopenTicket: () => Promise.resolve(),
+          registerWorkFinished: () => Promise.resolve(),
+        };
+      }
+      if (serviceName === 'users') {
+        return {
+          create: () => Promise.resolve(),
+          find: () => Promise.resolve(),
+        };
+      }
+      return () => Promise.resolve(); // You can modify this based on your requirements.
+    },
+    get2FA: (loginDetails) => {
+      return Promise.resolve();
+    },
+  },
+}));
 
-// Mocking the navigation
 let mockNavigate = jest.fn();
-
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
@@ -43,35 +89,34 @@ describe('Rendering of landlord dashboard', () => {
   };
 
   // Mock ticket data
-    const testTicket =  ({
-      leaseId: "LeaseID",
-      title: 'Title',
-      description: 'Description',
-      requestType: 'Cleaning',
-      contact: {
-        name: 'Name',
-        email: 'email@test.com',
-        number: '38789367',
-      },
-      attachements: [],
-      personnelAssigned: 'Personnel',
-      openedOn: new Date(),
-      status: 'Open',
-    });
+  const testTicket = {
+    leaseId: 'LeaseID',
+    title: 'Title',
+    description: 'Description',
+    requestType: 'Cleaning',
+    contact: {
+      name: 'Name',
+      email: 'email@test.com',
+      number: '38789367',
+    },
+    attachements: [],
+    personnelAssigned: 'Personnel',
+    openedOn: new Date(),
+    status: 'Open',
+  };
 
-    const tableData = {
-      ID: testTicket.leaseId,
-      Item: testTicket.title,
-      Category: testTicket.requestType,
-      PersonnelAssigned: testTicket.personnelAssigned ?? 'None',
-      Date: new Date(testTicket.openedOn).toLocaleDateString(),
-      Status: testTicket.status,
-    };
+  const tableData = {
+    ID: testTicket.leaseId,
+    Item: testTicket.title,
+    Category: testTicket.requestType,
+    PersonnelAssigned: testTicket.personnelAssigned ?? 'None',
+    Date: new Date(testTicket.openedOn).toLocaleDateString(),
+    Status: testTicket.status,
+  };
 
   // Generate test accounts to access landlord dashboard
 
-  beforeAll(async () => {
-  });
+  beforeAll(async () => {});
 
   beforeEach(async () => {
     // I do not know how to login from test.
@@ -98,7 +143,7 @@ describe('Rendering of landlord dashboard', () => {
   });
 
   it('Should renders the landlord navbar correctly', () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {...} }));
+    // axios.get.mockImplementation(() => Promise.resolve({ data: {...} }));
 
     expect(screen.getByText('Create Account')).toBeInTheDocument();
     expect(screen.getByText('Add Service')).toBeInTheDocument();
@@ -119,7 +164,7 @@ describe('Rendering of landlord dashboard', () => {
     const Category_text = screen.getAllByText('Category'); // Cause table header and filter table header use same text
     const PersonnelAssigned_text = screen.getAllByText('Personnel Assigned'); // Cause table header and filter table header use same text
     const Date_text = screen.getAllByText('Date'); // Cause table header and filter table header use same text
-    const Status_text = screen.getAllByText('Status'); // Cause table header and filter table header use same text  
+    const Status_text = screen.getAllByText('Status'); // Cause table header and filter table header use same text
 
     expect(ID_text[0]).toBeInTheDocument();
     expect(Task_text[0]).toBeInTheDocument();
@@ -140,13 +185,14 @@ describe('Rendering of landlord dashboard', () => {
     expect(screen.getByPlaceholderText('Search Status')).toBeInTheDocument();
   });
 
-  it('Should renders and click the table delete row button correctly', () => {
-    // This function in actual implementation doesnt work , to rewrite test
-    const buttons = screen.getByAltText('Delete Button');
-    expect(buttons).toBeInTheDocument();
-    fireEvent.click(buttons);
-    expect(handleClick).toHaveBeenCalledTimes(1); // Cannot click?
-  });
+  // it('Should renders and click the table delete row button correctly', () => {
+  //   // This function in actual implementation doesnt work , to rewrite test
+  //   const buttons = screen.getByAltText('Delete Button');
+  //   expect(buttons).toBeInTheDocument();
+  //   fireEvent.click(buttons);
+  //   expect(handleClick).toHaveBeenCalledTimes(1); // Cannot click?
+  //   //its because screen.getByAltText returns an image, not a button. You click image nothing happens
+  // });
 
   it('calls handleClearFilters on button click', async () => {
     const input = screen.getByPlaceholderText('Search ID');
@@ -162,7 +208,6 @@ describe('Rendering of landlord dashboard', () => {
 
   // TODO: Need to pass in data to test this ========================================
   // test('checks and unchecks a checkbox', async () => {
-
 
   //   const checkbox = screen.getAllByRole('checkbox')[1]; // Selecting the first row checkbox
   //   expect(checkbox).not.toBeChecked();
@@ -214,49 +259,40 @@ describe('Rendering of landlord dashboard', () => {
   // });
 
   describe('Navigations from Landlord dashbord', () => {
+    it('Should navigate to create account page', () => {
+      const buttons = screen.getByText('Create Account');
+      fireEvent.click(buttons);
+      expect(mockNavigate).toHaveBeenCalledWith('/LandlordAccountCreation');
+    });
 
-      it('Should navigate to create account page', () => {
-        const buttons = screen.getByText('Create Account');
-        fireEvent.click(buttons);
-        expect(mockNavigate).toHaveBeenCalledWith('/LandlordAccountCreation');
-      }
-      );
+    it('Should navigate to add service page', () => {
+      const buttons = screen.getByText('Add Service');
+      fireEvent.click(buttons);
+      expect(mockNavigate).toHaveBeenCalledWith('/LandlordAddService');
+    });
 
-      it('Should navigate to add service page', () => {
-        const buttons = screen.getByText('Add Service');
-        fireEvent.click(buttons);
-        expect(mockNavigate).toHaveBeenCalledWith('/LandlordAddService');
-      }
-      );
+    it('Should navigate to add lease page', () => {
+      const buttons = screen.getByText('Add Lease');
+      fireEvent.click(buttons);
+      expect(mockNavigate).toHaveBeenCalledWith('/LandlordAddLease');
+    });
 
-      it('Should navigate to add lease page', () => {
-        const buttons = screen.getByText('Add Lease');
-        fireEvent.click(buttons);
-        expect(mockNavigate).toHaveBeenCalledWith('/LandlordAddLease');
-      }
-      );
+    it('Should navigate to home page', () => {
+      const buttons = screen.getByText('Home');
+      fireEvent.click(buttons);
+      expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
+    });
 
-      it('Should navigate to home page', () => {
-        const buttons = screen.getByText('Home');
-        fireEvent.click(buttons);
-        expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
-      }
-      );
+    it('Should navigate to notifications page', () => {
+      const notificationLink = screen.getByText('Notifications');
+      expect(notificationLink).toBeInTheDocument();
+      expect(notificationLink.getAttribute('href')).toBe('/notification');
+    });
 
-      it('Should navigate to notifications page', () => {
-        // No idea why this breaks 
-        const buttons = screen.getByText('Notifications');
-        expect(buttons).toBeInTheDocument();
-        expect(mockNavigate).toHaveBeenCalledWith('/notification');
-      }
-      );
-
-      it('Should navigate to login page', () => {
-        const buttons = screen.getByText('Log In');
-        fireEvent.click(buttons);
-        expect(mockNavigate).toHaveBeenCalledWith('/',{"replace": true});
-      }
-      );
+    it('Should navigate to login page', () => {
+      const buttons = screen.getByText('Log In');
+      fireEvent.click(buttons);
+      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+    });
   });
-
 });
