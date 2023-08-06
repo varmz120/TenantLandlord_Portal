@@ -18,11 +18,9 @@ jest.mock('../images/pencil_edit_icon.svg', () => 'pencilEditIcon');
 describe('AdminAccounts', () => {
   let handleClick: jest.Mock;
 
-  let mockData=[{ID: "121221", Email: "jol@gmail.com"}]
-
   beforeEach(() => {
     handleClick = jest.fn();
-    render(<AdminAccounts clicked={false} handleClick={handleClick} data={mockData} />);
+    render(<AdminAccounts clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {

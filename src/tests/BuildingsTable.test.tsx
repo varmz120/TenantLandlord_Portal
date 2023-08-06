@@ -20,8 +20,7 @@ describe('BuildingsTable', () => {
 
   beforeEach(() => {
     handleClick = jest.fn();
-    let mockData=[{ID: "121221", Name: "jol@gmail.com", Address:"Changi"}]
-    render(<BuildingsTable clicked={false} handleClick={handleClick} data={mockData}/>);
+    render(<BuildingsTable clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {
