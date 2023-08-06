@@ -9,18 +9,40 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }));
 
+jest.mock('../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'ticket') {
+        return {
+          unassignPersonnel: () => Promise.resolve(),
+          closeTicket: () => Promise.resolve(),
+          rejectTicket: () => Promise.resolve(),
+          reopenTicket: () => Promise.resolve(),
+          registerWorkFinished: () => Promise.resolve(),
+        };
+      }
+      return () => Promise.resolve(); // You can modify this based on your requirements.
+    },
+    get2FA: (loginDetails) => {
+      return Promise.resolve();
+    },
+  },
+}));
+
 // Mocking the images
 jest.mock('../images/trash_bin_icon.svg', () => 'trashBinIcon');
 jest.mock('../images/add_service_provider_icon.svg', () => 'addServiceProviderIcon');
 jest.mock('../images/filter_icon.svg', () => 'filterIcon');
 jest.mock('../images/pencil_edit_icon.svg', () => 'pencilEditIcon');
 
+const filteredTableData = [{ ID: 'id1', Email: 'ddwadwa@gmail.com' }];
+
 describe('AdminAccounts', () => {
   let handleClick: jest.Mock;
 
   beforeEach(() => {
     handleClick = jest.fn();
-    render(<AdminAccounts clicked={false} handleClick={handleClick} />);
+    render(<AdminAccounts data={filteredTableData} clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {
