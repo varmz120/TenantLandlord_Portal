@@ -25,7 +25,7 @@ export enum TicketStatus {
   Closed,
 }
 
-function ViewTicket() {
+function LandlordViewTicket() {
   const navigate = useNavigate();
   const locate = useLocation();
   const ticket: Ticket = locate.state;
@@ -253,13 +253,13 @@ function ViewTicket() {
           </div>
           <div className="ml-2 w-3/7 flex h-fit bg-white border-gray-200 rounded-lg shadow sm:p-7">
             <div className="space-y-4">
-              <p className="text-lg text-left font-medium">Landlord Assigned</p>
+              <p className="text-lg text-left font-medium">Relevant Personnel</p>
               <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
               {ticket.personnelAssigned ? (
                 <LineField
                   type={'text'}
-                  label="Name"
-                  padding_right="85"
+                  label="Landlord"
+                  padding_right="65"
                   value={ticket.personnelAssigned}
                   name="landlord"
                   placeholder={''}
@@ -317,4 +317,4 @@ function ViewTicket() {
   );
 }
 
-export default ViewTicket;
+export default LandlordViewTicket;

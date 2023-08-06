@@ -8,7 +8,7 @@ interface InputProps {
   name: string;
   error: string;
   disabled?: boolean;
-  filenames: string[];
+  filenames: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -30,10 +30,10 @@ const UploadField: FC<InputProps> = ({
       >
         {label}
       </label>
-      <span className="flex  items-center">
+      <span className="flex items-center">
         <label
           htmlFor="dropzone-file"
-          className="mt-2 py-2 w-1/3 rounded cursor-pointer bg-disabledField"
+          className="mt-2 py-2 rounded cursor-pointer bg-disabledField"
         >
           <div className="flex flex-col items-center">
             <img src={uploadIcons} className="ml-24" alt="Upload Icon" />
@@ -44,14 +44,11 @@ const UploadField: FC<InputProps> = ({
             name={name}
             type="file"
             className="hidden overflow-hidden z-1 "
-            multiple
             onChange={onChange}
           />
         </label>
         <p className="pt-2 pl-2 font-light text-sm ">
-          {filenames.map((name: string) => {
-            return <li className="inline-block overflow-hidden px-2"> {name} </li>;
-          })}
+            <li className="inline-block overflow-hidden px-2"> {filenames} </li>;
         </p>
       </span>
       <p className="mt-2 text-left text-xs text-gray-500 font-light">
