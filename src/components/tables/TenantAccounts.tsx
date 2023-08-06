@@ -212,7 +212,8 @@ const TenantAccounts = ({ clicked, handleClick,data }: Props) => {
             href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               deleteRow(checked);
               console.log(checked);
             }}
