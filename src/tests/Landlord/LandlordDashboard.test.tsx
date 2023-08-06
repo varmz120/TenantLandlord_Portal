@@ -2,12 +2,13 @@ import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import LandlordDashboard from '../../pages/LandlordDashboard';
-import { client } from '../../client';
+// import { client } from '../../client';
 import axios from 'axios';
 
 // This page of test is for testing landlord dashboard, its navigations and its components
-const appUrl = 'http://localhost:3030';
+// const appUrl = 'http://localhost:3030';
 
+jest.mock('axios');
 
 // Mocking the navigation
 let mockNavigate = jest.fn();
@@ -97,6 +98,8 @@ describe('Rendering of landlord dashboard', () => {
   });
 
   it('Should renders the landlord navbar correctly', () => {
+    axios.get.mockImplementation(() => Promise.resolve({ data: {...} }));
+
     expect(screen.getByText('Create Account')).toBeInTheDocument();
     expect(screen.getByText('Add Service')).toBeInTheDocument();
     expect(screen.getByText('Add Lease')).toBeInTheDocument();
@@ -243,7 +246,6 @@ describe('Rendering of landlord dashboard', () => {
       it('Should navigate to notifications page', () => {
         // No idea why this breaks 
         const buttons = screen.getByText('Notifications');
-        console.log(screen.debug());
         expect(buttons).toBeInTheDocument();
         expect(mockNavigate).toHaveBeenCalledWith('/notification');
       }

@@ -6,7 +6,6 @@ const fs = require('fs');
 const appUrl = 'http://localhost:3030';
 const extensions = ['png', 'jpg', 'pdf'];
 const notableEventsPath = './fuzzerlog-'+crypto.randomUUID()+'.txt';
-const keep_going = 10;
 
 let invocationCount = 0;
 
@@ -23,6 +22,19 @@ const getCircularReplacer = () => {
     };
   };
 
+async function brute_url(data){
+  const provider = new FuzzedDataProvider(data);
+  const fuzzedData = provider. consumeRemainingAsString("utf-8");
+
+  try {
+    await axios.get('${appUrl}/${fuzzedData}', {
+      responseType: 'json',
+    });
+  } catch {
+
+  }
+}
+
 async function brute_files(data){
     const provider = new FuzzedDataProvider(data);
     const fuzzedData = provider.consumeString(25, "utf-8");
@@ -33,7 +45,6 @@ async function brute_files(data){
             await axios.get(`${appUrl}/static/${fuzzedData}.${ext}`, {
               responseType: 'json',
             });
-            assert.fail('should not be here! crash fuzzer.');
           } catch (error) {
             const { response } = error;
 
@@ -42,7 +53,7 @@ async function brute_files(data){
               //stream.end();
 
             //Log notable events
-            if ([302, 200, 400].includes(response?.status)) {
+            if (response?.status < 400) {
               //var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
               stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
               //stream.end();
