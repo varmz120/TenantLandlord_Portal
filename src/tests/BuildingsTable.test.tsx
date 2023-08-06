@@ -4,9 +4,36 @@ import '@testing-library/jest-dom/extend-expect';
 import BuildingsTable from '../components/tables/BuildingsTable'; // Adjust this import based on your file structure
 import userEvent from '@testing-library/user-event';
 
-// Mocking the navigation
+jest.mock('../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'ticket') {
+        return {
+          unassignPersonnel: () => Promise.resolve(),
+          closeTicket: () => Promise.resolve(),
+          rejectTicket: () => Promise.resolve(),
+          reopenTicket: () => Promise.resolve(),
+          registerWorkFinished: () => Promise.resolve(),
+        };
+      }
+      if (serviceName === 'users') {
+        return {
+          create: () => Promise.resolve(),
+          find: () => Promise.resolve(),
+        };
+      }
+      return () => Promise.resolve(); // You can modify this based on your requirements.
+    },
+    get2FA: (loginDetails) => {
+      return Promise.resolve();
+    },
+  },
+}));
+
+let mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
 }));
 
 // Mocking the images
@@ -15,12 +42,17 @@ jest.mock('../images/add_service_provider_icon.svg', () => 'addServiceProviderIc
 jest.mock('../images/filter_icon.svg', () => 'filterIcon');
 jest.mock('../images/pencil_edit_icon.svg', () => 'pencilEditIcon');
 
+const mockBuildingData = [
+  { ID: '22', Name: '3333', Address: '32132131' },
+  { ID: '23', Name: '33421333', Address: '32133212131' },
+];
+
 describe('BuildingsTable', () => {
   let handleClick: jest.Mock;
 
   beforeEach(() => {
     handleClick = jest.fn();
-    render(<BuildingsTable clicked={false} handleClick={handleClick} />);
+    render(<BuildingsTable data={mockBuildingData} clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {
