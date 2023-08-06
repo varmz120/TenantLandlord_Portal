@@ -1,134 +1,231 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
-import { MemoryRouter as Router } from 'react-router-dom';
-import LandlordViewTicket from '../pages/LandlordViewTicket';
-import { MockAuthProvider } from './mockAdmin';
-// Mocking the navigation
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
-  useLocation: () => jest.fn(),
+import React from 'react';
+import { render, fireEvent, act, waitFor, screen } from '@testing-library/react';
+import LandlordViewTicket, { TicketStatus } from '../pages/LandlordViewTicket';
+import { AuthContext } from '../contexts/AuthContext';
+
+jest.mock('../client', () => ({
+  service: jest.fn((serviceName) => {
+    if (serviceName === 'ticket') {
+      return {
+        unassignPersonnel: jest.fn(),
+        closeTicket: jest.fn(),
+        rejectTicket: jest.fn(),
+        reopenTicket: jest.fn(() => Promise.resolve()),
+        registerWorkFinished: jest.fn(),
+      };
+    }
+    return {};
+  }),
 }));
 
-let mockNavigate = jest.fn();
+let mockTicket = {
+  _id: '123',
+  title: 'Test Ticket',
+  requestType: 'Test Type',
+  description: 'Test Description',
+  attachements: [],
+  status: TicketStatus.InQueue,
+  buildingId: '32133',
+};
 
-describe('LandlordViewTicket page rendering', () => {
-  const mockTicketData = {
-    Category: 'Maintenance',
-    Description: 'Dirty ceiling',
-    Landlord: 'Dora',
-    TenantContact: '62353535',
-  };
+let mockValue = {
+  user: {
+    _id: 'mockUserId',
+    typ: 2,
+    email: 'testuser@example.com',
+    password: 'mockPassword',
+    buildingId: 'mockBuildingId',
+    leaseId: 'mockLeaseId',
+  },
+  temp_details: {
+    id: 'mockId',
+    password: 'mockPassword', // Mock these values according to your needs
+  }, // Mock this according to your needs.
+  login: jest.fn(), // Mock function for login
+  logout: jest.fn(), // Mock function for logout
+  tempLogin: jest.fn(), // Mock function for tempLogin
+};
 
-  //Case 1: Ticket status "Opened"
-  it('renders correctly when ticket status is "Opened"', () => {
-    render(
-      <MockAuthProvider>
+const mockNavigate = jest.fn();
+// Mocking react-router-dom hooks
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+  useLocation: () => ({
+    state: mockTicket,
+  }),
+}));
+
+describe('<LandlordViewTicket />', () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('renders the component with ticket details', () => {
+    const { getByText } = render(
+      <AuthContext.Provider value={mockValue}>
         <LandlordViewTicket />
-      </MockAuthProvider>
+      </AuthContext.Provider>
     );
 
-    // Assert that "Category" is displayed with the correct value
-    expect(screen.getByText(/Category/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Category)).toBeInTheDocument();
+    expect(getByText('Service Ticket #123')).toBeInTheDocument();
+    expect(getByText('Test Ticket')).toBeInTheDocument();
+  });
 
-    // Assert that "Description" is displayed with the correct value
-    expect(screen.getByText(/Description/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Description)).toBeInTheDocument();
+  it('handles back button click', async () => {
+    render(
+      <AuthContext.Provider value={mockValue}>
+        <LandlordViewTicket />
+      </AuthContext.Provider>
+    );
 
-    // Assert that "Landlord" is displayed with the correct value
-    expect(screen.getByText(/Landlord/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Landlord)).toBeInTheDocument();
+    const backButton = await screen.findByText('Back to all tickets');
+    fireEvent.click(backButton);
 
-    // Assert that "Tenant Contact" is displayed with the correct value
-    expect(screen.getByText(/Tenant Contact/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.TenantContact)).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
+  });
 
-    // Assert that "opened" status is shown
-    expect(screen.getByAltText(/Opened/i)).toBeInTheDocument();
+  it('only have upload quotation button in status "In queue"', async () => {
+    mockTicket.status = 0;
+    render(<LandlordViewTicket />);
+    let quotationButton = screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
 
-    // Assert that "Reject Ticket" button is rendered
-    expect(screen.getByText(/Reject Ticket/i)).toBeInTheDocument();
+    mockTicket.status = 1;
+    render(<LandlordViewTicket />);
 
-    test('calls navigation function on Reject Ticket click', () => {
-      const rejectButton = screen.getByText(/Reject Ticket/i);
-      fireEvent.click(rejectButton);
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
 
-      expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
+    mockTicket.status = 3;
+    render(<LandlordViewTicket />);
+
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
+
+    mockTicket.status = 4;
+    render(<LandlordViewTicket />);
+
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
+
+    mockTicket.status = 5;
+    render(<LandlordViewTicket />);
+
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
+
+    mockTicket.status = 6;
+    render(<LandlordViewTicket />);
+
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).not.toBeInTheDocument();
+
+    mockTicket.status = 2;
+    render(<LandlordViewTicket />);
+
+    quotationButton = await screen.queryByText('Upload Quotation');
+    expect(quotationButton).toBeInTheDocument();
+  });
+
+  it('handles upload quotation click', async () => {
+    mockTicket.status = 2;
+    render(<LandlordViewTicket />);
+
+    const quotationButton = await screen.findByText('Upload Quotation');
+    fireEvent.click(quotationButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/LandlordUploadQuotation', { state: mockTicket });
+  });
+
+  it('only have reopen button in status "Rejected"', async () => {
+    mockTicket.status = 0;
+    render(<LandlordViewTicket />);
+    let reopenButton = screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 1;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 3;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 4;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 2;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 6;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).not.toBeInTheDocument();
+
+    mockTicket.status = 5;
+    render(<LandlordViewTicket />);
+
+    reopenButton = await screen.queryByText('Reopen Ticket');
+    expect(reopenButton).toBeInTheDocument();
+  });
+
+  it('handles reopen button click', async () => {
+    render(<LandlordViewTicket />);
+    const reopenButton = await screen.findByText('Reopen Ticket');
+    fireEvent.click(reopenButton);
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/landlordDashboard');
     });
-
-    // Assert that "Assign Personnel" button is rendered and disabled
-    const assignButton = screen.getByText(/Assign Personnel !/i);
-    expect(assignButton).toBeInTheDocument();
-    expect(assignButton).toBeDisabled();
-
-    // Assert that "Unassign Personnel" button is rendered and disabled (greyed out)
-    const unassignButton = screen.getByText(/Unassign Personnel/i);
-    expect(unassignButton).toBeInTheDocument();
-    expect(unassignButton).toBeDisabled();
   });
 
-  //Case 2: Ticket status "Waiting for Quotation Approval"
-  it('renders correctly when ticket status is "Waiting for Quotation Approval"', () => {
-    render(<LandlordViewTicket />);
+  // test('handles unassign click', async () => {
+  //   // Mocking any API calls if any
+  //   jest.mock('axios'); // Assuming axios is used for API calls
 
-    // Assert that "Category" is displayed with the correct value
-    expect(screen.getByText(/Category/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Category)).toBeInTheDocument();
+  //   const apiMock = jest.fn(); // Mock the API call function
+  //   apiMock.mockResolvedValueOnce({ data: {} }); // Modify as per your API's expected response
 
-    // Assert that "Description" is displayed with the correct value
-    expect(screen.getByText(/Description/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Description)).toBeInTheDocument();
+  //   // Render your component
+  //   render(<LandlordViewTicket />);
 
-    // Assert that "Landlord" is displayed with the correct value
-    expect(screen.getByText(/Landlord/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Landlord)).toBeInTheDocument();
+  //   // Find the element that triggers `handleUnassignClick`. Assuming it's a button with "Unassign" text.
+  //   const unassignButton = screen.getByText(/unassign/i);
 
-    // Assert that "Tenant Contact" is displayed with the correct value
-    expect(screen.getByText(/Tenant Contact/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.TenantContact)).toBeInTheDocument();
+  //   // Fire a click event on the button
+  //   fireEvent.click(unassignButton);
 
-    // Assert that "opened" status is shown
-    expect(screen.getByAltText(/Waiting for Quotation Approval/i)).toBeInTheDocument();
+  //   // Assuming that there is a loader or some UI change that indicates an API call or state change
+  //   expect(screen.getByTestId('loading-indicator')).toBeVisible(); // Assuming you have a loader with 'loading-indicator' as its data-testid
 
-    // Assert that "None at this time." action status is rendered
-    expect(screen.getByText(/None at this time./i)).toBeInTheDocument();
+  //   // If the API call was successful and changes some UI elements, you can check for those UI changes here.
+  //   // For instance, if it shows a success message:
+  //   expect(screen.getByText(/successfully unassigned/i)).toBeVisible();
 
-    // Assert that "Unassign Personnel" button is rendered and disabled (greyed out)
-    const unassignButton = screen.getByText(/Unassign Personnel/i);
-    expect(unassignButton).toBeInTheDocument();
-    expect(unassignButton).toBeDisabled();
-  });
+  //   // If the `handleUnassignClick` also makes state changes, ensure those are reflected in the UI and check for them.
 
-  //Case 3: Ticket status "In Queue"
-  it('renders correctly when ticket status is "In Queue"', () => {
-    render(<LandlordViewTicket />);
+  //   // Validate that the API was called once
+  //   expect(apiMock).toHaveBeenCalledTimes(1);
+  // });
 
-    // Assert that "Category" is displayed with the correct value
-    expect(screen.getByText(/Category/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Category)).toBeInTheDocument();
+  // - handleUnassignClick
+  // - handleCloseTicket
 
-    // Assert that "Description" is displayed with the correct value
-    expect(screen.getByText(/Description/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Description)).toBeInTheDocument();
-
-    // Assert that "Landlord" is displayed with the correct value
-    expect(screen.getByText(/Landlord/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.Landlord)).toBeInTheDocument();
-
-    // Assert that "Tenant Contact" is displayed with the correct value
-    expect(screen.getByText(/Tenant Contact/i)).toBeInTheDocument();
-    expect(screen.getByText(mockTicketData.TenantContact)).toBeInTheDocument();
-
-    // Assert that "opened" status is shown
-    expect(screen.getByAltText(/Waiting for Quotation Approval/i)).toBeInTheDocument();
-
-    // Assert that "None at this time." action status is rendered
-    expect(screen.getByText(/None at this time./i)).toBeInTheDocument();
-
-    // Assert that "Unassign Personnel" button is rendered and disabled (greyed out)
-    const unassignButton = screen.getByText(/Unassign Personnel/i);
-    expect(unassignButton).toBeInTheDocument();
-    expect(unassignButton).toBeDisabled();
-  });
-
-  // Add more test cases for different ticket statuses
+  // Also consider adding tests for different ticket statuses and how the UI behaves in those cases.
 });
