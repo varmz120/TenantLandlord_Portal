@@ -9,6 +9,7 @@ import { useState, MouseEvent, useContext, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import ActionRequired from '../components/ActionRequired';
 import ActionButton from '../components/ActionButton';
+import ActionAssignRequired from '../components/ActionAssignRequired';
 import { AuthContext } from '../contexts/AuthContext';
 import { Ticket } from '../esc-backend/src/client';
 import { client } from '../client';
@@ -200,11 +201,12 @@ function ViewTicket() {
                           toggle={false}
                           onClick={handleRejectTicket}
                         />
-                        <ActionButton
-                          value={'Assign Personnel'} // TODO : Change the size of the button to fit the text "Assign Personnel in Dashboard"
+                        <ActionAssignRequired
+                          value={'Assign Personnel !'} // TODO : Change the size of the button to fit the text "Assign Personnel in Dashboard"
                           padding_right={'30'}
                           type=""
                           firstViewState={false}
+                          disabled={true}
                           toggle={false}
                           onClick={() => null}
                         />
