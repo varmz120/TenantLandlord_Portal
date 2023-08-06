@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BuildingDetailsForm from '../components/BuildingDetailsForm';
+import BuildingDetailsForm from '../components/BuildingDetails';
 import BuildingsTable from '../components/tables/BuildingsTable';
 import BackArrowIcon from '../images/back_arrow_icon.svg';
 import { client } from '../client';
