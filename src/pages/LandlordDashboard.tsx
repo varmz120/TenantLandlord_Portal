@@ -241,7 +241,7 @@ const Dashboard = () => {
     // Fetch the users with the same building id
     const allusers = await client.service('users').find();
     const usersWithSameBuildingId = allusers.data.filter(
-      (users) => users.buildingId == building_id && users.typ == 1
+      (users) => users.buildingId == building_id && (users.typ == 1 || users.typ == 2)
     );
     console.log('fetchcat:', usersWithSameBuildingId);
     return usersWithSameBuildingId;
