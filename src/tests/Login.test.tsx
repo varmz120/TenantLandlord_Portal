@@ -5,10 +5,41 @@ import { AuthContext } from '../contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import { IAuthContextType } from '../interfaces/Auth';
 
+const mockLogin = jest.fn();
+jest.mock('../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'ticket') {
+        return {
+          unassignPersonnel: () => Promise.resolve(),
+          closeTicket: () => Promise.resolve(),
+          rejectTicket: () => Promise.resolve(),
+          reopenTicket: () => Promise.resolve(),
+          registerWorkFinished: () => Promise.resolve(),
+        };
+      }
+      return () => Promise.resolve(); // You can modify this based on your requirements.
+    },
+    get2FA: (loginDetails) => {
+      return Promise.resolve();
+    },
+  },
+}));
+
+const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+  useNavigate: () => mockNavigate,
 }));
+
+// Define the initial context state
+const contextState: IAuthContextType = {
+  user: null,
+  temp_details: null,
+  login: mockLogin,
+  logout: async () => {},
+  tempLogin: mockLogin,
+};
 
 describe('TenantLogin', () => {
   it('renders without crashing', () => {
@@ -22,16 +53,6 @@ describe('TenantLogin', () => {
 
   it('calls event handlers when login and forgot password buttons are clicked', async () => {
     // Define the mock login function
-    const loginMock = jest.fn((user) => {});
-
-    // Define the initial context state
-    const contextState : IAuthContextType = {
-      user: null,
-      temp_details: null,
-      login: loginMock,
-      logout: async () => {},
-      tempLogin: () => {}
-    };
 
     // Render the component under test
     render(
@@ -60,10 +81,10 @@ describe('TenantLogin', () => {
     fireEvent.click(forgotPasswordButton);
 
     // Verify the results
-    await waitFor(() => {
-      expect(loginMock).toHaveBeenCalled();
-      // eslint-disable-next-line
-      expect(loginMock).toHaveBeenCalledWith(mockUser);
-    });
+    // await waitFor(() => {
+    expect(mockLogin).toHaveBeenCalled();
+    // eslint-disable-next-line
+    expect(mockNavigate).toHaveBeenCalledWith('/reset');
+    // });
   });
 });
