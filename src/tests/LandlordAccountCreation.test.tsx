@@ -41,8 +41,7 @@ describe('LandlordAccountCreation', () => {
 
 
   test('renders Submit button', () => {
-    const submitButton = screen.getByText(/Submit/i);
-
-    expect(mockNavigate).toHaveBeenCalledWith('/LandlordDashboard');
+    //Assert that "Submit" button is rendered
+    expect(screen.getByText(/Submit/i)).toBeInTheDocument();
   });
 });
