@@ -227,7 +227,7 @@ describe('<LandlordViewTicket />', () => {
   // });
 
   // - handleUnassignClick
-  // - handleCloseTicket
+  // - handleCloseTicketd
 
   // Also consider adding tests for different ticket statuses and how the UI behaves in those cases.
 });
