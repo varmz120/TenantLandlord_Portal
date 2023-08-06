@@ -1,11 +1,11 @@
 const { FuzzedDataProvider } = require('@jazzer.js/core');
 const axios = require('axios');
-const assert = require('assert');
 const fs = require('fs');
 
 const appUrl = 'http://localhost:3030';
 const extensions = ['png', 'jpg', 'pdf'];
-const notableEventsPath = './fuzzerlog-'+crypto.randomUUID()+'.txt';
+const notableEventsFiles = './fuzzerlog-bruteFile-'+crypto.randomUUID()+'.txt';
+const notableEventsURL =  './fuzzerlog-brutePath-'+crypto.randomUUID()+'.txt';
 
 let invocationCount = 0;
 
@@ -30,7 +30,15 @@ async function brute_url(data){
     await axios.get('${appUrl}/${fuzzedData}', {
       responseType: 'json',
     });
-  } catch {
+  } catch (error) {
+    const { response } = error;
+    var stream = fs.createWriteStream(notableEventsURL, {flags: 'a'});
+
+    // Log notable events
+    if (response?.status > 500) {
+      stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n');
+    }
+    stream.end();
 
   }
 }
@@ -38,7 +46,6 @@ async function brute_url(data){
 async function brute_files(data){
     const provider = new FuzzedDataProvider(data);
     const fuzzedData = provider.consumeString(25, "utf-8");
-    //var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
 
     for (ext in extensions) {
         try {
@@ -48,40 +55,22 @@ async function brute_files(data){
           } catch (error) {
             const { response } = error;
 
-            var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
-              //stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
-              //stream.end();
+            var stream = fs.createWriteStream(notableEventsFiles, {flags: 'a'});
 
             //Log notable events
             if (response?.status < 400) {
-              //var stream = fs.createWriteStream(notableEventsPath, {flags: 'a'});
-              stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response, getCircularReplacer()) + '\n');
-              //stream.end();
+              stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n');
             }
             stream.end();
-
-            // if (response === undefined) {
-            //     continue; // For purpose of running indefinitely
-            // } else {
-            //     //assert.ok([400, 404].includes(response.status));
-            //     // if not expected values, 
-            //     //if([400, 404].includes(response.status)) {
           }
     }
     invocationCount++;
 }
 
-console.log("Logging on ", notableEventsPath);
+console.log("Logging static files : Notable events on ", notableEventsFiles);
+console.log("Logging URL paths : Notable events on ", notableEventsURL);
 
 module.exports.fuzz = function (data) {
     brute_files(data);
+    brute_url(data)
 }
-
-// function random(data){
-//     //const fuzzerData = data.toString(); -> return fuzzerData instead
-//     return data;
-//     //const provider = new FuzzedDataProvider(data);
-//     //return provider.consumeString(25);
-// }
-
-//     } 
