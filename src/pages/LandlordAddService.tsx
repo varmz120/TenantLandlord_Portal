@@ -50,27 +50,27 @@ const AddService = () => {
 
     if (Object.keys(errors).length > 0) {
     } else {
-      setSubmit(true);
-      navigate('/LandlordDashboard');
-    }
 
-    client
-      .service('building')
-      .get(user?.buildingId ?? '')
-      .then((building) => {
-        // Add the new request type to the existing array
-        building.requestTypes.push(formState.nameService);
 
-        // Patch the building with the updated requestTypes array
-        return client.service('building').patch(user?.buildingId ?? '', building);
-      })
-      .then((updatedBuilding) => {
-        console.log('Updated building:', updatedBuilding);
-      })
-      .catch((err) => {
-        console.error('Error updating building:', err);
-      });
-  };
+      client
+        .service('building')
+        .get(user?.buildingId ?? '')
+        .then((building) => {
+          // Add the new request type to the existing array
+          building.requestTypes.push(formState.nameService);
+
+          // Patch the building with the updated requestTypes array
+          return client.service('building').patch(user?.buildingId ?? '', building);
+        })
+        .then((updatedBuilding) => {
+          console.log('Updated building:', updatedBuilding);
+          setSubmit(true);
+        })
+        .catch((err) => {
+          console.error('Error updating building:', err);
+        });
+      }
+    };
 
   useEffect(() => {
     if (isSubmit) {

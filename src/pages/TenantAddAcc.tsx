@@ -10,7 +10,7 @@ import AddTenantButton from '../components/AddTenantButton';
 import AddBldgButton from '../components/AddBldgButton';
 import SubmitButton from '../components/SubmitButton';
 import TenantDetails from '../components/TenantDetails';
-import BuildingDetailsForm from '../components/BuildingDetailsForm';
+import BuildingDetailsForm from '../components/BuildingDetails';
 
 const AddLease = () => {
   const navigate = useNavigate();
