@@ -24,7 +24,7 @@ function UploadQuote() {
     totalAmount: ticket?.quotation?.amount,
     formRemarks: ticket?.quotation?.remarks,
     formId: ticket?._id,
-    formAttachments: ticket?.quotation?.uri || "",
+    formAttachments: ticket?.quotation?.uri || null,
     //isSubmitted: false
   });
 
@@ -138,8 +138,9 @@ function UploadQuote() {
   const [iframeSrc, setIframeSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (formAttachments.length > 0) {
-      setIframeSrc(URL.createObjectURL(formAttachments[0])); // Use the first attachment URL as iframe src
+    if (formAttachments) {
+      console.log(formAttachments);
+      setIframeSrc(URL.createObjectURL(formAttachments)); // Use the first attachment URL as iframe src
     } else if (ticket?.quotation?.uri) {
       // Use the URI from the ticket if available (when editing existing quote)
       setIframeSrc(`http://localhost:3030/${ticket?.quotation?.uri}`);

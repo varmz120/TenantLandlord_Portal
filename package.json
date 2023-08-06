@@ -79,6 +79,9 @@
   "jest": {
     "watchPathIgnorePatterns": [
       "<rootDir>/src/esc-backend/"
-    ]
+    ],
+    "moduleNameMapper": {      
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }

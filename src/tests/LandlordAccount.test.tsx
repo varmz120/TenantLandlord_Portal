@@ -9,6 +9,8 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }));
 
+// jest.mock('axios');
+
 // Mocking the images
 jest.mock('../images/trash_bin_icon.svg', () => 'trashBinIcon');
 jest.mock('../images/add_service_provider_icon.svg', () => 'addServiceProviderIcon');
