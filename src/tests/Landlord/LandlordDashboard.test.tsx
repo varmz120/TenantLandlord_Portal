@@ -98,7 +98,7 @@ describe('Rendering of landlord dashboard', () => {
   });
 
   it('Should renders the landlord navbar correctly', () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {...} }));
+    axios.get.mockImplementation(() => Promise.resolve({ data: {} }));
 
     expect(screen.getByText('Create Account')).toBeInTheDocument();
     expect(screen.getByText('Add Service')).toBeInTheDocument();
