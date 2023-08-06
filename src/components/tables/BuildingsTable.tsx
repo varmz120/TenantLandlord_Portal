@@ -186,7 +186,8 @@ const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
             href="#/"
             className="block rounded-full px-5 py-5 mr-4
                                         flex items-center bg-[#edfdff] active:text-[#cbe6ec] active:bg-[#193446]"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               deleteRow(checked);
               console.log(checked);
             }}
@@ -226,7 +227,7 @@ const BuildingsTable = ({ clicked, handleClick, data }: Props) => {
         </div>
       </div>
       <div className="bg-white h-full overflow-y-auto rounded-b-lg drop-shadow-2xl">
-        <table className="table-fixed w-full">
+        <table className="table-fixed w-full ">
           <thead>
             <tr style={{ display: isRowVisible ? 'table-row' : 'none' }}>
               <th className="border w-1/12 px-2 py-2 bg-[gray] text-white"></th>

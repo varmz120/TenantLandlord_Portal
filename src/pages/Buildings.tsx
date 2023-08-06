@@ -14,7 +14,9 @@ const Buildings = () => {
   const getBuildingsData = async () => {
     try {
       const buildingData = await client.service('building').find();
+      console.log(buildingData)
       const buildings = buildingData.data;
+      console.log(buildings);
       const buildingsUpdated = buildings.map((building) => ({
         ID: building._id,
         Name: building.name,
