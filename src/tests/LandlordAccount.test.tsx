@@ -22,8 +22,7 @@ describe('LandlordAccounts', () => {
 
   beforeEach(() => {
     handleClick = jest.fn();
-    let mockData=[{ID: "121221", Email: "jol@gmail.com", BuildingID:"Changi"}]
-    render(<LandlordAccounts clicked={false} handleClick={handleClick} data={mockData} />);
+    render(<LandlordAccounts clicked={false} handleClick={handleClick} />);
   });
 
   test('renders correctly', () => {
