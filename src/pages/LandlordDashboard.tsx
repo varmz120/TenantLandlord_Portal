@@ -159,7 +159,7 @@ const Dashboard = () => {
     if (checked.length === tableData.length) {
       setChecked([]);
     } else {
-      const newChecked = tableData.map((row) => row.ID);
+      const newChecked = tableData.map((row : any) => row.ID);
       setChecked(newChecked);
     }
   };
