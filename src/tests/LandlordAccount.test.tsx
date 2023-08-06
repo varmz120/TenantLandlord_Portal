@@ -4,12 +4,37 @@ import '@testing-library/jest-dom/extend-expect';
 import LandlordAccounts from '../components/tables/LandlordAccounts'; // Adjust this import based on your file structure
 import userEvent from '@testing-library/user-event';
 
-// Mocking the navigation
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
+jest.mock('../client', () => ({
+  client: {
+    service: (serviceName) => {
+      if (serviceName === 'ticket') {
+        return {
+          unassignPersonnel: () => Promise.resolve(),
+          closeTicket: () => Promise.resolve(),
+          rejectTicket: () => Promise.resolve(),
+          reopenTicket: () => Promise.resolve(),
+          registerWorkFinished: () => Promise.resolve(),
+        };
+      }
+      if (serviceName === 'users') {
+        return {
+          create: () => Promise.resolve(),
+          find: () => Promise.resolve(),
+        };
+      }
+      return () => Promise.resolve(); // You can modify this based on your requirements.
+    },
+    get2FA: (loginDetails) => {
+      return Promise.resolve();
+    },
+  },
 }));
 
-// jest.mock('axios');
+let mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 
 // Mocking the images
 jest.mock('../images/trash_bin_icon.svg', () => 'trashBinIcon');
@@ -17,12 +42,27 @@ jest.mock('../images/add_service_provider_icon.svg', () => 'addServiceProviderIc
 jest.mock('../images/filter_icon.svg', () => 'filterIcon');
 jest.mock('../images/pencil_edit_icon.svg', () => 'pencilEditIcon');
 
+const mockLandlordAccountData = [
+  {
+    ID: 'testID1',
+    Email: 'testemail@email.com',
+    BuildingID: 'testbuilding1',
+  },
+  {
+    ID: 'testID2',
+    Email: 'testemail2@email.com',
+    BuildingID: 'testbuilding2',
+  },
+];
+
 describe('LandlordAccounts', () => {
   let handleClick: jest.Mock;
 
   beforeEach(() => {
     handleClick = jest.fn();
-    render(<LandlordAccounts clicked={false} handleClick={handleClick} />);
+    render(
+      <LandlordAccounts data={mockLandlordAccountData} clicked={false} handleClick={handleClick} />
+    );
   });
 
   test('renders correctly', () => {
@@ -39,7 +79,7 @@ describe('LandlordAccounts', () => {
     // fireEvent.click(buttons[2]); // Clicks the third button
     expect(screen.getByPlaceholderText('Search ID')).toBeVisible();
     expect(screen.getByPlaceholderText('Search Email')).toBeVisible();
-    expect(screen.getByPlaceholderText('Search Building ID')).toBeVisible();
+    expect(screen.getByPlaceholderText('Search BuildingID')).toBeVisible();
   });
 
   test('clicks on the add service provider button', () => {
