@@ -55,7 +55,7 @@ function ViewTicket() {
       .service('ticket')
       .registerWorkFinished({ ticketId: ticket._id })
       .then(() => {
-        navigate('/landlordDashboard');
+        navigate('/ServProvDashboard');
       });
   };
 
