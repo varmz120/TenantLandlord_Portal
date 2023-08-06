@@ -25,7 +25,7 @@ export enum TicketStatus {
   Closed,
 }
 
-function LandlordViewTicket() {
+const LandlordViewTicket = () => {
   const navigate = useNavigate();
   const locate = useLocation();
   const ticket: Ticket = locate.state;
@@ -173,7 +173,8 @@ function LandlordViewTicket() {
                 <Status label={'Status'} value={ticket.status} padding_right={'0'} />
                 <div className="flex flex-col pt-1">
                   {ticket.status === TicketStatus.PendingCompletionApproval ||
-                  ticket.status === TicketStatus.WaitingForQuotApproval ? (
+                  ticket.status === TicketStatus.WaitingForQuotApproval || 
+                  ticket.status === TicketStatus.Closed ? (
                     <ActionRequired label={'Action Required'} padding_right={'32'} alert={false} />
                   ) : (
                     <ActionRequired label={'Action Required'} padding_right={'32'} alert={true} />
