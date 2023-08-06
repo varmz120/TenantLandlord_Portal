@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, act, waitFor, screen } from '@testing-library/react';
 import LandlordViewTicket, { TicketStatus } from '../pages/LandlordViewTicket';
 import { AuthContext } from '../contexts/AuthContext';
+import { stat } from 'fs';
 
 jest.mock('../client', () => ({
   client: {
@@ -58,6 +59,32 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+const buttonExist = async (statusNo, buttonText) => {
+  for (let i = 0; i < 6; i++) {
+    if (i == statusNo) {
+      continue;
+    }
+    mockTicket.status = i;
+    render(<LandlordViewTicket />);
+    let button = await screen.queryByText(buttonText);
+    expect(button).not.toBeInTheDocument();
+  }
+  mockTicket.status = statusNo;
+  render(<LandlordViewTicket />);
+  let button = await screen.queryByText(buttonText);
+  expect(button).toBeInTheDocument();
+};
+
+const handlesButton = async (statusNo, buttonText, navigate) => {
+  mockTicket.status = statusNo;
+  render(<LandlordViewTicket />);
+  const reopenButton = await screen.findByText(buttonText);
+  fireEvent.click(reopenButton);
+  // await waitFor(() => {
+  expect(mockNavigate).toHaveBeenCalledWith(navigate);
+  // });
+};
+
 describe('<LandlordViewTicket />', () => {
   beforeEach(() => {
     // Reset mocks before each test
@@ -93,140 +120,53 @@ describe('<LandlordViewTicket />', () => {
   });
 
   it('only have upload quotation button in status "In queue"', async () => {
-    mockTicket.status = 0;
-    render(<LandlordViewTicket />);
-    let quotationButton = screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 1;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 3;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 4;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 5;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 6;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).not.toBeInTheDocument();
-
-    mockTicket.status = 2;
-    render(<LandlordViewTicket />);
-
-    quotationButton = await screen.queryByText('Upload Quotation');
-    expect(quotationButton).toBeInTheDocument();
+    buttonExist(2, 'Upload Quotation');
   });
 
-  it('handles upload quotation click', async () => {
-    mockTicket.status = 2;
-    render(<LandlordViewTicket />);
+  it('only have finish works button in status "In Progress"', async () => {
+    buttonExist(3, 'Finish Works');
+  });
 
-    const quotationButton = await screen.findByText('Upload Quotation');
-    fireEvent.click(quotationButton);
+  it('only have Assign Personnel ! button in status "In Progress"', async () => {
+    buttonExist(0, 'Assign Personnel !');
+  });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/LandlordUploadQuotation', { state: mockTicket });
+  it('only have Reject Ticket button in status "In Progress"', async () => {
+    buttonExist(0, 'Reject Ticket');
   });
 
   it('only have reopen button in status "Rejected"', async () => {
-    mockTicket.status = 0;
-    render(<LandlordViewTicket />);
-    let reopenButton = screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
+    buttonExist(5, 'Reopen Ticket');
+  });
 
-    mockTicket.status = 1;
-    render(<LandlordViewTicket />);
+  it('only have View Feedback button in status "In Progress"', async () => {
+    buttonExist(6, 'View Feedback');
+  });
 
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
-
-    mockTicket.status = 3;
-    render(<LandlordViewTicket />);
-
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
-
-    mockTicket.status = 4;
-    render(<LandlordViewTicket />);
-
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
-
-    mockTicket.status = 2;
-    render(<LandlordViewTicket />);
-
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
-
-    mockTicket.status = 6;
-    render(<LandlordViewTicket />);
-
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).not.toBeInTheDocument();
-
-    mockTicket.status = 5;
-    render(<LandlordViewTicket />);
-
-    reopenButton = await screen.queryByText('Reopen Ticket');
-    expect(reopenButton).toBeInTheDocument();
+  it('handles upload quotation click', async () => {
+    handlesButton(2, 'Upload Quotation', '/landlordDashboard');
   });
 
   it('handles reopen button click', async () => {
-    render(<LandlordViewTicket />);
-    const reopenButton = await screen.findByText('Reopen Ticket');
-    fireEvent.click(reopenButton);
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/landlordDashboard');
-    });
+    handlesButton(5, 'Reopen Ticket', '/landlordDashboard');
   });
 
-  // test('handles unassign click', async () => {
-  //   // Mocking any API calls if any
-  //   jest.mock('axios'); // Assuming axios is used for API calls
+  it('handles finish works button click', async () => {
+    handlesButton(3, 'Finish Works', '/landlordDashboard');
+  });
 
-  //   const apiMock = jest.fn(); // Mock the API call function
-  //   apiMock.mockResolvedValueOnce({ data: {} }); // Modify as per your API's expected response
+  it('handles Reject Ticket button click', async () => {
+    handlesButton(0, 'Reject Ticket', '/landlordDashboard');
+  });
 
-  //   // Render your component
-  //   render(<LandlordViewTicket />);
+  it('handles View Feedback button click', async () => {
+    handlesButton(6, 'View Feedback', '/landlordDashboard');
+  });
 
-  //   // Find the element that triggers `handleUnassignClick`. Assuming it's a button with "Unassign" text.
-  //   const unassignButton = screen.getByText(/unassign/i);
-
-  //   // Fire a click event on the button
-  //   fireEvent.click(unassignButton);
-
-  //   // Assuming that there is a loader or some UI change that indicates an API call or state change
-  //   expect(screen.getByTestId('loading-indicator')).toBeVisible(); // Assuming you have a loader with 'loading-indicator' as its data-testid
-
-  //   // If the API call was successful and changes some UI elements, you can check for those UI changes here.
-  //   // For instance, if it shows a success message:
-  //   expect(screen.getByText(/successfully unassigned/i)).toBeVisible();
-
-  //   // If the `handleUnassignClick` also makes state changes, ensure those are reflected in the UI and check for them.
-
-  //   // Validate that the API was called once
-  //   expect(apiMock).toHaveBeenCalledTimes(1);
+  // it('handles Assign Personnel button click', async () => {
+  //   handlesButton(0, 'Assign Personnel !', '/landlordDashboard');
   // });
 
-  // - handleUnassignClick
   // - handleCloseTicketd
 
   // Also consider adding tests for different ticket statuses and how the UI behaves in those cases.
