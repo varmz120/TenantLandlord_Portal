@@ -33,19 +33,19 @@ function RateTicket() {
   let currentDate = `${currentDay}/${currentMonth}/${currentYear}`;
 
   // Context
-  const { user } = useContext(AuthContext);
+  //const { user } = useContext(AuthContext);
 
   // UseStates & Backend Data
   const [firstView, setFirstView] = useState(true);
   const [isClosed, setClosed] = useState(false);
   const [formState, setFormState] = useState<string | any>({
-    formTitle: ticket.title,
-    formCategory: ticket.requestType,
-    formID: ticket._id,
+    formTitle: ticket?.title,
+    formCategory: ticket?.requestType,
+    formID: ticket?._id,
     formStatus: ticket,
     formFeedback: {
-      rating: ticket.feedback?.rating ?? 0,
-      description: ticket.feedback?.description ?? '',
+      rating: ticket?.feedback?.rating ?? 0,
+      description: ticket?.feedback?.description ?? '',
     },
     formAcknowledgement: false,
     formAttachments: [],
@@ -53,9 +53,6 @@ function RateTicket() {
   const [isSubmit, setSubmit] = useState(false);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
-  // Mock static values
-  var location = 'Sunplaza';
-  var unit = '01-35';
 
   // Handlers
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
@@ -78,16 +75,6 @@ function RateTicket() {
       });
     }
   };
-
-  // const handleRatingChange = (event: MouseEvent<HTMLButtonElement>): void => {
-  //   event.stopPropagation();
-  //   if ('id' in event.target) {
-  //     setFormState({
-  //       ...formState,
-  //       formFeedback: +(event.target.id as string),
-  //     });
-  //   }
-  // };
 
   const handleRatingChange = (rating: number) => {
     // Create a new object with the updated rating value in formFeedback
@@ -114,19 +101,6 @@ function RateTicket() {
     }
     console.log('formState: ', formState.formFeedback);
   };
-
-  // const handleTextChange = (event: ChangeEvent<HTMLDivElement>): void => {
-  //   event.stopPropagation();
-
-  //   // console.log('event.target.id: ', event.target.id);
-  //   // if ('textContent' in event.target) {
-  //   //   setFormState({
-  //   //     ...formState,
-  //   //     [event.target.id]: event.target.textContent,
-  //   //   });
-  //   //   console.log('formState: ', formState.formFeedback);
-  //   // }
-  // };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if ('files' in event.target) {
@@ -233,33 +207,15 @@ function RateTicket() {
   const { formFeedback, formDescription, formAcknowledgement, formAttachments } = formState;
 
   return (
-    <React.Fragment>
-      {/* // When user is not logged in */}
-      {user === null ? (
-        <Navigate to="/401" replace={true} />
-      ) : (
+    // <React.Fragment>
+    //   {/* // When user is not logged in */}
+    //   {user === null ? (
+    //     <Navigate to="/401" replace={true} />
+    //   ) : (
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
-          {user?.typ === 0 && formState ? (
+          {/* {user?.typ === 0 && formState ? ( */}
             <React.Fragment>
-              {/* {isSubmit ? (
-                <div className="h-full w-full flex flex-col items-center justify-center">
-                  <p>Ticket is {isClosed ? 'closed' : 'reopened'}</p>
-                  <p>Remarks: {formDescription}</p>
-                  {formRating && isClosed ? <p>Rating: {formRating}</p> : null}
-                  <p>Acknowledgement: {formAcknowledgement ? 'yes' : ''}</p>
-                  {formAttachments.length > 0 ? <p>Attachments below:</p> : null}
-                  {formAttachments?.map((file: string) => {
-                    return (
-                      <iframe
-                        src={file}
-                        title="Attachments"
-                        className="flex align-center items-center mx-auto wx-full text-center"
-                      />
-                    );
-                  })}
-                </div>
-              ) : ( */}
               <div className="flex flex-col font-3xl" id="viewTicket">
                 <BackButton
                   type="button"
@@ -270,12 +226,12 @@ function RateTicket() {
                 />
                 <div className="flex justify-center">
                   <p className="text-headerText pb-5 text-2xl font-medium">
-                    Service Ticket #00{ticket._id} : {ticket.buildingId} Unit {ticket.leaseId}
+                    Service Ticket #00{ticket?._id} : {ticket?.buildingId} Unit {ticket?.leaseId}
                   </p>
                 </div>
                 <div className="flex mx-auto w-fit bg-form border-gray-200 rounded-lg shadow sm:p-7">
                   <form className="space-y-4" onSubmit={handleSubmit}>
-                    <p className="text-lg text-left font-medium">{ticket.title}</p>
+                    <p className="text-lg text-left font-medium">{ticket?.title}</p>
                     <hr className="h-[1px] bg-gray-300 border-0 drop-shadow-md"></hr>
                     <div className="flex align-center text-left">
                       <p className="text-userNameText">
@@ -318,12 +274,12 @@ function RateTicket() {
                           disabled={false}
                           layout={'vertical'}
                           error={''}
-                          placeholder="Please inclue any additional remarks here."
+                          placeholder="Please include any additional remarks here."
                           onChange={handleTextChange}
                         />
                         <TermsConditionsCheckbox
                           link={'#'}
-                          label="Acnowledgement of T&C"
+                          label="Acknowledgement of T&C"
                           padding_right="0"
                           value={formAcknowledgement}
                           name="formAcknowledgement"
@@ -344,7 +300,7 @@ function RateTicket() {
                           disabled={false}
                           layout={'vertical'}
                           error={errors.formDescription}
-                          placeholder="Please inclue any additional remarks here."
+                          placeholder="Please include any additional remarks here."
                           onChange={handleTextChange}
                         />
                         <UploadField
@@ -356,10 +312,11 @@ function RateTicket() {
                           error={''}
                           disabled={false}
                           onChange={handleFileChange}
+                          layout={''}
                         />
                         <TermsConditionsCheckbox
                           link={'#'}
-                          label="Acnowledgement of T&C"
+                          label="Acknowledgement of T&C"
                           padding_right="0"
                           value={formAcknowledgement}
                           name="formAcknowledgement"
@@ -375,13 +332,13 @@ function RateTicket() {
               </div>
               {/* )} */}
             </React.Fragment>
-          ) : (
+          {/* ) : (
             // When user is logged in but NOT a tenant
             <Navigate to="/403" replace={true} />
-          )}
-        </React.Fragment>
-      )}
-    </React.Fragment>
-  );
+          )} */}
+        </React.Fragment>)
+  //     )}
+  //   </React.Fragment>
+  // );
 }
 export default RateTicket;

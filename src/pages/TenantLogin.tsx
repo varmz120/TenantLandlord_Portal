@@ -65,7 +65,7 @@ const TenantLogin = () => {
 
   // Event handler for clicking forgot password
   const handleForgotPassword = () => {
-    navigate('/reset1');
+    navigate('/reset');
   };
 
   return (
