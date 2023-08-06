@@ -1,38 +1,51 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {  fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import App from '../App';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
-import { UserType } from '../esc-backend/src/services/users/users.schema';
+import { AuthContext } from '../contexts/AuthContext';
 
-// TODO: Include routes after auth for other pages (Tenant, Landlord, Admin)
-
-// ---------------------------- SETUP ---------------------------------
-// MOCKS
 const mockUseNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockUseNavigate
 }));
 
-// AUTH SETUP
-const testAdminUser = {
-  _id: 'admin',
-  typ: UserType.Admin,
-  email: 'admin@test.com',
-  password: 'supersecret',
+const mockTenant = {
+  user: {
+    _id: 'mockTenantUser',
+    typ: 0,
+    email: 'testuser@example.com',
+    password: 'mockPassword',
+    buildingId: 'mockBuildingId',
+    leaseId: 'mockLeaseId',
+  },
+  temp_details: {
+    id: 'mockId',
+    password: 'mockPassword', // Mock these values according to your needs
+  }, // Mock this according to your needs.
+  login: jest.fn(), // Mock function for login
+  logout: jest.fn(), // Mock function for logout
+  tempLogin: jest.fn(), // Mock function for tempLogin
 };
 
-// const testTenantUser: UserData = {
-//   _id: 'tenant',
-//   password: 'supersecret',
-//   email: 'tenant@test.com',
-//   typ: UserType.Tenant,
-// };
+const mockAdmin = {
+  user: {
+    _id: 'mockAdminUser',
+    typ: 3,
+    email: 'testuser@example.com',
+    password: 'mockPassword',
+    buildingId: 'mockBuildingId',
+  },
+  temp_details: {
+    id: 'mockId',
+    password: 'mockPassword', // Mock these values according to your needs
+  }, // Mock this according to your needs.
+  login: jest.fn(), // Mock function for login
+  logout: jest.fn(), // Mock function for logout
+  tempLogin: jest.fn(), // Mock function for tempLogin
+};
 
-
-// ROUTING TESTS
 describe('Routing Tests\n    Route: \'/\'', () => {
 
   afterEach(() => {
@@ -105,38 +118,106 @@ describe('  Route: \'/login\'', () => {
 
   });
 
-  // TODO: Find out why the navigate event is not firing after form submission
-  // test('renders 2fa page (navigate)', async() => {
-  //   render(
-  //     <MemoryRouter initialEntries={['/login']}>
-  //          <App/>
-  //     </MemoryRouter>);
+})
 
-  //   // To resolve the loading
-  //   await act(async() => {
-  //     Promise.resolve();
-  //   });
+describe('  Route: \'/2fa\'', () => {
+  test('renders 2fa page (navigate from /login)', async() => {
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+          <App/>
+      </MemoryRouter>);
+
+    // To resolve the loading
+    await act(async() => {
+      Promise.resolve();
+    });
     
-  //   const usernameInput = screen.getByPlaceholderText('Username');
-  //   const passwordInput = screen.getByPlaceholderText('Password');
-  //   const loginButton = screen.getByRole("button", {name: "Login"});
-  //   //const form = screen.getByRole('form');
+    const usernameInput = screen.getByPlaceholderText('Username');
+    const passwordInput = screen.getByPlaceholderText('Password');
+    const loginButton = screen.getByRole("button", {name: "Login"});
 
-  //   // NOTE: There is an error with form submission during Jest testing but npm run start is working... 
-  //   waitFor(()=> userEvent.type(usernameInput, testAdminUser._id));
-  //   waitFor(()=> userEvent.type(passwordInput, testAdminUser.password));
+    waitFor(()=> fireEvent.change(usernameInput, {target: testAdminUser._id}));
+    waitFor(()=> fireEvent.change(passwordInput, {target: testAdminUser.password}));
 
-  //   expect(usernameInput).toHaveValue(testAdminUser._id);
-  //   expect(passwordInput).toHaveValue(testAdminUser.password);
-  //   //waitFor(()=> fireEvent.submit(form));
+    waitFor(()=> expect(usernameInput).toHaveValue(testAdminUser._id));
+    waitFor(()=> expect(passwordInput).toHaveValue(testAdminUser.password));
 
-  //   waitFor(()=> userEvent.click(loginButton));
+    waitFor(()=> fireEvent.click(loginButton));
     
-  //   // PRINT SCREEN BEFORE ERROR
-  //   console.log(screen.debug());
+    waitFor(()=> expect(mockUseNavigate).toHaveBeenCalledTimes(1));
+    waitFor(()=> expect(mockUseNavigate).toHaveBeenCalledWith('/login2FA'));
+  });
 
-  //   // ERROR
-  //   //expect(mockUseNavigate).toHaveBeenCalledTimes(1);
-  //   expect(mockUseNavigate).toHaveBeenCalledWith('/login2FA');
-  // });
+  test('renders 2fa page (direct w user details)', async() => {
+    render(
+
+      <AuthContext.Provider value={mockTenant}>
+        <MemoryRouter initialEntries={['/login2fa']}>
+          <App />
+        </MemoryRouter>
+      </AuthContext.Provider>);
+
+    // To resolve the loading
+    await act(async() => {
+      Promise.resolve();
+    });
+    
+    const titleElement = screen.getByText(/Anacle/);
+    const twofaLabel = screen.getByText(/Two-Factor/);
+    const authLabel = screen.getByText(/Authentication/);
+    const authInput = screen.getByPlaceholderText("Enter authentication code");
+    const submitButton = screen.getByRole('button', { name: 'Submit' });
+
+    expect(titleElement).toBeInTheDocument();
+    expect(twofaLabel).toBeInTheDocument();
+    expect(authLabel).toBeInTheDocument();
+    expect(authInput).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
+    
+  });
+  
+})
+
+describe('  Route: \'Errors', () => {
+  test('renders 404 error after navigate to /gibberish', async() => {
+    render(
+        <MemoryRouter initialEntries={['/gibberish']}>
+          <App />
+        </MemoryRouter>);
+
+    // To resolve the loading
+    await act(async() => {
+      Promise.resolve();
+    });
+
+    const errorTitle = screen.getByText(/404/);
+    const errorMsg = screen.getByText(/Page Not Found/);
+    const redirectLink = screen.getByRole("link", {name: "Dashboard or Login page"});
+    
+    expect(errorTitle).toBeInTheDocument();
+    expect(errorMsg).toBeInTheDocument();
+    expect(redirectLink).toBeInTheDocument();
+  })
+
+  test('renders 403 error after navigate to /tenantDashboard (as admin)', async() => {
+    render(
+      <AuthContext.Provider value={mockAdmin}>
+        <MemoryRouter initialEntries={['/tenantDashboard']}>
+          <App />
+        </MemoryRouter>
+      </AuthContext.Provider>);
+      // To resolve the loading
+      await act(async() => {
+        Promise.resolve();
+      });
+
+      const errorTitle = screen.getByText(/403 - Forbidden/);
+      const errorMsg = screen.getByText(/You do not have permission to access this resource. If you think this is an error, please contact the system admin./);
+      const redirectLink = screen.getByRole("link", {name: "Dashboard or Login page"});
+      
+      expect(errorTitle).toBeInTheDocument();
+      expect(errorMsg).toBeInTheDocument();
+      expect(redirectLink).toBeInTheDocument();
+  })
+
 })

@@ -43,9 +43,9 @@ function ViewTicket() {
   return (
     <React.Fragment>
       {/* // When user is not logged in */}
-      {user === null ? (
+      {/* {user === null ? (
         <Navigate to="/403" replace={true} />
-      ) : (
+      ) : ( */}
         <React.Fragment>
           {/* // When user is logged in AND a tenant */}
           {user?.typ === 0 ? (
@@ -189,7 +189,6 @@ function ViewTicket() {
             <Navigate to="/403" replace={true} />
           )}
         </React.Fragment>
-      )}
     </React.Fragment>
   );
 }

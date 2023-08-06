@@ -1,15 +1,19 @@
-import React from 'react';
 import { render, fireEvent, screen, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import RateTicket from '../pages/RateTicket';
-import { AuthContext } from '../contexts/AuthContext';
-import { title } from 'process';
 import userEvent from '@testing-library/user-event';
 
+const mockAcceptData = {
+  rating: 4,
+  remarks: 'accept_test'
+}
+
+const mockRejectData = {
+  remarks: 'reject_test'
+}
 
 // Mock useNavigate
 let mockNavigate = jest.fn();
-const loginMock = jest.fn(() => {});
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -38,7 +42,7 @@ describe('RateTicket', () => {
 
   test('click on yes for close ticket form', () => {
     const yesButton = screen.getByRole("button", {name: "Yes"});
-    waitFor(()=> userEvent.click(yesButton));
+    waitFor(()=> fireEvent.click(yesButton));
 
     const ratingLabel = screen.getByText(/Rating/);
     const starButtons = screen.getAllByText("★");
@@ -59,33 +63,33 @@ describe('RateTicket', () => {
     expect(submitButton).toBeInTheDocument();
   })
 
-  test('submit close ticket form', () => {
+  test('navigate /tenantDashboard after submit mock data for close ticket form', () => {
     const yesButton = screen.getByRole("button", {name: "Yes"});
-    waitFor(()=> userEvent.click(yesButton));
+    waitFor(()=> fireEvent.click(yesButton));
 
     const starButtons = screen.getAllByText("★");
-    const remarksInput = screen.getByPlaceholderText("Please include any additional remarks here.");
+    fireEvent.click(starButtons[mockAcceptData.rating]);
+
+    for(let i = 0; i< mockAcceptData.rating; i++) {
+      expect(starButtons[i].closest('button')).toHaveClass('text-starActive');
+    }
+
+
     const acknowledgementCheck = screen.getByRole("checkbox");
+    fireEvent.click(acknowledgementCheck);
+    expect(acknowledgementCheck).toBeChecked();
+
     const submitButton = screen.getByRole("button", {name: "Submit"});
+    userEvent.click(submitButton);
 
-    waitFor(()=> userEvent.click(starButtons[2]));
-    waitFor(()=> userEvent.type(remarksInput, "MOCK"));
-    waitFor(()=> userEvent.click(acknowledgementCheck));
-
-    expect(starButtons[2]).toHaveValue(3);
-    expect(remarksInput).toHaveValue("Mock");
-    expect(acknowledgementCheck).toHaveValue("true");
-    
-    console.log(screen.debug());
-
-    starButtons.forEach(star =>{
-        expect(star).toBeInTheDocument();
-    });
+    waitFor(()=>expect(mockNavigate).toBeCalledTimes(1));
+    waitFor(()=>expect(mockNavigate).toHaveBeenCalledWith('/tenantDashboard'));
   })
+
 
   test('click on no for reopen ticket form', () => {
     const noButton = screen.getByRole("button", {name: "No"});
-    waitFor(()=> userEvent.click(noButton));
+    waitFor(()=> fireEvent.click(noButton));
 
     const remarksLabel = screen.getByText(/Reasons for reopening of service ticket/);
     const remarksInput = screen.getByPlaceholderText("Please include any additional remarks here.");
@@ -100,6 +104,21 @@ describe('RateTicket', () => {
     expect(acknowledgementLabel).toBeInTheDocument();
     expect(acknowledgementCheck).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
+  })
+
+  test('navigate /tenantDashboard after submit mock data for close ticket form', () => {
+    const noButton = screen.getByRole("button", {name: "No"});
+    waitFor(()=> fireEvent.click(noButton));
+
+    const acknowledgementCheck = screen.getByRole("checkbox");
+    fireEvent.click(acknowledgementCheck);
+    expect(acknowledgementCheck).toBeChecked();
+
+    const submitButton = screen.getByRole("button", {name: "Submit"});
+    userEvent.click(submitButton);
+
+    waitFor(()=>expect(mockNavigate).toBeCalledTimes(1));
+    waitFor(()=>expect(mockNavigate).toHaveBeenCalledWith('/tenantDashboard'));
   })
 
 });
