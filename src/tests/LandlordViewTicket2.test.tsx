@@ -4,20 +4,18 @@ import LandlordViewTicket, { TicketStatus } from '../pages/LandlordViewTicket';
 import { AuthContext } from '../contexts/AuthContext';
 
 jest.mock('../client', () => ({
-  client: {
-    service: (serviceName) => {
-      if (serviceName === 'ticket') {
-        return {
-          unassignPersonnel: () => Promise.resolve(),
-          closeTicket: () => Promise.resolve(),
-          rejectTicket: () => Promise.resolve(),
-          reopenTicket: () => Promise.resolve(),
-          registerWorkFinished: () => Promise.resolve(),
-        };
-      }
-      return () => Promise.resolve(); // You can modify this based on your requirements.
-    },
-  },
+  service: jest.fn((serviceName) => {
+    if (serviceName === 'ticket') {
+      return {
+        unassignPersonnel: jest.fn(),
+        closeTicket: jest.fn(),
+        rejectTicket: jest.fn(),
+        reopenTicket: jest.fn(() => Promise.resolve()),
+        registerWorkFinished: jest.fn(),
+      };
+    }
+    return {};
+  }),
 }));
 
 let mockTicket = {
