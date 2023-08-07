@@ -34,10 +34,12 @@ async function brute_url(data){
     const { response } = error;
     var stream = fs.createWriteStream(notableEventsURL, {flags: 'a'});
 
+    var msg = ''
     // Log notable events
     if (response?.status > 500) {
-      stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n');
+      msg = new Date() + ' FOUND SOMETHING | Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n';
     }
+    stream.write(msg);
     stream.end();
 
   }
@@ -54,13 +56,14 @@ async function brute_files(data){
             });
           } catch (error) {
             const { response } = error;
-
             var stream = fs.createWriteStream(notableEventsFiles, {flags: 'a'});
 
+            var msg = '';
             //Log notable events
             if (response?.status < 400) {
-              stream.write('Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n');
-            }
+              msg = new Date() + ' FOUND SOMETHING |Input: '+ fuzzedData + ' | Axios Response: ' + JSON.stringify(response.data, getCircularReplacer()) + '\n';
+            } 
+            stream.write(msg);
             stream.end();
           }
     }
