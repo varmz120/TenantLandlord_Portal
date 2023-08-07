@@ -94,15 +94,14 @@ const AdminAccManage = () => {
     navigate('/Accounts');
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
 
-    if(userType === "Landlord" || userType === "Admin"){
-      try {
-        client.service('users').remove(Id);
-      } catch (error) {
-        console.error('Failed to delete account', error);
-      }
+    try {
+      await client.service('users').remove(Id);
+    } catch (error) {
+      console.error('Failed to delete account', error);
     }
+
 
     navigate('/Accounts')
 
