@@ -32,11 +32,11 @@ function ViewTicket() {
       navigate('/LandlordDashboard');
   };
 
-  const ticket_id = ticket._id;
+  const ticket_id = ticket?._id;
   const completed_date = new Date(ticket?.completedOn).toLocaleDateString();
-  const rating = ticket.feedback?.rating;
-  const remarks = ticket.feedback?.description;
-  const title = ticket.title;
+  const rating = ticket?.feedback?.rating;
+  const remarks = ticket?.feedback?.description;
+  const title = ticket?.title;
 
   const getUnitNo = async () => {
     console.log(await client.service('users').find());
@@ -79,6 +79,7 @@ function ViewTicket() {
               label="Rating"
               padding_right="106"
               rating={rating}
+              disabled={true}
               error=""
               handleClick={() => null}
             />
