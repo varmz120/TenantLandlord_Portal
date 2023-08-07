@@ -7,7 +7,7 @@ const PasswordResetRequestedFailed = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigate('/reset1');
+      navigate('/reset');
     }, 3000);
   });
 

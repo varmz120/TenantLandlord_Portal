@@ -3,6 +3,7 @@ import { MouseEvent, FC, useState } from 'react';
 interface InputProps {
   label: string;
   padding_right: string;
+  disabled: boolean;
   rating: number;
   error: string;
   // handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -11,7 +12,7 @@ interface InputProps {
 }
 
 // Source : https://dev.to/michaelburrows/create-a-custom-react-star-rating-component-5o6
-const StarRating: FC<InputProps> = ({ label, padding_right, rating, error, handleClick }) => {
+const StarRating: FC<InputProps> = ({ label, padding_right, rating, error, disabled, handleClick }) => {
   const [hover, setHover] = useState(0);
   return (
     <div className="flex align-left text-left input-wrapper">
@@ -27,6 +28,7 @@ const StarRating: FC<InputProps> = ({ label, padding_right, rating, error, handl
         return (
           <button
             type="button"
+            disabled={disabled}
             key={index}
             className={index <= (hover || rating) ? 'text-starActive' : 'text-placeholderText'}
             onClick={() => handleClick(index)}
