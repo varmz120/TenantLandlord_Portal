@@ -14,7 +14,7 @@ function Navbar() {
     if (user === null) {
       navigate('/', { replace: true });
     } else {
-      logout()//.then(() => navigate('/', { replace: true }));
+      logout().then(() => navigate('/', { replace: true }));
     }
   };
 
@@ -102,7 +102,7 @@ function Navbar() {
                       : "bg-[url('./images/log_in_icon.svg')] group-hover:bg-[url('./images/log_in_icon_dark.svg')] mx-3 ml-3")
                   }
                 ></div>
-                <div className="mr-4">{user ? 'Log Out' : 'Log In'}</div>
+                <div id={user ? "logout" : undefined} className="mr-4">{user ? 'Log Out' : 'Log In'}</div>
               </a>
             </li>
           </ul>

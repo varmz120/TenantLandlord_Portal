@@ -51,14 +51,13 @@ const TenantLogin = () => {
         _id: username,
         password: password,
       })
-      .then()
+      .then(() => {
+          navigate('/login2FA');
+      })
       .catch((error) => {
         if (error.message == 'Invalid login') {
           setInvalidLogin(true);
           return;
-        }
-        if (error.message == 'Sent 2FA') {
-          navigate('/login2FA');
         }
       });
   };
@@ -89,6 +88,7 @@ const TenantLogin = () => {
             className={
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500 '
             }
+            id="username"
             value={username}
             onChange={handleUsernameFieldChange}
             placeholder="Username"
@@ -98,6 +98,7 @@ const TenantLogin = () => {
             className={
               'my-2 text-headerText bg-inputField disabled:bg-disabledField disabled:text-disabledText font-light rounded pl-2 py-1 px-5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:bg-userNameButton focus:ring-sky-500 focus:caret-sky-500 invalid:border-pink-500 invalid:text-pink-600 invalid:caret-pink-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:invalid:caret-pink-500 '
             }
+            id="password"
             value={password}
             type="password"
             onChange={handlePasswordFieldChange}
@@ -108,6 +109,7 @@ const TenantLogin = () => {
             <p className="flex text-red-500">Invalid username or password!</p>
           )}
           <button
+            id="submit"
             type="submit"
             className="bg-[#335B77] rounded-lg mt-24 text-2xl font-bold text-white p-1"
           >
