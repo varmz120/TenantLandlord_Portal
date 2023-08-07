@@ -50,17 +50,19 @@ const AddService = () => {
 
     if (Object.keys(errors).length > 0) {
     } else {
-
-
       client
         .service('building')
         .get(user?.buildingId ?? '')
         .then((building) => {
           // Add the new request type to the existing array
-          building.requestTypes.push(formState.nameService);
+          const reqTypes = building.requestTypes;
+          reqTypes.push(formState.nameService);
+          const buildingUpdated = { requestTypes: reqTypes };
+          // console.log(building.requestTypes);
+          // building.requestTypes.push(formState.nameService);
 
           // Patch the building with the updated requestTypes array
-          return client.service('building').patch(user?.buildingId ?? '', building);
+          return client.service('building').patch(user?.buildingId ?? '', buildingUpdated);
         })
         .then((updatedBuilding) => {
           console.log('Updated building:', updatedBuilding);
@@ -69,8 +71,8 @@ const AddService = () => {
         .catch((err) => {
           console.error('Error updating building:', err);
         });
-      }
-    };
+    }
+  };
 
   useEffect(() => {
     if (isSubmit) {
