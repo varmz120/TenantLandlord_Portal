@@ -25,6 +25,7 @@ function RequestTicket() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
+  const [categories, setcategories] = useState<string[]>([]);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [errors, setErrors] = useState<string | any>({});
   const [formState, setFormState] = useState({
@@ -40,7 +41,7 @@ function RequestTicket() {
   // Mock static values
   var area = 'General Queries';
   var contactNo = '+65 9123 4567';
-  var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
+  // var categories = ['Cleanliness', 'Aircon Extension', 'Repair', 'Pest Control'];
 
   const date = new Date();
   let currentDay = String(date.getDate()).padStart(2, '0');
@@ -156,13 +157,16 @@ function RequestTicket() {
       for (const attachement of formAttachments) {
         form.append('attachements', attachement);
       }
-      client.service('ticket').create(form as any, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }).then(() => {
-        setSubmit(true);
-      });
+      client
+        .service('ticket')
+        .create(form as any, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(() => {
+          setSubmit(true);
+        });
     }
   };
 
@@ -172,6 +176,17 @@ function RequestTicket() {
       navigate('/Success', { state: { redirect, formState, isSubmit } });
     }
   }, [isSubmit, formState, navigate]);
+
+  useEffect(() => {
+    let reqTypes = {};
+    client
+      .service('building')
+      .get(user?.buildingId ?? '')
+      .then((building) => {
+        reqTypes = building.requestTypes;
+        setcategories(building.requestTypes);
+      });
+  });
 
   const { formTitle, formCategory, formDescription, formAttachments, formAcknowledgement } =
     formState;
