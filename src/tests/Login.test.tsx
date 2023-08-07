@@ -1,45 +1,15 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import TenantLogin from '../pages/TenantLogin';
 import { AuthContext } from '../contexts/AuthContext';
-import { BrowserRouter } from 'react-router-dom';
-import { IAuthContextType } from '../interfaces/Auth';
+import { client } from '../client';
 
-const mockLogin = jest.fn();
 jest.mock('../client', () => ({
   client: {
-    service: (serviceName) => {
-      if (serviceName === 'ticket') {
-        return {
-          unassignPersonnel: () => Promise.resolve(),
-          closeTicket: () => Promise.resolve(),
-          rejectTicket: () => Promise.resolve(),
-          reopenTicket: () => Promise.resolve(),
-          registerWorkFinished: () => Promise.resolve(),
-        };
-      }
-      return () => Promise.resolve(); // You can modify this based on your requirements.
-    },
-    get2FA: (loginDetails) => {
-      return Promise.resolve();
-    },
+    get2FA: jest.fn(),
   },
 }));
-
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
-// Define the initial context state
-const contextState: IAuthContextType = {
-  user: null,
-  temp_details: null,
-  login: mockLogin,
-  logout: async () => {},
-  tempLogin: mockLogin,
-};
 
 describe('TenantLogin', () => {
   it('renders without crashing', () => {
@@ -52,20 +22,15 @@ describe('TenantLogin', () => {
   });
 
   it('calls event handlers when login and forgot password buttons are clicked', async () => {
-    // Define the mock login function
-
     // Render the component under test
     render(
-      <AuthContext.Provider value={contextState}>
-        <BrowserRouter>
-          <TenantLogin />
-        </BrowserRouter>
-      </AuthContext.Provider>
+      <BrowserRouter>
+        <TenantLogin />
+      </BrowserRouter>
     );
 
     // Find the buttons
     const loginButton = screen.getByRole('button', { name: /login/i });
-    const forgotPasswordButton = screen.getByRole('button', { name: /click here/i });
 
     // Define a mock user
     const mockUser = { id: '1', email: '', typ: 0 };
@@ -76,15 +41,21 @@ describe('TenantLogin', () => {
     });
     fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password' } });
 
-    // Click the buttons
-    fireEvent.click(loginButton);
-    fireEvent.click(forgotPasswordButton);
+    // Mock the get2FA function with a resolved Promise
+    const mockGet2FA = jest.spyOn(client, 'get2FA');
+    mockGet2FA.mockResolvedValue({}); // Simulate successful login without 2FA
 
-    // Verify the results
-    // await waitFor(() => {
-    expect(mockLogin).toHaveBeenCalled();
-    // eslint-disable-next-line
-    expect(mockNavigate).toHaveBeenCalledWith('/reset');
-    // });
+    // Click the login button
+    fireEvent.click(loginButton);
+
+    // Wait for the async operations to complete
+    await waitFor(() => expect(mockGet2FA).toHaveBeenCalled());
+
+    // Check if the navigate function was called with the correct path
+    expect(mockGet2FA).toHaveBeenCalledWith({
+      strategy: 'local',
+      _id: mockUser.typ.toString(),
+      password: 'password',
+    });
   });
 });

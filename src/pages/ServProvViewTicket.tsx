@@ -23,7 +23,7 @@ export enum TicketStatus {
   Closed,
 }
 
-function ViewTicket() {
+const ServProvViewTicket = () => {
   const navigate = useNavigate();
   const locate = useLocation();
   const ticket: Ticket = locate.state;
@@ -55,7 +55,7 @@ function ViewTicket() {
       .service('ticket')
       .registerWorkFinished({ ticketId: ticket._id })
       .then(() => {
-        navigate('/ServProvDashboard');
+        navigate('/landlordDashboard');
       });
   };
 
@@ -213,4 +213,4 @@ function ViewTicket() {
   );
 }
 
-export default ViewTicket;
+export default ServProvViewTicket;
