@@ -1,0 +1,35 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "./public/",
+  "clientUrl": "http://localhost:3000",
+  "origins": [
+    "http://localhost:3030"
+  ],
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "mongodb": "mongodb://127.0.0.1:27017/esc-project",
+  "authentication": {
+    "entity": "user",
+    "service": "users",
+    "secret": "AUiypTl2ul6cmUL+mO7BLjVumjIX7yFr",
+    "authStrategies": [
+      "jwt",
+      "local"
+    ],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "_id",
+      "passwordField": "password"
+    }
+  }
+}

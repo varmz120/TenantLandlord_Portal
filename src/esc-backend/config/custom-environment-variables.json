@@ -1,0 +1,12 @@
+{
+  "port": {
+    "__name": "PORT",
+    "__format": "number"
+  },
+  "host": "HOSTNAME",
+  "authentication": {
+    "secret": "FEATHERS_SECRET"
+  },
+  "gmail": "GMAIL_ACCOUNT",
+  "gmailPassword": "GMAIL_PASSWORD"
+}
